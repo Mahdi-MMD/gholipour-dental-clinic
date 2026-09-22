@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 120" width="100%" height="100%">
+  <defs>
+    <!-- Gradient for Brand Icon -->
+    <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1c83aa" />
+      <stop offset="100%" stop-color="#1c434f" />
+    </linearGradient>
+    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#c4eaf7" />
+      <stop offset="100%" stop-color="#1c83aa" />
+    </linearGradient>
+    <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#1c83aa" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+
+  <!-- Modern Stylized Tooth & Sparkle Icon -->
+  <g transform="translate(20, 15)" filter="url(#softGlow)">
+    <!-- Tooth Background Contour -->
+    <path d="M 45 10 C 65 10 80 25 80 45 C 80 65 72 80 62 95 C 57 102 52 95 48 80 C 45 70 45 70 42 80 C 38 95 33 102 28 95 C 18 80 10 65 10 45 C 10 25 25 10 45 10 Z" 
+          fill="url(#blueGrad)" />
+    
+    <!-- Aesthetic Inner Curve / Smile Line -->
+    <path d="M 26 40 C 35 60 55 60 64 40 C 66 36 70 40 66 46 C 54 68 36 68 24 46 C 20 40 24 36 26 40 Z" 
+          fill="#ffffff" opacity="0.9" />
+
+    <!-- Star / Sparkle of Purity & Precision -->
+    <path d="M 72 15 L 75 24 L 84 27 L 75 30 L 72 39 L 69 30 L 60 27 L 69 24 Z" 
+          fill="url(#accentGrad)" />
+    <circle cx="22" cy="22" r="3" fill="#c4eaf7" />
+  </g>
+
+  <!-- Typography: Clinic Name in Persian -->
+  <g transform="translate(130, 20)">
+    <!-- Main Clinic Title -->
+    <text x="360" y="48" font-family="'PeydaWeb', 'Vazirmatn', sans-serif" font-size="32" font-weight="900" fill="#1c434f" text-anchor="end" letter-spacing="-0.5">
+      کلینیک دندانپزشکی قلی‌پور
+    </text>
+    
+    <!-- Subtitle / English Branding -->
+    <text x="360" y="76" font-family="'PeydaWeb', 'Vazirmatn', sans-serif" font-size="14" font-weight="600" fill="#1c83aa" text-anchor="end" letter-spacing="1">
+      GHOLIPOUR DENTAL CLINIC  •  مرکز تخصصی درمان و زیبایی
+    </text>
+  </g>
+</svg>

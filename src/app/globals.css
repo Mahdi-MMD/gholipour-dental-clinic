@@ -2283,10 +2283,13 @@ button, input {
   }
   .footer-col-socials {
     grid-column: span 2;
-    justify-content: flex-start;
+    justify-content: center;
+    width: 100%;
   }
   .social-vertical-list {
     flex-direction: row;
+    justify-content: center;
+    width: 100%;
   }
 }
 
@@ -2417,9 +2420,13 @@ button, input {
   }
   .footer-col-socials {
     grid-column: span 1;
+    justify-content: center;
+    width: 100%;
   }
   .social-vertical-list {
+    flex-direction: row;
     justify-content: center;
+    width: 100%;
     gap: 12px;
   }
   .footer-bottom-bar {

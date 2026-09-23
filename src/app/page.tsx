@@ -11,6 +11,7 @@ import Articles from '@/components/Articles';
 import Footer from '@/components/Footer';
 import BookingDrawer from '@/components/BookingDrawer';
 import FloatingBubble from '@/components/FloatingBubble';
+import ScrollIndicator from '@/components/ScrollIndicator';
 
 export default function HomePage() {
   const [isBookingOpen, setIsBookingOpen] = useState(false);
@@ -45,7 +46,8 @@ export default function HomePage() {
         isOpen={isBookingOpen}
         onClose={handleCloseBooking}
       />
-      <FloatingBubble />
+      <FloatingBubble isMobileMenuOpen={mobileMenuOpen} />
+      <ScrollIndicator />
     </>
   );
 }

@@ -5,6 +5,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import BookingDrawer from '@/components/BookingDrawer';
 import FloatingBubble from '@/components/FloatingBubble';
+import ScrollIndicator from '@/components/ScrollIndicator';
 
 export default function ContactPage() {
   const [isBookingOpen, setIsBookingOpen] = useState(false);
@@ -287,7 +288,8 @@ export default function ContactPage() {
         onClose={handleCloseBooking}
       />
       
-      <FloatingBubble />
+      <FloatingBubble isMobileMenuOpen={mobileMenuOpen} />
+      <ScrollIndicator />
     </>
   );
 }

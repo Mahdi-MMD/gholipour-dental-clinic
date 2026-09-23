@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import MobileMenu from './MobileMenu';
 
 interface HeaderProps {
   onOpenBooking: () => void;
@@ -128,17 +129,62 @@ export default function Header({
           >
             <span>رزرو نوبت</span>
           </button>
-          {/* Mobile Menu Hamburger */}
+          {/* Mobile Menu Toggle Button */}
           <button
-            className="mobile-toggle-btn"
+            className={`mobile-toggle-btn ${mobileMenuOpen ? 'active' : ''}`}
             id="mobileToggleBtn"
-            aria-label="منوی موبایل"
+            aria-label={mobileMenuOpen ? 'بستن منو' : 'باز کردن منو'}
+            aria-expanded={mobileMenuOpen}
             onClick={toggleMobileMenu}
           >
-            <i className={`fa-solid ${mobileMenuOpen ? 'fa-xmark' : 'fa-bars'}`}></i>
+            {mobileMenuOpen ? (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="26"
+                height="26"
+                viewBox="0 0 48 48"
+                fill="none"
+                aria-hidden="true"
+                className="mobile-menu-icon close-icon"
+              >
+                <path
+                  d="M12 12L36 36M36 12L12 36"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            ) : (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="28"
+                height="28"
+                viewBox="0 0 48 48"
+                fill="none"
+                aria-hidden="true"
+                className="mobile-menu-icon hamburger-icon"
+              >
+                <path
+                  d="M8 12H20M8 24H40M8 36H28"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            )}
           </button>
         </div>
       </div>
+
+      {/* Modern Mobile Offcanvas Popup Menu matching reference */}
+      <MobileMenu
+        isOpen={mobileMenuOpen}
+        onClose={closeMobileMenu}
+        onOpenBooking={onOpenBooking}
+        activePage={activePage}
+      />
     </header>
   );
 }

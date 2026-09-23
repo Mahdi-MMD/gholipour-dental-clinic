@@ -2,7 +2,11 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 
-export default function FloatingBubble() {
+interface FloatingBubbleProps {
+  isMobileMenuOpen?: boolean;
+}
+
+export default function FloatingBubble({ isMobileMenuOpen = false }: FloatingBubbleProps) {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -33,7 +37,7 @@ export default function FloatingBubble() {
 
   return (
     <div
-      className="floating-social-bubble-container"
+      className={`floating-social-bubble-container ${isMobileMenuOpen ? 'hidden-menu-open' : ''}`}
       id="floatingBubbleContainer"
       ref={containerRef}
     >

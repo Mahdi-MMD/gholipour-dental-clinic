@@ -64,7 +64,8 @@
 
 html {
   scroll-behavior: smooth;
-  overflow-x: hidden;
+  scroll-padding-top: 95px;
+  overflow-x: clip;
   scrollbar-width: thin;
   scrollbar-color: var(--color-primary) #f1f5f8;
 }
@@ -98,7 +99,7 @@ body {
   background-color: var(--color-white);
   color: var(--color-text-body);
   line-height: 1.8;
-  overflow-x: hidden;
+  overflow-x: clip;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -214,25 +215,44 @@ button, input {
   z-index: 2;
 }
 
-/* ==================== SITE HEADER ==================== */
+/* ==================== SITE HEADER (FLOATING ROUNDED ISLAND BAR) ==================== */
 .site-header {
+  position: -webkit-sticky;
   position: sticky;
-  top: 0;
-  z-index: 100;
-  background-color: rgba(255, 255, 255, 0.96);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--color-border);
-  padding: 12px 0;
-  transition: var(--transition);
+  top: 16px;
+  z-index: 1000;
+  width: 100%;
+  pointer-events: none; /* Let clicks pass through empty sides */
+  padding: 0 20px;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .header-container {
+  pointer-events: auto; /* Re-enable clicks on the nav bar itself */
   display: flex;
   align-items: center;
   justify-content: space-between;
   max-width: 1240px;
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 10px 24px;
+  background-color: rgba(255, 255, 255, 0.94);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(216, 238, 245, 0.85);
+  box-shadow: 0 10px 30px -5px rgba(28, 131, 170, 0.12), 0 4px 12px rgba(28, 67, 79, 0.05);
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.site-header.is-scrolled {
+  top: 10px;
+}
+
+.site-header.is-scrolled .header-container {
+  padding: 7px 20px;
+  background-color: rgba(255, 255, 255, 0.98);
+  border-color: rgba(196, 234, 247, 0.95);
+  box-shadow: 0 14px 34px -5px rgba(28, 131, 170, 0.18), 0 6px 16px rgba(28, 67, 79, 0.08);
 }
 
 .header-logo a {
@@ -369,7 +389,8 @@ button, input {
 
 /* ==================== HERO SECTION ==================== */
 .hero-section {
-  padding: 60px 0 80px;
+  margin-top: -85px;
+  padding: 145px 0 80px;
   background: radial-gradient(circle at top right, rgba(196, 234, 247, 0.4) 0%, rgba(255, 255, 255, 0.8) 60%);
   position: relative;
 }
@@ -2112,7 +2133,18 @@ button, input {
 @media (max-width: 992px) {
   /* Header adjustments for Tablet & Mobile (Clean Logo + Hamburger matching reference) */
   .site-header {
-    padding: 10px 0;
+    top: 10px;
+    padding: 0 12px;
+  }
+  .site-header.is-scrolled {
+    top: 6px;
+  }
+  .site-header .header-container {
+    padding: 6px 14px 6px 16px;
+    border-radius: var(--radius-pill);
+  }
+  .site-header.is-scrolled .header-container {
+    padding: 5px 12px 5px 14px;
   }
   .header-actions .phone-link {
     display: none;
@@ -2127,7 +2159,7 @@ button, input {
     width: 44px;
     height: 44px;
     padding: 0;
-    border-radius: var(--radius-sm);
+    border-radius: 50%;
     background-color: var(--color-sky-tint);
     color: var(--color-primary);
     cursor: pointer;
@@ -2541,7 +2573,8 @@ button, input {
 
   /* Hero Section Reordering (Image FIRST on Mobile - Matching Reference!) */
   .hero-section {
-    padding: 30px 0 48px;
+    margin-top: -75px;
+    padding: 100px 0 48px;
   }
   .hero-container {
     display: flex;

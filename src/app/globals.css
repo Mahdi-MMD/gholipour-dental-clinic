@@ -221,10 +221,34 @@ button, input {
   object-fit: contain;
   display: block;
   transition: transform 0.3s ease;
+  -webkit-mask: linear-gradient(-60deg, #000 30%, rgba(0, 0, 0, 0.35) 40%, #000 50%) right / 300% 100%;
+  mask: linear-gradient(-60deg, #000 30%, rgba(0, 0, 0, 0.35) 40%, #000 50%) right / 300% 100%;
+  animation: logoShine 10s ease-in-out infinite;
 }
 
 .header-logo a:hover .logo-img {
   transform: scale(1.02);
+}
+
+.footer-logo-img {
+  -webkit-mask: linear-gradient(-60deg, #000 30%, rgba(0, 0, 0, 0.35) 40%, #000 50%) right / 300% 100%;
+  mask: linear-gradient(-60deg, #000 30%, rgba(0, 0, 0, 0.35) 40%, #000 50%) right / 300% 100%;
+  animation: logoShine 10s ease-in-out infinite;
+}
+
+@keyframes logoShine {
+  0% {
+    -webkit-mask-position: 140% 140%;
+    mask-position: 140% 140%;
+  }
+  25% {
+    -webkit-mask-position: -20% -20%;
+    mask-position: -20% -20%;
+  }
+  100% {
+    -webkit-mask-position: -20% -20%;
+    mask-position: -20% -20%;
+  }
 }
 
 .nav-list {
@@ -330,6 +354,29 @@ button, input {
   grid-template-columns: 1.15fr 0.85fr;
   align-items: center;
   gap: 40px;
+  animation: heroEntranceBounce 1.25s cubic-bezier(0.215, 0.61, 0.355, 1) both;
+  will-change: transform, opacity;
+}
+
+@keyframes heroEntranceBounce {
+  0% {
+    opacity: 0;
+    transform: translateY(90px);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(-16px);
+  }
+  75% {
+    transform: translateY(8px);
+  }
+  90% {
+    transform: translateY(-4px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .hero-subtitle {
@@ -1568,10 +1615,21 @@ button, input {
   border-radius: 24px 24px 0 0;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.03);
   padding: 38px 45px 15px;
-  display: grid;
-  grid-template-columns: 2.2fr 1fr 1fr auto;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
   gap: 40px;
-  align-items: start;
+}
+
+.footer-col-brand {
+  max-width: 440px;
+  flex-shrink: 0;
+  margin-left: auto; /* in RTL, margin-left pushes everything following it to the left side */
+}
+
+.footer-col-links {
+  min-width: 140px;
+  flex-shrink: 0;
 }
 
 .footer-col-brand .footer-logo {
@@ -2213,9 +2271,15 @@ button, input {
 
   /* Footer on Tablet */
   .footer-card {
+    display: grid;
     grid-template-columns: 1fr 1fr;
     padding: 35px 30px;
     gap: 30px;
+  }
+  .footer-col-brand {
+    max-width: 100%;
+    margin-left: 0;
+    grid-column: span 2;
   }
   .footer-col-socials {
     grid-column: span 2;
@@ -2413,7 +2477,7 @@ button, input {
   display: grid;
   grid-template-columns: 1.15fr 1fr;
   gap: 36px;
-  align-items: start;
+  align-items: stretch;
 }
 
 /* Form Card */
@@ -2556,13 +2620,14 @@ button, input {
 .contact-info-column {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 20px;
+  height: 100%;
 }
 
 .contact-cards-list {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 16px;
 }
 
 .contact-info-card {
@@ -2634,7 +2699,7 @@ button, input {
 .contact-social-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 14px;
+  gap: 16px;
 }
 
 /* Map Card */
@@ -2645,6 +2710,9 @@ button, input {
   overflow: hidden;
   box-shadow: var(--shadow-sm);
   transition: var(--transition);
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 }
 
 .contact-map-card:hover {
@@ -2697,7 +2765,8 @@ button, input {
 .map-frame-wrapper {
   position: relative;
   width: 100%;
-  height: 290px;
+  flex: 1;
+  min-height: 290px;
 }
 
 .map-frame-wrapper iframe {

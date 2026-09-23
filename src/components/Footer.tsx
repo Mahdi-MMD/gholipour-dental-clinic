@@ -31,60 +31,63 @@ export default function Footer({ onOpenBooking }: FooterProps) {
             </p>
           </div>
 
-          {/* Col 2: Quick Links (Center-Right) */}
-          <div className="footer-col footer-col-links">
-            <h4 className="footer-card-title">دسترسی سریع</h4>
-            <ul className="footer-links">
-              <li>
-                <Link href="/">صفحه اصلی</Link>
-              </li>
-              <li>
-                <Link href="/contact">تماس با ما</Link>
-              </li>
-              <li>
-                <a href="/#portfolio">نمونه کارها</a>
-              </li>
-              <li>
-                <a href="/#articles">مقالات</a>
-              </li>
-              <li>
-                <a
-                  href="#bookingDrawer"
-                  className="open-booking-btn"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    onOpenBooking();
-                  }}
-                >
-                  رزرو نوبت
-                </a>
-              </li>
-              <li>
-                <a href="/#faq">سوالات متداول</a>
-              </li>
-              <li>
-                <a href="/#about">درباره ما</a>
-              </li>
-            </ul>
-          </div>
+          {/* Links Section: Quick Links & Useful Links */}
+          <div className="footer-links-group">
+            {/* Col 2: Quick Links */}
+            <div className="footer-col footer-col-links">
+              <h4 className="footer-card-title">دسترسی سریع</h4>
+              <ul className="footer-links">
+                <li>
+                  <Link href="/">صفحه اصلی</Link>
+                </li>
+                <li>
+                  <Link href="/contact">تماس با ما</Link>
+                </li>
+                <li>
+                  <a href="/#portfolio">نمونه کارها</a>
+                </li>
+                <li>
+                  <a href="/#articles">مقالات</a>
+                </li>
+                <li>
+                  <a
+                    href="#bookingDrawer"
+                    className="open-booking-btn"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      onOpenBooking();
+                    }}
+                  >
+                    رزرو نوبت
+                  </a>
+                </li>
+                <li>
+                  <a href="/#faq">سوالات متداول</a>
+                </li>
+                <li>
+                  <a href="/#about">درباره ما</a>
+                </li>
+              </ul>
+            </div>
 
-          {/* Col 3: Useful Links (Center-Left) */}
-          <div className="footer-col footer-col-links">
-            <h4 className="footer-card-title">لینک های مفید</h4>
-            <ul className="footer-links">
-              <li>
-                <a href="/#services">ایمپلنت تخصصی</a>
-              </li>
-              <li>
-                <a href="/#services">ترمیم دندان</a>
-              </li>
-              <li>
-                <a href="/#services">روکش دندان</a>
-              </li>
-              <li>
-                <a href="/#services">درمان ریشه دندان</a>
-              </li>
-            </ul>
+            {/* Col 3: Useful Links */}
+            <div className="footer-col footer-col-links">
+              <h4 className="footer-card-title">لینک های مفید</h4>
+              <ul className="footer-links">
+                <li>
+                  <a href="/#services">ایمپلنت تخصصی</a>
+                </li>
+                <li>
+                  <a href="/#services">ترمیم دندان</a>
+                </li>
+                <li>
+                  <a href="/#services">روکش دندان</a>
+                </li>
+                <li>
+                  <a href="/#services">درمان ریشه دندان</a>
+                </li>
+              </ul>
+            </div>
           </div>
 
           {/* Col 4: Social Icons (Left) */}

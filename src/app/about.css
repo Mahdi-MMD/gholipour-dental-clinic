@@ -1,0 +1,612 @@
+/* ==========================================================
+   ABOUT PAGE ("درباره ما") STYLES
+   Matching Qaf Dental Clinic Theme & Design Language
+   ========================================================== */
+
+.about-page-main {
+  min-height: 100vh;
+  background-color: var(--color-white);
+  padding-bottom: 80px;
+}
+
+/* Hero / Header Banner */
+.about-hero-banner {
+  background-color: var(--color-white);
+  padding: 50px 0 20px;
+  text-align: center;
+}
+
+.about-main-title {
+  font-size: 36px;
+  font-weight: 900;
+  color: var(--color-primary-dark);
+  letter-spacing: -0.5px;
+  margin: 0;
+  line-height: 1.3;
+}
+
+/* Description Section */
+.about-desc-section {
+  padding: 30px 0 45px;
+}
+
+.about-desc-container {
+  max-width: 1040px;
+  margin: 0 auto;
+}
+
+.about-desc-card {
+  background-color: var(--color-white);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  box-shadow: 0 10px 35px rgba(28, 67, 79, 0.05);
+  padding: 44px 48px;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 30px;
+}
+
+.about-desc-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 8px;
+  height: 100%;
+  background: linear-gradient(180deg, var(--color-primary), var(--color-primary-dark));
+}
+
+.about-desc-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.about-desc-header-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-md);
+  background-color: var(--color-sky-tint);
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  flex-shrink: 0;
+}
+
+.about-desc-heading {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--color-primary-dark);
+  margin: 0;
+  white-space: nowrap;
+}
+
+.about-desc-text {
+  font-size: 16px;
+  line-height: 2.1;
+  color: var(--color-text-body);
+  text-align: justify;
+  margin-bottom: 22px;
+}
+
+.about-desc-text:last-child {
+  margin-bottom: 0;
+}
+
+/* Highlights Grid */
+.about-highlights-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin-top: 36px;
+}
+
+.about-highlight-box {
+  background: #f8fdff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 22px 18px;
+  text-align: center;
+  transition: var(--transition);
+}
+
+.about-highlight-box:hover {
+  transform: translateY(-4px);
+  border-color: var(--color-primary);
+  box-shadow: 0 12px 30px rgba(28, 131, 170, 0.1);
+  background: var(--color-white);
+}
+
+.about-highlight-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--color-white);
+  color: var(--color-primary);
+  border: 1px solid var(--color-ice-blue);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  margin-bottom: 14px;
+  box-shadow: var(--shadow-sm);
+}
+
+.about-highlight-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--color-primary-dark);
+  margin-bottom: 6px;
+}
+
+.about-highlight-desc {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
+
+/* ==================== GALLERY CAROUSEL ==================== */
+.clinic-gallery-section {
+  padding: 55px 0 70px;
+  background: linear-gradient(180deg, var(--color-white) 0%, #f7fcfe 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.gallery-carousel-wrap {
+  position: relative;
+  margin-top: 25px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 10px 0 25px;
+  max-width: 100%;
+}
+
+.clinic-gallery-swiper {
+  padding: 30px 6px !important;
+  overflow: hidden !important;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.gallery-slide {
+  transition: transform 0.6s cubic-bezier(0.25, 0.1, 0.25, 1),
+              opacity 0.6s ease,
+              filter 0.6s ease;
+  transform: scale(0.85);
+  opacity: 0.6;
+  filter: saturate(0.25) brightness(0.98);
+  cursor: pointer;
+  transform-origin: center center;
+}
+
+.gallery-slide:not(.swiper-slide-active):not(.swiper-slide-duplicate-active):hover {
+  opacity: 0.85;
+  filter: saturate(0.65);
+  transform: scale(0.89);
+}
+
+.gallery-slide.swiper-slide-active,
+.gallery-slide.swiper-slide-duplicate-active {
+  transform: scale(1.05);
+  opacity: 1;
+  filter: saturate(1) brightness(1);
+  z-index: 10;
+  cursor: default;
+}
+
+.gallery-card {
+  position: relative;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(28, 67, 79, 0.08);
+  background-color: var(--color-white);
+  border: 1px solid var(--color-border);
+  aspect-ratio: 4 / 3;
+}
+
+.gallery-card-img-wrap {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.gallery-card-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.6s ease;
+}
+
+.gallery-slide.swiper-slide-active .gallery-card {
+  box-shadow: 0 22px 55px rgba(28, 131, 170, 0.22), 0 8px 24px rgba(0, 0, 0, 0.06);
+  border-color: rgba(28, 131, 170, 0.35);
+}
+
+.gallery-slide.swiper-slide-active .gallery-card-img-wrap img {
+  transform: scale(1.03);
+}
+
+.gallery-card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 50%, rgba(28, 67, 79, 0.85) 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 22px;
+  color: var(--color-white);
+  transition: opacity 0.4s ease;
+}
+
+.gallery-card-tag {
+  font-size: 12px;
+  font-weight: 700;
+  background: rgba(28, 131, 170, 0.85);
+  backdrop-filter: blur(4px);
+  padding: 4px 12px;
+  border-radius: 20px;
+  align-self: flex-start;
+  margin-bottom: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.gallery-card-title {
+  font-size: 18px;
+  font-weight: 800;
+  margin-bottom: 4px;
+  color: var(--color-white);
+}
+
+.gallery-card-desc {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.88);
+  line-height: 1.5;
+}
+
+/* Gallery bottom accent bar */
+.gallery-slide::after {
+  content: '';
+  position: absolute;
+  bottom: 0px;
+  left: 20%;
+  right: 20%;
+  height: 8px;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-primary-dark));
+  border-radius: 0 0 10px 10px;
+  box-shadow: 0 4px 15px rgba(28, 131, 170, 0.45);
+  opacity: 0;
+  transform: scaleX(0.3);
+  transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
+  z-index: 12;
+}
+
+.gallery-slide.swiper-slide-active::after,
+.gallery-slide.swiper-slide-duplicate-active::after {
+  opacity: 1;
+  transform: scaleX(1);
+}
+
+/* Gallery Minimal Semi-Transparent Navigation Arrows (No Circle, Just Clean Chevrons) */
+.gallery-arrow-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: rgba(28, 67, 79, 0.55);
+  font-size: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 25;
+  transition: all 0.25s ease;
+  outline: none;
+  padding: 8px;
+  line-height: 1;
+  text-shadow: 0 2px 8px rgba(255, 255, 255, 0.7);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.gallery-arrow-right {
+  right: 14px;
+}
+
+.gallery-arrow-left {
+  left: 14px;
+}
+
+.gallery-arrow-btn:hover {
+  color: var(--color-primary);
+  transform: translateY(-50%) scale(1.18);
+  opacity: 0.95;
+  text-shadow: 0 2px 12px rgba(28, 131, 170, 0.35);
+}
+
+.gallery-arrow-btn:active {
+  transform: translateY(-50%) scale(0.95);
+}
+
+.gallery-arrow-btn.swiper-button-disabled {
+  opacity: 0.2;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ==================== DOCTORS SECTION (ABOUT PAGE) - EXACT SCREENSHOT DESIGN ==================== */
+.about-doctors-section {
+  padding: 50px 0 95px;
+  background-color: var(--color-white);
+  position: relative;
+}
+
+.doctor-hybrid-showcase {
+  display: flex;
+  flex-direction: row; /* In RTL: first child (portrait) is on the RIGHT, second child (details) is on the LEFT */
+  align-items: stretch;
+  justify-content: center;
+  max-width: 1040px;
+  margin: 38px auto 0;
+  padding: 0 16px;
+  gap: 0;
+}
+
+/* Base Card Style */
+.doctor-hybrid-card {
+  box-sizing: border-box;
+}
+
+/* 1. Portrait Card: Positioned on the RIGHT in RTL */
+.doctor-hybrid-portrait {
+  flex: 0 0 50%;
+  max-width: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-white);
+  border-radius: 0 42px 42px 0;
+  border: 1.5px solid #d9edf5;
+  border-left: none; /* Seamless border meeting with the details card */
+  box-shadow: 0 16px 45px rgba(28, 67, 79, 0.08);
+  overflow: hidden;
+  padding: 8px;
+  z-index: 2;
+}
+
+.doctor-portrait-image {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  display: block;
+  border-radius: 34px;
+}
+
+/* 2. Details Card: Positioned on the LEFT in RTL */
+/* Very light soft blue tint that fades completely to pure white where it meets the image of the doctor */
+.doctor-hybrid-details {
+  flex: 0 0 50%;
+  max-width: 50%;
+  background: linear-gradient(to right, rgba(206, 237, 248, 0.45) 0%, rgba(225, 245, 252, 0.3) 20%, rgba(240, 250, 254, 0.15) 38%, #ffffff 58%, #ffffff 100%);
+  border-radius: 65px 0 0 65px;
+  border: 1.5px solid #d9edf5;
+  border-right: none; /* Seamless junction with portrait card */
+  box-shadow: 0 16px 45px rgba(28, 67, 79, 0.08);
+  padding: 30px 44px 45px; /* Reduced top padding (30px) to align heading with doctor name in red box */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+  z-index: 1;
+}
+
+.doctor-details-heading {
+  font-size: 27px;
+  font-weight: 900;
+  color: #17424f;
+  margin: 0 0 45px 0;
+  letter-spacing: -0.5px;
+  text-align: center; /* Centered title at the top of the box, aligned with doctor name */
+  width: 100%;
+}
+
+.doctor-details-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 30px; /* Generous line spacing between items */
+  width: 100%;
+}
+
+.doctor-details-list li {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  white-space: nowrap; /* Prevents text from breaking onto multiple lines */
+}
+
+.details-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #5c7784;
+  flex-shrink: 0;
+}
+
+.details-text {
+  font-size: 18px;
+  font-weight: 700;
+  color: #4b6673;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+
+/* Mobile & Tablet View: Stacks vertically seamlessly connected (Portrait image on TOP, Explanations directly underneath) */
+@media (max-width: 860px) {
+  .doctor-hybrid-showcase {
+    flex-direction: column; /* Portrait stays on top, details goes directly under it */
+    align-items: center;
+    max-width: 480px;
+    padding: 0 14px;
+    gap: 0; /* Seamless vertical connection like desktop */
+  }
+
+  .doctor-hybrid-portrait {
+    flex: none;
+    width: 100%;
+    max-width: 100%;
+    border-radius: 36px 36px 0 0; /* Rounded top corners, flat bottom corners to connect seamlessly */
+    border: 1.5px solid #d9edf5;
+    border-bottom: none; /* Seamless vertical junction with details card below */
+    box-shadow: 0 10px 30px rgba(28, 67, 79, 0.06);
+    padding: 8px;
+  }
+
+  .doctor-hybrid-details {
+    flex: none;
+    width: 100%;
+    max-width: 100%;
+    border-radius: 0 0 36px 36px; /* Flat top corners to connect with portrait, rounded bottom corners */
+    border: 1.5px solid #d9edf5;
+    border-top: none; /* Seamless vertical junction with portrait card above */
+    /* On mobile: Very light blue at bottom that fades completely to pure white at top where it meets the portrait */
+    background: linear-gradient(to top, rgba(206, 237, 248, 0.45) 0%, rgba(225, 245, 252, 0.3) 20%, rgba(240, 250, 254, 0.15) 40%, #ffffff 60%, #ffffff 100%);
+    box-shadow: 0 16px 45px rgba(28, 67, 79, 0.08);
+    padding: 30px 14px 38px;
+  }
+
+  .doctor-details-heading {
+    font-size: clamp(19px, 5.2vw, 24px);
+    margin-bottom: 26px;
+    text-align: center;
+  }
+
+  .doctor-details-list {
+    gap: 20px;
+    width: 100%;
+  }
+
+  .doctor-details-list li {
+    white-space: nowrap; /* Prevents text from breaking down on mobile */
+    gap: 10px;
+  }
+
+  .details-dot {
+    width: 6px;
+    height: 6px;
+    flex-shrink: 0;
+  }
+
+  .details-text {
+    /* Responsive auto-scaling font size on mobile so text scales down to fit on one line without breaking */
+    font-size: clamp(10.5px, 3.4vw, 15px);
+    font-weight: 700;
+    white-space: nowrap;
+    line-height: 1.4;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .about-highlights-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .gallery-prev { left: 4px; }
+  .gallery-next { right: 4px; }
+}
+
+@media (max-width: 768px) {
+  .about-hero-banner {
+    padding: 35px 0 15px;
+  }
+  .about-main-title {
+    font-size: 28px;
+  }
+  .about-desc-card {
+    padding: 26px 18px;
+  }
+  .about-desc-header {
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .about-desc-header-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 19px;
+    flex-shrink: 0;
+  }
+  .about-desc-heading {
+    font-size: clamp(11.5px, 3.65vw, 19px);
+    white-space: nowrap;
+    letter-spacing: -0.2px;
+  }
+  .about-desc-text {
+    font-size: 14.5px;
+    line-height: 1.95;
+  }
+  .about-highlights-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-top: 24px;
+  }
+  .about-highlight-box {
+    padding: 12px 8px;
+    border-radius: var(--radius-sm);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .about-highlight-icon {
+    width: 38px;
+    height: 38px;
+    font-size: 16px;
+    margin-bottom: 8px;
+  }
+  .about-highlight-title {
+    font-size: 12.5px;
+    margin-bottom: 0;
+    line-height: 1.35;
+    text-align: center;
+  }
+  .about-highlight-desc {
+    display: none;
+  }
+  .gallery-prev, .gallery-next {
+    width: 38px;
+    height: 38px;
+  }
+  .gallery-slide {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .gallery-card {
+    width: 100%;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 380px) {
+  .about-desc-card {
+    padding: 22px 14px;
+  }
+  .about-desc-header {
+    gap: 10px;
+  }
+  .about-desc-header-icon {
+    width: 36px;
+    height: 36px;
+    font-size: 17px;
+  }
+}
+

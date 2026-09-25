@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 interface BookingDrawerProps {
   isOpen: boolean;
@@ -11,6 +11,27 @@ export default function BookingDrawer({ isOpen, onClose }: BookingDrawerProps) {
   const [submitted, setSubmitted] = useState(false);
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
+
+  // Lock body scroll, blur header, and handle Escape key
+  useEffect(() => {
+    if (isOpen) {
+      document.body.classList.add('booking-drawer-open');
+    } else {
+      document.body.classList.remove('booking-drawer-open');
+    }
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isOpen) {
+        onClose();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.body.classList.remove('booking-drawer-open');
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isOpen, onClose]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

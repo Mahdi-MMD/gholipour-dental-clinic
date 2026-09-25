@@ -1828,15 +1828,24 @@ button, input {
 }
 
 /* ==================== OFF-CANVAS BOOKING DRAWER ==================== */
+/* Blur site header when drawer is open so user can focus on the form */
+body.booking-drawer-open .site-header {
+  filter: blur(8px) brightness(0.92);
+  opacity: 0.6;
+  pointer-events: none !important;
+  transition: filter 0.35s ease, opacity 0.35s ease;
+}
+
 .booking-drawer-overlay {
   position: fixed;
   inset: 0;
-  background-color: rgba(28, 67, 79, 0.6);
-  backdrop-filter: blur(4px);
-  z-index: 999;
+  background-color: rgba(18, 44, 53, 0.55);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 1001;
   opacity: 0;
   visibility: hidden;
-  transition: var(--transition);
+  transition: opacity 0.35s ease, visibility 0.35s ease;
 }
 
 .booking-drawer-overlay.active {
@@ -1846,21 +1855,25 @@ button, input {
 
 .booking-drawer {
   position: fixed;
-  top: 0;
-  right: -420px;
-  width: 400px;
-  max-width: 90vw;
-  height: 100vh;
+  top: 14px;
+  bottom: 14px;
+  right: -460px;
+  width: 420px;
+  max-width: calc(100vw - 28px);
+  height: calc(100vh - 28px);
   background-color: var(--color-white);
-  z-index: 1000;
-  box-shadow: -10px 0 30px rgba(0, 0, 0, 0.15);
-  transition: right 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1002;
+  border-radius: 28px;
+  border: 1px solid rgba(196, 234, 247, 0.7);
+  box-shadow: -15px 0 45px rgba(18, 44, 53, 0.22), 0 10px 30px rgba(28, 131, 170, 0.12);
+  transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 .booking-drawer.active {
-  right: 0;
+  right: 14px;
 }
 
 .drawer-header {
@@ -2800,7 +2813,14 @@ button, input {
     top: -16px;
   }
   .booking-drawer {
-    max-width: 100vw;
+    top: 10px;
+    bottom: 10px;
+    height: calc(100vh - 20px);
+    max-width: calc(100vw - 20px);
+    border-radius: 20px;
+  }
+  .booking-drawer.active {
+    right: 10px;
   }
   .site-footer {
     padding-top: 35px;

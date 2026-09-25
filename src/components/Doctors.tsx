@@ -65,8 +65,8 @@ export default function Doctors() {
               pauseOnMouseEnter: true,
             }}
             navigation={{
-              nextEl: '.doctor-next',
-              prevEl: '.doctor-prev',
+              nextEl: '.doctor-arrow-left',
+              prevEl: '.doctor-arrow-right',
             }}
             breakpoints={{
               640: {
@@ -91,14 +91,23 @@ export default function Doctors() {
             ))}
           </Swiper>
 
-          <div
-            className="swiper-button-prev doctor-prev"
-            aria-label="پزشک قبلی"
-          ></div>
-          <div
-            className="swiper-button-next doctor-next"
+          {/* Right Arrow: faces outward to the right */}
+          <button
+            type="button"
+            className="doctor-arrow-btn doctor-arrow-right"
             aria-label="پزشک بعدی"
-          ></div>
+          >
+            <i className="fa-solid fa-chevron-right"></i>
+          </button>
+
+          {/* Left Arrow: faces outward to the left */}
+          <button
+            type="button"
+            className="doctor-arrow-btn doctor-arrow-left"
+            aria-label="پزشک قبلی"
+          >
+            <i className="fa-solid fa-chevron-left"></i>
+          </button>
         </div>
       </div>
     </section>

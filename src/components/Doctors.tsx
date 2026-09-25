@@ -85,12 +85,7 @@ export default function Doctors() {
             {doctorsData.map((doc, idx) => (
               <SwiperSlide key={idx} className="doctor-slide">
                 <div className="doctor-card">
-                  <img
-                    src={doc.img}
-                    alt={`${doc.name} - ${doc.title}`}
-                    loading="lazy"
-                    decoding="async"
-                  />
+                  <img src={doc.img} alt={`${doc.name} - ${doc.title}`} />
                 </div>
               </SwiperSlide>
             ))}

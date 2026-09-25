@@ -23,15 +23,11 @@ function BeforeAfterCard({ beforeImg, afterImg, title = 'درمان' }: BeforeAf
             className="ba-image-before"
             src={beforeImg}
             alt={`قبل از درمان - ${title}`}
-            loading="lazy"
-            decoding="async"
           />
           <img
             className="ba-image-after"
             src={afterImg}
             alt={`بعد از درمان - ${title}`}
-            loading="lazy"
-            decoding="async"
           />
         </div>
         <input
@@ -120,8 +116,6 @@ export default function Portfolio() {
                 <img
                   src="https://qafdentalclinic.com/wp-content/uploads/2025/08/Qaf-Daily-40.jpeg"
                   alt="روزمرگی مطب قلی‌پور"
-                  loading="lazy"
-                  decoding="async"
                 />
                 <div className="gallery-overlay">
                   <span>محیط آرام و استاندارد کلینیک</span>
@@ -131,8 +125,6 @@ export default function Portfolio() {
                 <img
                   src="https://qafdentalclinic.com/wp-content/uploads/2025/08/Qaf-Daily-41.jpeg"
                   alt="تجهیزات مدرن مطب"
-                  loading="lazy"
-                  decoding="async"
                 />
                 <div className="gallery-overlay">
                   <span>اتاق استریلیزاسیون و تجهیزات دیجیتال</span>
@@ -142,8 +134,6 @@ export default function Portfolio() {
                 <img
                   src="https://qafdentalclinic.com/wp-content/uploads/2025/08/Qaf-Daily-43.jpeg"
                   alt="روزمرگی کادر درمان"
-                  loading="lazy"
-                  decoding="async"
                 />
                 <div className="gallery-overlay">
                   <span>همراهی صمیمانه با مراجعین</span>

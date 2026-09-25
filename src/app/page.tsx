@@ -1,17 +1,27 @@
 'use client';
 
 import React, { useState } from 'react';
+import dynamic from 'next/dynamic';
 import Header from '@/components/Header';
 import Hero from '@/components/Hero';
 import Services from '@/components/Services';
 import Portfolio from '@/components/Portfolio';
 import Testimonials from '@/components/Testimonials';
-import Doctors from '@/components/Doctors';
-import Articles from '@/components/Articles';
 import Footer from '@/components/Footer';
-import BookingDrawer from '@/components/BookingDrawer';
 import FloatingBubble from '@/components/FloatingBubble';
 import ScrollIndicator from '@/components/ScrollIndicator';
+
+const Doctors = dynamic(() => import('@/components/Doctors'), {
+  loading: () => <div style={{ minHeight: '300px' }} />,
+});
+
+const Articles = dynamic(() => import('@/components/Articles'), {
+  loading: () => <div style={{ minHeight: '300px' }} />,
+});
+
+const BookingDrawer = dynamic(() => import('@/components/BookingDrawer'), {
+  ssr: false,
+});
 
 export default function HomePage() {
   const [isBookingOpen, setIsBookingOpen] = useState(false);

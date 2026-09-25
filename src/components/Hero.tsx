@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 
 interface HeroProps {
   onOpenBooking: () => void;
@@ -35,10 +36,16 @@ export default function Hero({ onOpenBooking }: HeroProps) {
           </div>
         </div>
         <div className="hero-image-wrap">
-          <img
+          <Image
             src="/assets/hero-doctors.png"
             alt="تیم پزشکان کلینیک دندانپزشکی قلی‌پور"
             className="hero-img"
+            width={600}
+            height={660}
+            priority={true}
+            quality={90}
+            sizes="(max-width: 768px) 100vw, 550px"
+            style={{ width: 'auto', height: 'auto', maxWidth: '95%' }}
           />
         </div>
       </div>

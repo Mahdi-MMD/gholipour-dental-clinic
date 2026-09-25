@@ -124,7 +124,12 @@ export default function Articles({ onOpenBooking }: ArticlesProps) {
                         onOpenBooking();
                       }}
                     >
-                      <img src={art.img} alt={art.title} />
+                      <img
+                        src={art.img}
+                        alt={art.title}
+                        loading="lazy"
+                        decoding="async"
+                      />
                     </a>
                   </div>
                   <div className="article-floating-box">

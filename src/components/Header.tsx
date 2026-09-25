@@ -103,12 +103,12 @@ export default function Header({
               </a>
             </li>
             <li className={`nav-item ${activePage === 'about' ? 'active' : ''}`}>
-              <Link href="/about" className="nav-link" onClick={closeMobileMenu}>
+              <Link href="/about" prefetch={false} className="nav-link" onClick={closeMobileMenu}>
                 درباره ما
               </Link>
             </li>
             <li className={`nav-item ${activePage === 'contact' ? 'active' : ''}`}>
-              <Link href="/contact" className="nav-link" onClick={closeMobileMenu}>
+              <Link href="/contact" prefetch={false} className="nav-link" onClick={closeMobileMenu}>
                 تماس با ما
               </Link>
             </li>

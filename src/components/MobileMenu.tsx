@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import Link from 'next/link';
+import Image from 'next/image';
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -181,10 +182,13 @@ export default function MobileMenu({
           {/* Drawer Header: Clinic Logo */}
           <div className="mobile-drawer-header">
             <Link href="/" onClick={handleLinkClick} className="mobile-drawer-logo">
-              <img
+              <Image
                 src="/assets/logo.png"
                 alt="کلینیک دندانپزشکی قلی‌پور"
                 className="drawer-logo-img"
+                width={150}
+                height={48}
+                loading="eager"
               />
             </Link>
           </div>

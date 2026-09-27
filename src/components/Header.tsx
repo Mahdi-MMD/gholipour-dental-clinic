@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import MobileMenu from './MobileMenu';
 
 interface HeaderProps {
@@ -49,10 +50,13 @@ export default function Header({
         {/* Right: Logo & Brand */}
         <div className="header-logo">
           <Link href="/">
-            <img
+            <Image
               src="/assets/logo.png"
               alt="کلینیک دندانپزشکی قلی‌پور"
               className="logo-img"
+              width={160}
+              height={52}
+              priority
             />
           </Link>
         </div>

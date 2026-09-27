@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Autoplay } from 'swiper/modules';
 
@@ -58,10 +59,13 @@ export default function Articles({ onOpenBooking }: ArticlesProps) {
         <div className="articles-header-bar">
           <div className="articles-title-group">
             <div className="articles-watermark-wrap">
-              <img
+              <Image
                 src="/assets/LAST-NEWS.png"
                 alt="LAST NEWS"
                 className="articles-watermark-img"
+                width={210}
+                height={42}
+                loading="eager"
               />
             </div>
             <h2 className="articles-section-title">جدیدترین مقالات</h2>
@@ -124,7 +128,13 @@ export default function Articles({ onOpenBooking }: ArticlesProps) {
                         onOpenBooking();
                       }}
                     >
-                      <img src={art.img} alt={art.title} />
+                      <Image
+                        src={art.img}
+                        alt={art.title}
+                        width={600}
+                        height={420}
+                        loading="eager"
+                      />
                     </a>
                   </div>
                   <div className="article-floating-box">

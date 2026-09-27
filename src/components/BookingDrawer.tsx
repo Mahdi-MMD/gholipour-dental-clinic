@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
 
 interface BookingDrawerProps {
   isOpen: boolean;
@@ -60,10 +61,13 @@ export default function BookingDrawer({ isOpen, onClose }: BookingDrawerProps) {
       >
         <div className="drawer-header">
           <div className="drawer-brand">
-            <img
+            <Image
               src="/assets/logo.png"
               alt="کلینیک دندانپزشکی قلی‌پور"
               className="drawer-logo-img"
+              width={140}
+              height={45}
+              loading="eager"
             />
           </div>
           <button

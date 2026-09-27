@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Image from 'next/image';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import BookingDrawer from '@/components/BookingDrawer';
@@ -180,7 +181,14 @@ export default function AboutPage() {
                   <SwiperSlide key={idx} className="gallery-slide">
                     <div className="gallery-card">
                       <div className="gallery-card-img-wrap">
-                        <img src={item.src} alt={item.title} />
+                        <Image
+                          src={item.src}
+                          alt={item.title}
+                          fill
+                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                          loading="eager"
+                          style={{ objectFit: 'cover' }}
+                        />
                         <div className="gallery-card-overlay">
                           <span className="gallery-card-tag">{item.tag}</span>
                           <h4 className="gallery-card-title">{item.title}</h4>
@@ -224,10 +232,13 @@ export default function AboutPage() {
             <div className="doctor-hybrid-showcase">
               {/* 1. Doctor Portrait Card (Right on desktop in RTL, Top on mobile) */}
               <div className="doctor-hybrid-card doctor-hybrid-portrait">
-                <img
+                <Image
                   src="/assets/doctor-portrait.jpg"
                   alt="دکتر مهدی محمد نژاد - دکترای حرفه‌ای دندان‌پزشکی"
                   className="doctor-portrait-image"
+                  width={500}
+                  height={500}
+                  loading="eager"
                 />
               </div>
 

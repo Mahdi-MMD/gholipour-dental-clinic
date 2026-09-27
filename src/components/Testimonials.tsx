@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
+import Image from 'next/image';
 
 interface Testimonial {
   text: string;
@@ -94,10 +95,13 @@ export default function Testimonials() {
         {/* Right Column: Title & COMMENTS Watermark */}
         <div className="testimonials-header-col">
           <div className="testimonials-watermark-wrap">
-            <img
+            <Image
               src="/assets/COMMENTS.png"
               alt="COMMENTS"
               className="testimonials-watermark-img"
+              width={260}
+              height={55}
+              loading="eager"
             />
           </div>
           <h2 className="testimonials-title">نظرات مراجعین</h2>
@@ -133,9 +137,12 @@ export default function Testimonials() {
                   <div className="v-card-inner">
                     <div className="v-card-header">
                       <div className="v-card-avatar">
-                        <img
+                        <Image
                           src="/assets/user-avatar.png"
                           alt="مراجع کلینیک قلی‌پور"
+                          width={48}
+                          height={48}
+                          loading="eager"
                         />
                       </div>
                       <div className="v-card-meta">

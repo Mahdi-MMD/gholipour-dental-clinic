@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Image from 'next/image';
 
 interface ServicesProps {
   onOpenBooking: () => void;
@@ -28,15 +29,21 @@ export default function Services({ onOpenBooking }: ServicesProps) {
             tabIndex={0}
           >
             <div className="pill-icon-box">
-              <img
+              <Image
                 src="https://qafdentalclinic.com/wp-content/uploads/2025/08/درمان-ربشه-3.png"
                 className="pill-bg"
                 alt="عصب کشی"
+                width={82}
+                height={82}
+                loading="eager"
               />
-              <img
+              <Image
                 src="https://qafdentalclinic.com/wp-content/uploads/2025/08/عصب-کشی.png"
                 className="pill-fg"
                 alt="عصب کشی"
+                width={54}
+                height={54}
+                loading="eager"
               />
             </div>
             <span className="pill-title">عصب کشی</span>
@@ -49,15 +56,21 @@ export default function Services({ onOpenBooking }: ServicesProps) {
             tabIndex={0}
           >
             <div className="pill-icon-box">
-              <img
+              <Image
                 src="https://qafdentalclinic.com/wp-content/uploads/2025/08/درمان-ربشه-3.png"
                 className="pill-bg"
                 alt="ترمیم"
+                width={82}
+                height={82}
+                loading="eager"
               />
-              <img
+              <Image
                 src="https://qafdentalclinic.com/wp-content/uploads/2025/08/ترمیم-4.png"
                 className="pill-fg"
                 alt="ترمیم"
+                width={54}
+                height={54}
+                loading="eager"
               />
             </div>
             <span className="pill-title">ترمیم دندان</span>
@@ -70,15 +83,21 @@ export default function Services({ onOpenBooking }: ServicesProps) {
             tabIndex={0}
           >
             <div className="pill-icon-box">
-              <img
+              <Image
                 src="https://qafdentalclinic.com/wp-content/uploads/2025/08/درمان-ربشه-3.png"
                 className="pill-bg"
                 alt="روکش"
+                width={82}
+                height={82}
+                loading="eager"
               />
-              <img
+              <Image
                 src="https://qafdentalclinic.com/wp-content/uploads/2025/08/روکش-6.png"
                 className="pill-fg"
                 alt="روکش"
+                width={54}
+                height={54}
+                loading="eager"
               />
             </div>
             <span className="pill-title">روکش دندان</span>
@@ -91,15 +110,21 @@ export default function Services({ onOpenBooking }: ServicesProps) {
             tabIndex={0}
           >
             <div className="pill-icon-box">
-              <img
+              <Image
                 src="https://qafdentalclinic.com/wp-content/uploads/2025/08/درمان-ربشه-3.png"
                 className="pill-bg"
                 alt="ایمپلنت"
+                width={82}
+                height={82}
+                loading="eager"
               />
-              <img
+              <Image
                 src="https://qafdentalclinic.com/wp-content/uploads/2025/08/ایمپلنت-5.png"
                 className="pill-fg"
                 alt="ایمپلنت"
+                width={54}
+                height={54}
+                loading="eager"
               />
             </div>
             <span className="pill-title">کاشت ایمپلنت</span>
@@ -132,9 +157,12 @@ export default function Services({ onOpenBooking }: ServicesProps) {
                 </button>
               </div>
               <div className="service-tab-graphic">
-                <img
+                <Image
                   src="https://qafdentalclinic.com/wp-content/uploads/2025/08/ایمپلنت-5.png"
                   alt="ایمپلنت"
+                  width={220}
+                  height={220}
+                  loading="eager"
                 />
               </div>
             </div>
@@ -163,9 +191,12 @@ export default function Services({ onOpenBooking }: ServicesProps) {
                 </button>
               </div>
               <div className="service-tab-graphic">
-                <img
+                <Image
                   src="https://qafdentalclinic.com/wp-content/uploads/2025/08/ترمیم-4.png"
                   alt="ترمیم"
+                  width={220}
+                  height={220}
+                  loading="eager"
                 />
               </div>
             </div>
@@ -195,9 +226,12 @@ export default function Services({ onOpenBooking }: ServicesProps) {
                 </button>
               </div>
               <div className="service-tab-graphic">
-                <img
+                <Image
                   src="https://qafdentalclinic.com/wp-content/uploads/2025/08/روکش-6.png"
                   alt="روکش"
+                  width={220}
+                  height={220}
+                  loading="eager"
                 />
               </div>
             </div>
@@ -225,9 +259,12 @@ export default function Services({ onOpenBooking }: ServicesProps) {
                 </button>
               </div>
               <div className="service-tab-graphic">
-                <img
+                <Image
                   src="https://qafdentalclinic.com/wp-content/uploads/2025/08/عصب-کشی.png"
                   alt="عصب کشی"
+                  width={220}
+                  height={220}
+                  loading="eager"
                 />
               </div>
             </div>

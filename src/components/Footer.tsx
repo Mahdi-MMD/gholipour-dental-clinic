@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 
 interface FooterProps {
   onOpenBooking: () => void;
@@ -17,10 +18,13 @@ export default function Footer({ onOpenBooking }: FooterProps) {
           <div className="footer-col footer-col-brand">
             <div className="footer-logo">
               <Link href="/">
-                <img
+                <Image
                   src="/assets/logo.png"
                   alt="کلینیک دندانپزشکی قلی‌پور"
                   className="footer-logo-img"
+                  width={150}
+                  height={48}
+                  loading="eager"
                 />
               </Link>
             </div>

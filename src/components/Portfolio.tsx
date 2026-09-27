@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Image from 'next/image';
 
 interface BeforeAfterItemProps {
   beforeImg: string;
@@ -19,15 +20,21 @@ function BeforeAfterCard({ beforeImg, afterImg, title = 'درمان' }: BeforeAf
         dir="ltr"
       >
         <div className="ba-image-container">
-          <img
+          <Image
             className="ba-image-before"
             src={beforeImg}
             alt={`قبل از درمان - ${title}`}
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            loading="eager"
           />
-          <img
+          <Image
             className="ba-image-after"
             src={afterImg}
             alt={`بعد از درمان - ${title}`}
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            loading="eager"
           />
         </div>
         <input
@@ -113,27 +120,39 @@ export default function Portfolio() {
           <div className="portfolio-tab-content active" id="tab-portfolio-daily">
             <div className="gallery-grid">
               <div className="gallery-card">
-                <img
+                <Image
                   src="https://qafdentalclinic.com/wp-content/uploads/2025/08/Qaf-Daily-40.jpeg"
                   alt="روزمرگی مطب قلی‌پور"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                  loading="eager"
+                  style={{ objectFit: 'cover' }}
                 />
                 <div className="gallery-overlay">
                   <span>محیط آرام و استاندارد کلینیک</span>
                 </div>
               </div>
               <div className="gallery-card">
-                <img
+                <Image
                   src="https://qafdentalclinic.com/wp-content/uploads/2025/08/Qaf-Daily-41.jpeg"
                   alt="تجهیزات مدرن مطب"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                  loading="eager"
+                  style={{ objectFit: 'cover' }}
                 />
                 <div className="gallery-overlay">
                   <span>اتاق استریلیزاسیون و تجهیزات دیجیتال</span>
                 </div>
               </div>
               <div className="gallery-card">
-                <img
+                <Image
                   src="https://qafdentalclinic.com/wp-content/uploads/2025/08/Qaf-Daily-43.jpeg"
                   alt="روزمرگی کادر درمان"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                  loading="eager"
+                  style={{ objectFit: 'cover' }}
                 />
                 <div className="gallery-overlay">
                   <span>همراهی صمیمانه با مراجعین</span>

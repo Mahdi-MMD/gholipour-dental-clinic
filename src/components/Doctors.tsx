@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Autoplay } from 'swiper/modules';
 
@@ -85,7 +86,13 @@ export default function Doctors() {
             {doctorsData.map((doc, idx) => (
               <SwiperSlide key={idx} className="doctor-slide">
                 <div className="doctor-card">
-                  <img src={doc.img} alt={`${doc.name} - ${doc.title}`} />
+                  <Image
+                    src={doc.img}
+                    alt={`${doc.name} - ${doc.title}`}
+                    width={469}
+                    height={512}
+                    loading="eager"
+                  />
                 </div>
               </SwiperSlide>
             ))}

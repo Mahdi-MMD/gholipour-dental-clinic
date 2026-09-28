@@ -1,0 +1,897 @@
+/* ==========================================================
+   ARTICLES 4TH PAGE STYLES (صفحه مقالات)
+   Clean, Elegant, Pill Search with Left Icon & Filter,
+   Swiper Vertical Drawer, Sleek Vertical Scrollbar,
+   Optical Depth-of-Field Focus (No Unwanted Blue Glow)
+   ========================================================== */
+
+/* Main Page Container: Fixed Single-Shot Viewport (No Page Scroll Down) */
+.articles-page-wrapper {
+  height: 100vh;
+  height: 100dvh;
+  max-height: 100vh;
+  max-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(180deg, #f0f9fd 0%, #ffffff 45%, #f6fbfe 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Centered Stage Content Area: Fitted inside available viewport height */
+.articles-stage {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 24px 20px;
+  position: relative;
+  z-index: 10;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* Floating Ambient Blobs & Sparkles */
+.articles-ambient-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.ambient-circle-1 {
+  position: absolute;
+  top: 5%;
+  right: 10%;
+  width: 450px;
+  height: 450px;
+  background: radial-gradient(circle, rgba(196, 234, 247, 0.45) 0%, rgba(255, 255, 255, 0) 70%);
+  border-radius: 50%;
+  filter: blur(60px);
+}
+
+.ambient-circle-2 {
+  position: absolute;
+  top: 35%;
+  left: 8%;
+  width: 520px;
+  height: 520px;
+  background: radial-gradient(circle, rgba(227, 249, 255, 0.55) 0%, rgba(255, 255, 255, 0) 70%);
+  border-radius: 50%;
+  filter: blur(70px);
+}
+
+.ambient-floating-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(40px);
+  opacity: 0.6;
+  animation: floatOrb 12s ease-in-out infinite alternate;
+}
+
+.orb-1 {
+  width: 200px;
+  height: 200px;
+  background: rgba(28, 131, 170, 0.15);
+  top: 20%;
+  left: 18%;
+  animation-duration: 14s;
+}
+
+.orb-2 {
+  width: 240px;
+  height: 240px;
+  background: rgba(120, 215, 245, 0.2);
+  top: 45%;
+  right: 12%;
+  animation-duration: 18s;
+  animation-delay: -3s;
+}
+
+.orb-3 {
+  width: 160px;
+  height: 160px;
+  background: rgba(196, 234, 247, 0.35);
+  bottom: 15%;
+  left: 25%;
+  animation-duration: 16s;
+  animation-delay: -6s;
+}
+
+@keyframes floatOrb {
+  0% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-25px) scale(1.08); }
+  100% { transform: translateY(20px) scale(0.95); }
+}
+
+.floating-dental-sparkle {
+  position: absolute;
+  color: rgba(28, 131, 170, 0.22);
+  font-size: 20px;
+  animation: pulseSparkle 6s ease-in-out infinite;
+}
+
+.s-1 { top: 18%; right: 22%; animation-delay: 0s; }
+.s-2 { top: 52%; left: 20%; animation-delay: 3s; }
+
+@keyframes pulseSparkle {
+  0%, 100% { transform: scale(0.8) rotate(0deg); opacity: 0.2; }
+  50% { transform: scale(1.2) rotate(45deg); opacity: 0.55; }
+}
+
+@property --glow-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes rotateBorderGlow {
+  0% {
+    --glow-angle: 0deg;
+  }
+  100% {
+    --glow-angle: 360deg;
+  }
+}
+
+/* ==========================================================
+   MAIN SHOWCASE CARD (Border Glow Animation & Aesthetics)
+   ========================================================== */
+
+/* Outer wrapper for border glow */
+.articles-showcase-glow-container {
+  width: 100%;
+  max-width: 980px;
+  position: relative;
+  border-radius: 44px;
+  padding: 3px;
+  box-sizing: border-box;
+  --glow-angle: 0deg;
+}
+
+/* Ambient rotating glowing blur halo outside the container */
+.articles-showcase-glow-container::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 46px;
+  background: conic-gradient(
+    from var(--glow-angle),
+    /* 1st wave: H, M, L, L, M, H */
+    rgba(17, 138, 178, 0.5) 0deg,
+    rgba(124, 213, 199, 0.4) 30deg,
+    rgba(242, 242, 237, 0.1) 60deg,
+    rgba(242, 242, 237, 0.1) 90deg,
+    rgba(124, 213, 199, 0.4) 120deg,
+    rgba(17, 138, 178, 0.5) 150deg,
+    rgba(17, 138, 178, 0.5) 180deg,
+    /* 2nd wave: H, M, L, L, M, H */
+    rgba(124, 213, 199, 0.4) 210deg,
+    rgba(242, 242, 237, 0.1) 240deg,
+    rgba(242, 242, 237, 0.1) 270deg,
+    rgba(124, 213, 199, 0.4) 300deg,
+    rgba(17, 138, 178, 0.5) 330deg,
+    rgba(17, 138, 178, 0.5) 360deg
+  );
+  filter: blur(15px);
+  opacity: 0.45;
+  z-index: 1;
+  pointer-events: none;
+  animation: rotateBorderGlow 10s linear infinite;
+}
+
+/* Crisp rotating border stroke directly under the inner card */
+.articles-showcase-glow-container::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 44px;
+  background: conic-gradient(
+    from var(--glow-angle),
+    /* 1st wave: H, M, L, L, M, H */
+    #118ab2 0deg,
+    #7cd5c7 30deg,
+    #f2f2ed 60deg,
+    #f2f2ed 90deg,
+    #7cd5c7 120deg,
+    #118ab2 150deg,
+    #118ab2 180deg,
+    /* 2nd wave: H, M, L, L, M, H */
+    #7cd5c7 210deg,
+    #f2f2ed 240deg,
+    #f2f2ed 270deg,
+    #7cd5c7 300deg,
+    #118ab2 330deg,
+    #118ab2 360deg
+  );
+  z-index: 2;
+  pointer-events: none;
+  animation: rotateBorderGlow 10s linear infinite;
+}
+
+.articles-showcase-card {
+  width: 100%;
+  height: min(620px, calc(100dvh - 120px));
+  background: #ffffff;
+  border-radius: 41px;
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 
+    0 20px 60px rgba(35, 105, 140, 0.12),
+    0 4px 18px rgba(28, 131, 170, 0.05);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 34px 50px 20px;
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+  z-index: 3;
+}
+
+.card-ambient-glow {
+  position: absolute;
+  top: -80px;
+  right: -80px;
+  width: 240px;
+  height: 240px;
+  background: radial-gradient(circle, rgba(196, 234, 247, 0.3) 0%, rgba(255, 255, 255, 0) 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+/* Header & Typography */
+.articles-page-header {
+  text-align: center;
+  margin-bottom: 24px;
+  flex-shrink: 0;
+}
+
+.articles-page-title {
+  font-size: 34px;
+  font-weight: 900;
+  color: #1f4b6a;
+  letter-spacing: -0.4px;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.articles-page-subtitle {
+  font-size: 14.5px;
+  font-weight: 500;
+  color: #6a8c9b;
+  margin: 8px 0 0;
+}
+
+/* ==========================================================
+   PILL SEARCH & FILTER BAR
+   Clean single pill matching mockup, with left icon & filter
+   ========================================================== */
+
+.articles-search-wrap {
+  width: 100%;
+  max-width: 680px;
+  margin-bottom: 28px;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.articles-search-inner-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+/* Search Magnifier Icon: inside pill on the RIGHT (Persian RTL) */
+.articles-search-icon {
+  position: absolute;
+  right: 20px;
+  color: #5596b6;
+  font-size: 22px;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: rotate(-10deg);
+  transition: transform 0.3s ease, color 0.3s ease;
+  z-index: 10;
+}
+
+/* Search Text Input: Pill Shape matching mockup (Padding: right for icon, left for clear button) */
+.articles-search-input {
+  width: 100%;
+  height: 56px;
+  border-radius: 50px;
+  border: 1.8px solid #95c5db;
+  background-color: #ffffff;
+  padding: 0 58px 0 52px; /* Right: 58px for magnifier icon, Left: 52px for clear button */
+  font-family: var(--font-base);
+  font-size: 15.5px;
+  font-weight: 500;
+  color: var(--color-primary-dark);
+  text-align: right;
+  direction: rtl;
+  outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+.articles-search-input::placeholder {
+  color: #9cb5c2;
+  font-size: 14.5px;
+  font-weight: 400;
+}
+
+.articles-search-input:focus {
+  border-color: #1c83aa;
+  box-shadow: 0 0 0 4px rgba(28, 131, 170, 0.16);
+  background-color: #fcfefe;
+}
+
+.articles-search-inner-box:focus-within .articles-search-icon {
+  color: #1c83aa;
+  transform: rotate(0deg) scale(1.08);
+}
+
+/* Clear Search Button: inside pill on the LEFT */
+.articles-clear-search-btn {
+  position: absolute;
+  left: 18px;
+  background: none;
+  border: none;
+  color: #7f9ca8;
+  font-size: 17px;
+  cursor: pointer;
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  z-index: 10;
+}
+
+.articles-clear-search-btn:hover {
+  color: #d9534f;
+  background: rgba(217, 83, 79, 0.08);
+  transform: scale(1.1);
+}
+
+/* ==========================================================
+   SWIPER VERTICAL 3D ROLLER WITH VERTICAL SCROLLBAR
+   & REALISTIC OPTICAL DEPTH-OF-FIELD FOCUS
+   (Blue glow completely removed per user instruction)
+   ========================================================== */
+
+.articles-drawer-container {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  user-select: none;
+  cursor: default;
+  touch-action: none;
+}
+
+/* Swiper + Vertical Scrollbar Row Wrapper */
+.articles-swiper-layout {
+  width: 100%;
+  height: 290px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+/* Swiper Box with Top/Bottom Vignette Fade */
+.articles-swiper-wrapper-box {
+  width: calc(100% - 40px);
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  mask-image: linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%);
+}
+
+.articles-vertical-swiper {
+  width: 100%;
+  height: 100%;
+}
+
+.article-swiper-slide {
+  height: 58px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  background: transparent;
+  pointer-events: none;
+}
+
+/* Content Container Inside Each Slide */
+.article-slide-content {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+              filter 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+              opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Exact Title Link: ONLY catches mouse directly on text */
+.article-exact-title-link {
+  pointer-events: auto;
+  text-decoration: none;
+  display: inline-block;
+  white-space: nowrap;
+  direction: rtl;
+  padding: 4px 18px;
+  border-radius: 14px;
+  cursor: pointer;
+}
+
+.title-text-inner {
+  font-family: var(--font-base);
+  white-space: nowrap;
+  display: inline-block;
+  letter-spacing: -0.2px;
+  transition: all 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.title-text-inner.title-desktop {
+  display: inline-block;
+}
+
+.title-text-inner.title-mobile {
+  display: none;
+}
+
+/* ==========================================================
+   OPTICAL DEPTH-OF-FIELD FOCUS
+   Center is bold, sharp & dark.
+   Edges become progressively smaller, faded & blurry.
+   ========================================================== */
+
+/* 1. Active Middle Slide: Pin-Sharp, Bold & Larger (No Blue Glow) */
+.article-slide-content.slide-active {
+  opacity: 1;
+  filter: blur(0px);
+  transform: scale(1.16);
+  z-index: 10;
+}
+
+.article-slide-content.slide-active .title-text-inner {
+  font-size: 21.5px;
+  font-weight: 800;
+  color: #124e69;
+}
+
+/* 2. Near Neighbors (Prev / Next): Moderate focus */
+.article-slide-content.slide-near {
+  opacity: 0.85;
+  filter: blur(0.6px);
+  transform: scale(0.96);
+  z-index: 5;
+}
+
+.article-slide-content.slide-near .title-text-inner {
+  font-size: 16.5px;
+  font-weight: 600;
+  color: #1c83aa;
+}
+
+/* 3. Outer Edge Slides: Substantially smaller, faded & blurry */
+.article-slide-content.slide-edge {
+  opacity: 0.38;
+  filter: blur(2.4px);
+  transform: scale(0.82);
+  z-index: 2;
+}
+
+.article-slide-content.slide-edge .title-text-inner {
+  font-size: 14px;
+  font-weight: 400;
+  color: #3b97ba;
+}
+
+/* Hovering directly on inactive title text */
+.article-exact-title-link:hover .title-text-inner {
+  color: #124e69;
+}
+
+/* ==========================================================
+   CUSTOM VERTICAL SCROLLBAR
+   ========================================================== */
+
+.articles-scrollbar-container {
+  width: 24px;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 20;
+}
+
+.articles-vertical-scrollbar {
+  width: 5px !important;
+  height: 100% !important;
+  background: #e8f5fb !important;
+  border-radius: 10px !important;
+  position: relative !important;
+  left: auto !important;
+  right: auto !important;
+  top: auto !important;
+  bottom: auto !important;
+  opacity: 0.85 !important;
+  transition: opacity 0.3s ease, width 0.3s ease;
+}
+
+.articles-scrollbar-container:hover .articles-vertical-scrollbar {
+  width: 7px !important;
+  opacity: 1 !important;
+}
+
+.articles-scrollbar-drag {
+  background: #1c83aa !important;
+  border-radius: 10px !important;
+  cursor: grab !important;
+  transition: background-color 0.25s ease;
+}
+
+.articles-scrollbar-drag:active {
+  cursor: grabbing !important;
+  background: #124e69 !important;
+}
+
+/* Drawer Bottom Controls & Hint */
+.articles-drawer-hint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px dashed #e8f4f9;
+  width: 100%;
+  max-width: 520px;
+  flex-shrink: 0;
+}
+
+.drawer-step-btn {
+  background: #f0f8fb;
+  border: 1px solid #d4ebf5;
+  color: #1c83aa;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.drawer-step-btn:hover {
+  background: #1c83aa;
+  color: #ffffff;
+  transform: scale(1.08);
+}
+
+.active-article-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #1c83aa;
+  font-size: 13.5px;
+  font-weight: 700;
+  text-decoration: none;
+  background-color: #f1faff;
+  padding: 8px 20px;
+  border-radius: 25px;
+  border: 1px solid #c7eaf7;
+  transition: all 0.25s ease;
+  white-space: nowrap;
+}
+
+.active-article-cta:hover {
+  background-color: #1c83aa;
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(28, 131, 170, 0.25);
+  transform: translateY(-1px);
+}
+
+.articles-no-results {
+  padding: 40px 20px;
+  text-align: center;
+  color: #607d8b;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.no-results-icon-wrap {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: #f0f8fc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  color: #1c83aa;
+}
+
+/* Quick badges strip below card */
+.articles-quick-badges-strip {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  margin-top: 35px;
+  width: 100%;
+  max-width: 980px;
+}
+
+.article-stat-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 20px;
+  background: #ffffff;
+  border: 1px solid #d8eef5;
+  border-radius: 30px;
+  box-shadow: 0 4px 15px rgba(28, 67, 79, 0.04);
+  font-size: 13px;
+  font-weight: 600;
+  color: #1f4b6a;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.article-stat-pill:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(28, 131, 170, 0.08);
+}
+
+.article-stat-pill i { color: #1c83aa; font-size: 15px; }
+
+/* Responsive adjustments for Single-Shot Screen Fit (No Scroll Down) */
+@media (max-width: 768px) {
+  .articles-stage {
+    padding: 8px 12px 14px;
+    justify-content: center;
+  }
+  .articles-showcase-glow-container {
+    border-radius: 28px;
+    max-width: 100%;
+  }
+  .articles-showcase-glow-container::before {
+    border-radius: 32px;
+    inset: -3px;
+    filter: blur(10px);
+  }
+  .articles-showcase-glow-container::after {
+    border-radius: 28px;
+  }
+  .articles-showcase-card {
+    border-radius: 26px;
+    padding: 28px 8px 16px; /* Increased top spacing (28px) and expanded horizontal space (8px padding) */
+    height: min(580px, calc(100dvh - 72px));
+    max-height: calc(100dvh - 72px);
+  }
+  .articles-page-header {
+    margin-bottom: 18px; /* More space below header title */
+  }
+  .articles-page-title {
+    font-size: 21.5px;
+    letter-spacing: -0.3px;
+  }
+  .articles-page-subtitle {
+    font-size: 12px;
+    margin: 6px 0 0;
+  }
+  .articles-search-wrap {
+    margin-bottom: 22px; /* More space between search box and wheel below */
+    max-width: 95%;
+  }
+  .articles-search-input {
+    height: 46px;
+    padding: 0 46px 0 42px; /* Right for search icon, Left for clear button */
+    font-size: 13.5px;
+  }
+  .articles-search-icon {
+    right: 14px;
+    font-size: 17px;
+  }
+  .articles-clear-search-btn {
+    left: 12px;
+    font-size: 15px;
+    padding: 4px;
+  }
+  .articles-swiper-layout {
+    height: 255px; /* Increased drawer height for looser wheel line spacing */
+  }
+  .articles-swiper-wrapper-box {
+    width: 100%; /* Full width on mobile without side indentation */
+  }
+  .article-swiper-slide {
+    height: 51px !important; /* Increased line spacing between wheel titles (from 46px to 51px) */
+  }
+  .title-text-inner.title-desktop {
+    display: none;
+  }
+  .title-text-inner.title-mobile {
+    display: inline-block;
+  }
+  .article-slide-content.slide-active .title-text-inner {
+    font-size: 15.5px;
+    font-weight: 800;
+  }
+  .article-slide-content.slide-near .title-text-inner {
+    font-size: 13px;
+  }
+  .article-slide-content.slide-edge .title-text-inner {
+    font-size: 11px;
+  }
+  .article-exact-title-link {
+    padding: 3px 2px;
+    max-width: 99%; /* Expand titles closer to borders */
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .articles-drawer-hint {
+    margin-top: 14px;
+    padding-top: 10px;
+    gap: 10px;
+  }
+  .active-article-cta {
+    padding: 7px 16px;
+    font-size: 12.5px;
+  }
+  .drawer-step-btn {
+    width: 32px;
+    height: 32px;
+    font-size: 12px;
+  }
+  /* Remove left scroll indicator on mobile as requested */
+  .articles-scrollbar-container {
+    display: none !important;
+  }
+}
+
+/* Extra small devices / compact height phones */
+@media (max-height: 700px) {
+  .articles-page-header {
+    margin-bottom: 8px;
+  }
+  .articles-page-title {
+    font-size: 20px;
+  }
+  .articles-page-subtitle {
+    display: none; /* Hide subtitle on very short screens to maximize vertical breathing space */
+  }
+  .articles-search-wrap {
+    margin-bottom: 10px;
+  }
+  .articles-search-input {
+    height: 42px;
+    font-size: 13px;
+  }
+  .articles-swiper-layout {
+    height: 210px;
+  }
+  .article-swiper-slide {
+    height: 42px !important;
+  }
+  .article-slide-content.slide-active .title-text-inner {
+    font-size: 15px;
+  }
+}
+
+/* ==========================================================
+   MINISEARCH RESULTS & SNIPPET HIGHLIGHT STYLES
+   ========================================================== */
+
+.search-match-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(2, 132, 199, 0.1);
+  color: #0284c7;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 12px;
+}
+
+.search-result-snippet {
+  margin-top: 8px;
+  font-size: 13.5px;
+  color: #3e5a67;
+  line-height: 1.7;
+  background: #f4fafd;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border-right: 3px solid #0284c7;
+  display: block;
+}
+
+.search-result-snippet mark,
+.highlight-term {
+  background-color: #fef08a;
+  color: #854d0e;
+  font-weight: 700;
+  padding: 1px 4px;
+  border-radius: 4px;
+}
+
+.articles-search-results-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-height: 380px;
+  overflow-y: auto;
+  padding: 8px 4px;
+}
+
+.search-result-card {
+  display: block;
+  background: #ffffff;
+  border: 1.5px solid #dbeef3;
+  border-radius: 16px;
+  padding: 16px 20px;
+  text-decoration: none;
+  transition: all 0.25s ease;
+  box-shadow: 0 2px 8px rgba(28, 67, 79, 0.04);
+}
+
+.search-result-card:hover {
+  border-color: #0284c7;
+  box-shadow: 0 6px 18px rgba(2, 132, 199, 0.12);
+  transform: translateY(-2px);
+}
+
+.search-result-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.search-result-category {
+  font-size: 12px;
+  font-weight: 700;
+  color: #0284c7;
+}
+
+.search-result-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: #123340;
+  margin: 0 0 6px;
+}
+
+.search-result-matched-section {
+  font-size: 12.5px;
+  color: #0284c7;
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+}

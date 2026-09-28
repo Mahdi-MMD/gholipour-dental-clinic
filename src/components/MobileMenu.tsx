@@ -9,7 +9,7 @@ interface MobileMenuProps {
   isOpen: boolean;
   onClose: () => void;
   onOpenBooking: () => void;
-  activePage?: 'home' | 'contact' | 'about';
+  activePage?: 'home' | 'contact' | 'about' | 'articles';
 }
 
 export default function MobileMenu({
@@ -257,10 +257,10 @@ export default function MobileMenu({
               </li>
 
               {/* Articles */}
-              <li className="drawer-nav-item">
-                <a href={`${prefix}#articles`} className="drawer-nav-link" onClick={handleLinkClick}>
+              <li className={`drawer-nav-item ${activePage === 'articles' ? 'active' : ''}`}>
+                <Link href="/articles" className="drawer-nav-link" onClick={handleLinkClick}>
                   <span>مقالات</span>
-                </a>
+                </Link>
               </li>
 
               {/* About Us */}

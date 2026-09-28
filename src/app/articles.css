@@ -5,7 +5,7 @@
    Optical Depth-of-Field Focus (No Unwanted Blue Glow)
    ========================================================== */
 
-/* Main Page Container: Fixed Single-Shot Viewport (No Page Scroll Down) */
+/* Main Page Container: Fixed Single-Shot Viewport (Matching About/Contact Us Theme) */
 .articles-page-wrapper {
   height: 100vh;
   height: 100dvh;
@@ -13,7 +13,7 @@
   max-height: 100dvh;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(180deg, #f0f9fd 0%, #ffffff 45%, #f6fbfe 100%);
+  background-color: var(--color-white);
   position: relative;
   overflow: hidden;
 }
@@ -47,7 +47,7 @@
   right: 10%;
   width: 450px;
   height: 450px;
-  background: radial-gradient(circle, rgba(196, 234, 247, 0.45) 0%, rgba(255, 255, 255, 0) 70%);
+  background: radial-gradient(circle, rgba(196, 234, 247, 0.25) 0%, rgba(255, 255, 255, 0) 70%);
   border-radius: 50%;
   filter: blur(60px);
 }
@@ -58,7 +58,7 @@
   left: 8%;
   width: 520px;
   height: 520px;
-  background: radial-gradient(circle, rgba(227, 249, 255, 0.55) 0%, rgba(255, 255, 255, 0) 70%);
+  background: radial-gradient(circle, rgba(227, 249, 255, 0.3) 0%, rgba(255, 255, 255, 0) 70%);
   border-radius: 50%;
   filter: blur(70px);
 }

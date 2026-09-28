@@ -27,11 +27,14 @@ export interface ArticleItem {
   category: string;            // One of the standard clinic categories
   readTime: string;            // Persian reading time (e.g. '۵ دقیقه')
   date: string;                // Persian Shamsi date (e.g. '۶ مهر ۱۴۰۵')
-  author: string;              // Clinical author title (e.g. 'جراح دندانپزشک کلینیک قلی‌پور')
+  author: string;              // Always: 'دکتر مهدی محمد نژاد'
   summary: string;             // 2-3 sentence engaging teaser & SEO meta description (130-160 chars)
   keywords: string[];          // 8-15 high-volume search tokens & patient symptoms
   sections: ArticleSection[];  // 3-5 structured sections with deep anchors
   faqs?: ArticleFAQ[];         // 2-4 patient FAQs for FAQPage schema & accordion
+  image?: string;              // Featured image path (e.g. '/assets/article-implant-dos-donts.jpg')
+  imageAlt?: string;           // Descriptive Persian alt text for Google Images & accessibility
+  imageCaption?: string;       // Helpful clinical caption under hero image
   content: string[];           // Array of section body strings (backwards compatibility)
 }
 ```
@@ -107,3 +110,21 @@ Every article injects valid JSON-LD schemas into the document:
 2. **`BreadcrumbList`**: Structured trail (`خانه > مقالات دندانپزشکی > عنوان مقاله`) for hierarchical Google SERP presentation.
 3. **`FAQPage`**: If `faqs` are defined, emits `FAQPage` schema enabling Google "People Also Ask" and expandable search results cards.
 
+
+
+---
+
+## 5. Editorial Featured Image & Author E-E-A-T Specification
+
+### A. Featured Hero Image (16:9 Aspect Ratio)
+- **Placement**: Placed directly after the article title and header metadata, before the summary callout box.
+- **Acquisition Protocol**:
+  1. **Priority 1 (Find)**: Search `public/assets/` for an existing matching image asset.
+  2. **Priority 2 (Generate)**: If no appropriate asset exists, generate a professional dental image using `generate_image` (aspectRatio `'16:9'`) and save in assets.
+- **Markup**: Renders with Next.js optimized `<Image fill priority>`, rounded corners, responsive aspect ratio (16:9), and optional `<figcaption>`.
+- **SEO Social Output**: Automatically populates `og:image` (1200x630) and `twitter:image` for rich social snippet cards.
+
+### B. Medical Authority & Author E-E-A-T
+- **Fixed Author & Medical Reviewer**: **دکتر مهدی محمد نژاد** (Dr. Mahdi Mohammadnezhad | Medical Registration Code: ۲۲۹۳۵۳).
+- **Credentials Box**: An author biography card rendered beneath the article and FAQ sections, highlighting clinical review, doctor portrait (`/assets/doctor-mohammadnezhad.jpg`), and medical registration code (`کد نظام پزشکی : ۲۲۹۳۵۳`).
+- **Structured Data**: Injects `author` and `reviewedBy` as `Person` objects in the `MedicalWebPage` JSON-LD schema with `identifier: "229353"`.

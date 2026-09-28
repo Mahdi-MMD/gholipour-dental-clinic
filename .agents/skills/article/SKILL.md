@@ -93,15 +93,27 @@ flowchart TD
    - `category`: Matching clinic specialty
    - `readTime`: e.g. `'۵ دقیقه'`
    - `date`: Current Persian Shamsi date (e.g. `'۶ مهر ۱۴۰۵'`)
-   - `author`: Relevant clinical specialist (e.g. `'دندانپزشک متخصص کلینیک شهید قلی‌پور'`)
+   - `author`: Fixed author & medical reviewer: `'دکتر مهدی محمد نژاد'` (دکترای حرفه‌ای دندان‌پزشکی کلینیک شهید قلی‌پور | کد نظام پزشکی: ۲۲۹۳۵۳)
+   - `image`: Relative asset path (e.g. `'/assets/article-implant-dos-donts.jpg'`). Priority 1: Check existing `public/assets/` images. Priority 2: Generate a realistic dental graphic with `generate_image` (aspectRatio `'16:9'`). Placed immediately after title with responsive hero styling.
+   - `imageAlt`: Descriptive Persian alt text for SEO and accessibility
+   - `imageCaption`: Engaging Persian caption explaining the clinical graphic
    - `summary`: 2–3 sentence engaging hook and search meta description (120–160 characters, natural keyword integration)
    - `keywords`: 8–15 high-volume search keywords and colloquial symptoms (e.g., `دندون درد`, `ورم صورت`, `عصب کشی بدون درد`)
    - `sections`: 3–5 structured sections, each with a unique kebab-case anchor `id` (for MiniSearch deep-linking), `title`, and rich `body`
    - `faqs`: 2–4 high-intent patient FAQs (`{ question: string, answer: string }`) written in warm conversational Persian, addressing top patient questions and fueling Google's `FAQPage` rich snippets and People Also Ask boxes.
    - `content`: Array of section texts for backward compatibility
-2. **Technical SEO & Schema Integration**:
+2. **Featured Editorial Image Workflow**:
+   - **Step 1 (Priority)**: Scan `public/assets/` for an existing relevant dental image (e.g., `article-implant-dos-donts.jpg`, `article-whitening.jpg`, `article-toothpaste.jpg`, `article-orthodontics.jpg`, `article-anesthesia.jpg`).
+   - **Step 2 (Creation)**: If no matching asset exists, use the `generate_image` tool with aspectRatio `'16:9'` and a photorealistic medical dental prompt to generate the asset into the clinic image repository.
+   - **Step 3 (Placement)**: Assign `image`, `imageAlt`, and `imageCaption` in `ArticleItem`. The page renders it as an editorial 16:9 hero image directly beneath the title and header metadata.
+
+3. **Author E-E-A-T & Reviewer Persona**:
+   - Author is always set to **`دکتر مهدی محمد نژاد`** (Doctor of Dental Surgery, Gholipour Dental Clinic | Medical Council Code: ۲۲۹۳۵۳).
+   - Injects both author bio credentials card (displaying portrait `/assets/doctor-mohammadnezhad.jpg` and code ۲۲۹۳۵۳) and structured schema markup (`author`, `reviewedBy`, with `identifier: "229353"`) to establish strong Google E-E-A-T and medical trust.
+
+4. **Technical SEO & Schema Integration**:
    - Verify that the new slug automatically pre-renders via `generateStaticParams()` in `src/app/articles/[slug]/page.tsx`.
-   - Verify dynamic metadata generation (`generateMetadata`): unique title, meta description, canonical URL, and Open Graph tags.
+   - Verify dynamic metadata generation (`generateMetadata`): unique title, meta description, canonical URL, and Open Graph tags (including `og:image`).
    - Verify JSON-LD structured data: `MedicalWebPage`, `BreadcrumbList`, and `FAQPage`.
 3. **Internal Linking (Hub & Spoke)**:
    - Identify 1–2 related articles in `src/data/articlesData.ts`.
@@ -115,7 +127,8 @@ flowchart TD
 Output a clean, structured summary for the user to analyze:
 - **Decision Mode**: New Article created vs Existing Article enriched (with similarity reasoning).
 - **Scientific References Cited**: Exact medical journals and clinical sources used.
-- **Article Metadata & Technical SEO**: Title, Slug, Category, Keywords, Reading Time, and Meta Description.
+- **Article Metadata & Technical SEO**: Title (refined for SEO), Slug, Category, Keywords, Reading Time, Meta Description, and Author (`دکتر مهدی محمد نژاد`).
+- **Featured Image**: Image path (found in assets or newly generated), Alt text, and Caption.
 - **Section Breakdown**: Heading names, deep anchor IDs (`#id`), and content preview.
 - **Patient FAQs**: List of 2–4 questions and answers prepared for `FAQPage` schema.
 - **Backlinks / Internal Links Added**: Existing articles updated to link here.

@@ -1,6 +1,7 @@
 import React from 'react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { ARTICLES_DATA } from '@/data/articlesData';
 import ArticleClientWrapper, {
@@ -33,6 +34,18 @@ export async function generateMetadata({
   }
 
   const pageUrl = `/articles/${article.slug}`;
+  const ogImages = article.image
+    ? [
+        {
+          url: article.image.startsWith('http')
+            ? article.image
+            : `https://gholipourdental.com${article.image}`,
+          width: 1200,
+          height: 630,
+          alt: article.imageAlt || article.title,
+        },
+      ]
+    : undefined;
 
   return {
     title: `${article.title} | کلینیک دندانپزشکی شهید قلی‌پور`,
@@ -48,13 +61,15 @@ export async function generateMetadata({
       type: 'article',
       locale: 'fa_IR',
       siteName: 'کلینیک دندانپزشکی شهید قلی‌پور',
-      authors: [article.author],
+      authors: [article.author || 'دکتر مهدی محمد نژاد'],
       tags: article.keywords,
+      images: ogImages,
     },
     twitter: {
       card: 'summary_large_image',
       title: article.title,
       description: article.summary,
+      images: article.image ? [article.image] : undefined,
     },
   };
 }
@@ -118,9 +133,31 @@ export default async function ArticleDetailPage({ params }: ArticleDetailProps) 
     description: article.summary,
     url: `https://gholipourdental.com/articles/${article.slug}`,
     inLanguage: 'fa-IR',
+    ...(article.image
+      ? {
+          image: {
+            '@type': 'ImageObject',
+            url: article.image.startsWith('http')
+              ? article.image
+              : `https://gholipourdental.com${article.image}`,
+          },
+        }
+      : {}),
     author: {
       '@type': 'Person',
-      name: article.author,
+      name: article.author || 'دکتر مهدی محمد نژاد',
+      jobTitle: 'دکترای حرفه‌ای دندان‌پزشکی',
+      identifier: '229353',
+      worksFor: {
+        '@type': 'DentalClinic',
+        name: 'کلینیک دندانپزشکی شهید قلی‌پور',
+      },
+    },
+    reviewedBy: {
+      '@type': 'Person',
+      name: 'دکتر مهدی محمد نژاد',
+      jobTitle: 'دکترای حرفه‌ای دندان‌پزشکی',
+      identifier: '229353',
     },
     publisher: {
       '@type': 'DentalClinic',
@@ -303,9 +340,9 @@ export default async function ArticleDetailPage({ params }: ArticleDetailProps) 
               <span>
                 <i
                   className="fa-solid fa-user-doctor"
-                  style={{ marginLeft: '6px' }}
+                  style={{ marginLeft: '6px', color: 'var(--color-primary)' }}
                 ></i>
-                {article.author}
+                نویسنده و بازبین علمی: {article.author}
               </span>
             </div>
           </div>
@@ -317,6 +354,62 @@ export default async function ArticleDetailPage({ params }: ArticleDetailProps) 
             className="container"
             style={{ maxWidth: '850px', margin: '0 auto', padding: '0 20px' }}
           >
+            {/* Featured Article Image (Modern Editorial Hero with 16:9 Aspect Ratio) */}
+            {article.image && (
+              <figure
+                style={{
+                  margin: '0 0 36px 0',
+                  borderRadius: '18px',
+                  overflow: 'hidden',
+                  boxShadow: '0 12px 36px rgba(28, 67, 79, 0.09)',
+                  border: '1px solid #d8eef5',
+                  backgroundColor: '#f6fbfd',
+                }}
+              >
+                <div
+                  style={{
+                    position: 'relative',
+                    width: '100%',
+                    aspectRatio: '16 / 9',
+                    maxHeight: '440px',
+                    overflow: 'hidden',
+                  }}
+                >
+                  <Image
+                    src={article.image}
+                    alt={article.imageAlt || article.title}
+                    fill
+                    priority
+                    sizes="(max-width: 850px) 100vw, 850px"
+                    style={{
+                      objectFit: 'cover',
+                      objectPosition: 'center',
+                    }}
+                  />
+                </div>
+                {article.imageCaption && (
+                  <figcaption
+                    style={{
+                      padding: '10px 18px',
+                      fontSize: '13px',
+                      color: 'var(--color-text-muted)',
+                      backgroundColor: '#f8fdff',
+                      borderTop: '1px solid #eef6f9',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                    }}
+                  >
+                    <i
+                      className="fa-solid fa-camera"
+                      style={{ color: 'var(--color-primary)', fontSize: '12px' }}
+                    ></i>
+                    <span>{article.imageCaption}</span>
+                  </figcaption>
+                )}
+              </figure>
+            )}
+
             {/* Summary Callout Box */}
             <div
               style={{
@@ -476,6 +569,88 @@ export default async function ArticleDetailPage({ params }: ArticleDetailProps) 
             {article.faqs && article.faqs.length > 0 && (
               <ArticleFaqAccordion faqs={article.faqs} />
             )}
+
+            {/* Author E-E-A-T Bio Box */}
+            <aside
+              aria-label="اطلاعات نویسنده و بازبین علمی"
+              style={{
+                marginTop: '44px',
+                padding: '24px',
+                backgroundColor: '#fbfdfe',
+                border: '1.5px solid #dbeef3',
+                borderRadius: '16px',
+                display: 'flex',
+                flexWrap: 'wrap',
+                alignItems: 'center',
+                gap: '20px',
+              }}
+            >
+              <div
+                style={{
+                  position: 'relative',
+                  width: '74px',
+                  height: '74px',
+                  borderRadius: '50%',
+                  overflow: 'hidden',
+                  flexShrink: 0,
+                  border: '2.5px solid var(--color-primary)',
+                  boxShadow: '0 4px 14px rgba(28, 67, 79, 0.1)',
+                }}
+              >
+                <Image
+                  src="/assets/doctor-mohammadnezhad.jpg"
+                  alt="دکتر مهدی محمد نژاد"
+                  fill
+                  style={{ objectFit: 'cover' }}
+                />
+              </div>
+              <div style={{ flex: '1 1 280px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', marginBottom: '4px' }}>
+                  <span
+                    style={{
+                      fontSize: '16px',
+                      fontWeight: 800,
+                      color: 'var(--color-primary-dark)',
+                    }}
+                  >
+                    نویسنده و بازبین علمی: دکتر مهدی محمد نژاد
+                  </span>
+                  <span
+                    style={{
+                      fontSize: '11px',
+                      fontWeight: 700,
+                      backgroundColor: 'var(--color-sky-tint)',
+                      color: 'var(--color-primary)',
+                      padding: '2px 10px',
+                      borderRadius: '12px',
+                    }}
+                  >
+                    تایید شده پزشکی
+                  </span>
+                </div>
+                <p
+                  style={{
+                    fontSize: '13px',
+                    color: 'var(--color-text-muted)',
+                    margin: '0 0 6px 0',
+                    lineHeight: 1.6,
+                  }}
+                >
+                  دکترای حرفه‌ای دندان‌پزشکی کلینیک تخصصی دندانپزشکی شهید قلی‌پور | <span style={{ fontWeight: 700, color: 'var(--color-primary-dark)' }}>کد نظام پزشکی: ۲۲۹۳۵۳</span>
+                </p>
+                <p
+                  style={{
+                    fontSize: '12.5px',
+                    color: '#4e707e',
+                    margin: 0,
+                    lineHeight: 1.8,
+                    textAlign: 'justify',
+                  }}
+                >
+                  این مقاله بر اساس آخرین شواهد و ژورنال‌های معتبر بین‌المللی دندانپزشکی نگارش یافته و با هدف ارتقای آگاهی بیماران، توسط دکتر مهدی محمد نژاد (کد نظام پزشکی ۲۲۹۳۵۳) بازبینی علمی و تایید شده است.
+                </p>
+              </div>
+            </aside>
 
             {/* Keywords / Tags for SEO & Contextual Navigation */}
             {article.keywords && article.keywords.length > 0 && (

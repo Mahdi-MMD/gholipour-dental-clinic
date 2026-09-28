@@ -426,7 +426,6 @@
               opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* Exact Title Link: ONLY catches mouse directly on text */
 .article-exact-title-link {
   pointer-events: auto;
   text-decoration: none;
@@ -436,6 +435,10 @@
   padding: 4px 18px;
   border-radius: 14px;
   cursor: pointer;
+  max-width: 90%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-sizing: border-box;
 }
 
 .title-text-inner {
@@ -748,10 +751,12 @@
     font-size: 11px;
   }
   .article-exact-title-link {
-    padding: 3px 2px;
-    max-width: 99%; /* Expand titles closer to borders */
+    padding: 3px 6px 3px 8px;
+    max-width: 92%; /* Safe margin from borders */
     overflow: hidden;
     text-overflow: ellipsis;
+    white-space: nowrap;
+    display: inline-block;
   }
   .articles-drawer-hint {
     margin-top: 14px;

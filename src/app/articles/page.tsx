@@ -30,12 +30,21 @@ interface SearchResultItem extends ArticleItem {
   score?: number;
 }
 
-// Smart Title Compressor: Truncates long titles gracefully by word count with ellipsis
-function formatWheelTitle(title: string, maxWords: number = 8): string {
+// Smart Title Compressor: Truncates long titles gracefully by word count and char limit with ellipsis
+function formatWheelTitle(title: string, maxWords: number = 8, maxChars: number = 42): string {
   if (!title) return '';
-  const words = title.trim().split(/\s+/);
-  if (words.length <= maxWords) return title;
-  return words.slice(0, maxWords).join(' ') + '...';
+  const trimmed = title.trim();
+  const words = trimmed.split(/\s+/);
+  
+  if (words.length > maxWords) {
+    return words.slice(0, maxWords).join(' ') + '...';
+  }
+  
+  if (trimmed.length > maxChars) {
+    return trimmed.slice(0, maxChars).trim() + '...';
+  }
+  
+  return trimmed;
 }
 
 export default function ArticlesPage() {
@@ -301,7 +310,13 @@ export default function ArticlesPage() {
                     slidesPerView={5}
                     centeredSlides={true}
                     loop={totalCount >= 5}
-                    speed={800}
+                    speed={600}
+                    slideToClickedSlide={true}
+                    freeMode={false}
+                    touchRatio={1}
+                    touchAngle={45}
+                    threshold={10}
+                    resistanceRatio={0.5}
                     mousewheel={{
                       forceToAxis: true,
                       releaseOnEdges: false,
@@ -340,10 +355,10 @@ export default function ArticlesPage() {
                                 className="article-exact-title-link"
                               >
                                 <span className="title-text-inner title-desktop">
-                                  {formatWheelTitle(item.title, 8)}
+                                  {formatWheelTitle(item.title, 8, 48)}
                                 </span>
                                 <span className="title-text-inner title-mobile">
-                                  {formatWheelTitle(item.title, 7)}
+                                  {formatWheelTitle(item.title, 6, 32)}
                                 </span>
                               </Link>
                             </div>

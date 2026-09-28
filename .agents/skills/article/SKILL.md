@@ -48,6 +48,10 @@ flowchart TD
      - Next sequential `id`
      - English kebab-case `slug` (e.g. `clear-aligners-vs-braces`)
      - Clinic `category`
+3. **Title Optimization & SEO Refinement**:
+   - The agent is **explicitly authorized and encouraged to adjust/refine the raw user topic title** to improve organic search visibility (SEO) and click-through rates, while perfectly reflecting the detailed article content.
+   - *Example*: A plain topic `"تفاوت لمینت و کامپوزیت"` can be refined to `"لمینت سرامیکی یا کامپوزیت دندان؟ مقایسه کامل ماندگاری، هزینه و زیبایی لبخند"`.
+   - The headline should remain honest, reassuring, and aligned with user search intent.
 
 ---
 
@@ -80,24 +84,29 @@ flowchart TD
 
 ---
 
-## Phase 4: Data Schema Sync & Internal Linking (Backlinks)
+## Phase 4: Technical SEO, Data Schema Sync & Internal Linking (Backlinks)
 
 1. **Format into `ArticleItem`**:
    - `id`: Unique incremental ID
    - `slug`: Clean kebab-case string
-   - `title`: Catchy, friendly Persian title
+   - `title`: Catchy, friendly Persian title (included in dynamic `<title>` and Open Graph)
    - `category`: Matching clinic specialty
    - `readTime`: e.g. `'۵ دقیقه'`
    - `date`: Current Persian Shamsi date (e.g. `'۶ مهر ۱۴۰۵'`)
    - `author`: Relevant clinical specialist (e.g. `'دندانپزشک متخصص کلینیک شهید قلی‌پور'`)
-   - `summary`: 2–3 sentence engaging hook / meta description
+   - `summary`: 2–3 sentence engaging hook and search meta description (120–160 characters, natural keyword integration)
    - `keywords`: 8–15 high-volume search keywords and colloquial symptoms (e.g., `دندون درد`, `ورم صورت`, `عصب کشی بدون درد`)
    - `sections`: 3–5 structured sections, each with a unique kebab-case anchor `id` (for MiniSearch deep-linking), `title`, and rich `body`
+   - `faqs`: 2–4 high-intent patient FAQs (`{ question: string, answer: string }`) written in warm conversational Persian, addressing top patient questions and fueling Google's `FAQPage` rich snippets and People Also Ask boxes.
    - `content`: Array of section texts for backward compatibility
-2. **Internal Linking (Hub & Spoke)**:
+2. **Technical SEO & Schema Integration**:
+   - Verify that the new slug automatically pre-renders via `generateStaticParams()` in `src/app/articles/[slug]/page.tsx`.
+   - Verify dynamic metadata generation (`generateMetadata`): unique title, meta description, canonical URL, and Open Graph tags.
+   - Verify JSON-LD structured data: `MedicalWebPage`, `BreadcrumbList`, and `FAQPage`.
+3. **Internal Linking (Hub & Spoke)**:
    - Identify 1–2 related articles in `src/data/articlesData.ts`.
-   - Update their section text to cross-reference the new article with natural anchor context.
-3. **Save**: Update [`src/data/articlesData.ts`](file:///c:/Users/mahdi/OneDrive/Desktop/%DA%A9%D9%84%DB%8C%D9%86%DB%8C%DA%A9%20%D8%AF%D9%86%D8%AF%D8%A7%D9%86%D9%BE%D8%B2%D8%B4%DA%A9%DB%8C%20%D8%B4%D9%87%DB%8C%D8%AF%20%D9%82%D9%84%DB%8C%20%D9%BE%D9%88%D8%B1/src/data/articlesData.ts).
+   - Update their section text to cross-reference the new article with natural markdown anchor context (`[متن پیوند](/articles/slug#anchor)`).
+4. **Save**: Update [`src/data/articlesData.ts`](file:///c:/Users/mahdi/OneDrive/Desktop/%DA%A9%D9%84%DB%8C%D9%86%DB%8C%DA%A9%20%D8%AF%D9%86%D8%AF%D8%A7%D9%86%D9%BE%D8%B2%D8%B4%DA%A9%DB%8C%20%D8%B4%D9%87%DB%8C%D8%AF%20%D9%82%D9%84%DB%8C%20%D9%BE%D9%88%D8%B1/src/data/articlesData.ts).
 
 ---
 
@@ -106,11 +115,12 @@ flowchart TD
 Output a clean, structured summary for the user to analyze:
 - **Decision Mode**: New Article created vs Existing Article enriched (with similarity reasoning).
 - **Scientific References Cited**: Exact medical journals and clinical sources used.
-- **Article Metadata**: Title, Slug, Category, Keywords, and Reading Time.
+- **Article Metadata & Technical SEO**: Title, Slug, Category, Keywords, Reading Time, and Meta Description.
 - **Section Breakdown**: Heading names, deep anchor IDs (`#id`), and content preview.
+- **Patient FAQs**: List of 2–4 questions and answers prepared for `FAQPage` schema.
 - **Backlinks / Internal Links Added**: Existing articles updated to link here.
 - **Explicit Call-to-Action**: Prompt the user:
-  > *"Please review the generated article structure and content above. If everything meets your approval, confirm and I will automatically commit and push to Git."*
+  > *"Please review the generated article structure, SEO metadata, and content above. If everything meets your approval, confirm and I will automatically commit and push to Git."*
 
 ---
 

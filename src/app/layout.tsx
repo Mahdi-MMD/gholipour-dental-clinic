@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://gholipourdental.com'),
   title: 'کلینیک دندانپزشکی قلی‌پور | خدمات تخصصی دندانپزشکی دیجیتال',
   description: 'کلینیک دندانپزشکی قلی‌پور، ارائه دهنده خدمات تخصصی ایمپلنت دیجیتال، عصب‌کشی بدون درد، روکش و ترمیم دندان در محیطی مدرن و آرامش‌بخش.',
   keywords: ['کلینیک دندانپزشکی قلی پور', 'ایمپلنت دندان', 'عصب کشی دندان', 'روکش زیرکونیا', 'ترمیم دندان', 'دندانپزشکی قم'],

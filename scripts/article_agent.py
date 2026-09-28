@@ -98,9 +98,9 @@ def check_cannibalization(topic: str, existing_articles: List[Dict[str, Any]]) -
 
 
 def git_commit_and_push(commit_message: str) -> bool:
-    """Stages articlesData.ts, commits, and pushes to origin main."""
+    """Stages articles data, routes, and skills, commits, and pushes to origin main."""
     try:
-        subprocess.run(["git", "add", "src/data/articlesData.ts"], cwd=WORKSPACE_DIR, check=True)
+        subprocess.run(["git", "add", "src/data/articlesData.ts", "src/app/articles/", ".agents/skills/article/"], cwd=WORKSPACE_DIR, check=True)
         subprocess.run(["git", "commit", "-m", commit_message], cwd=WORKSPACE_DIR, check=True)
         subprocess.run(["git", "push", "origin", "main"], cwd=WORKSPACE_DIR, check=True)
         print(" Successfully committed and pushed to git.")

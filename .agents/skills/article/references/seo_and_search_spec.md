@@ -15,6 +15,11 @@ export interface ArticleSection {
   body: string;    // Rich, detailed Persian paragraph (120-220 words)
 }
 
+export interface ArticleFAQ {
+  question: string; // High-intent patient question (e.g. 'آیا لمینت نیاز به تراش دارد؟')
+  answer: string;   // Clear, conversational, reassuring medical answer (50-90 words)
+}
+
 export interface ArticleItem {
   id: string;                  // Next incremental sequential string (e.g. '9')
   slug: string;                // URL path kebab-case (e.g. 'wisdom-tooth-recovery-tips')
@@ -23,9 +28,10 @@ export interface ArticleItem {
   readTime: string;            // Persian reading time (e.g. '۵ دقیقه')
   date: string;                // Persian Shamsi date (e.g. '۶ مهر ۱۴۰۵')
   author: string;              // Clinical author title (e.g. 'جراح دندانپزشک کلینیک قلی‌پور')
-  summary: string;             // 2-3 sentence engaging teaser / meta description
+  summary: string;             // 2-3 sentence engaging teaser & SEO meta description (130-160 chars)
   keywords: string[];          // 8-15 high-volume search tokens & patient symptoms
   sections: ArticleSection[];  // 3-5 structured sections with deep anchors
+  faqs?: ArticleFAQ[];         // 2-4 patient FAQs for FAQPage schema & accordion
   content: string[];           // Array of section body strings (backwards compatibility)
 }
 ```
@@ -71,3 +77,33 @@ Before writing a new page, evaluate the semantic overlap with existing articles 
 Whenever a new subpage is created:
 1. **Link to Parent/Hub**: Reference related clinic treatments or foundational articles.
 2. **Backlink from Existing Articles**: Find 1–2 existing articles in `ARTICLES_DATA` that mention the topic, and add an inline mention or contextual link pointing to the new subpage.
+
+---
+
+## 4. Technical Search Engine Architecture
+
+All article detail subpages (`/articles/[slug]`) operate under a high-performance Next.js Server Component architecture:
+
+### A. Pre-Rendering (`generateStaticParams`)
+All slugs are pre-rendered at build time:
+```typescript
+export async function generateStaticParams() {
+  return ARTICLES_DATA.map((article) => ({ slug: article.slug }));
+}
+```
+This guarantees instant server responses and immediate indexation by search engine spiders.
+
+### B. Dynamic Metadata & Open Graph (`generateMetadata`)
+Each subpage emits custom, per-article metadata:
+- **Title**: `<article.title> | کلینیک دندانپزشکی شهید قلی‌پور`
+- **Description**: `<article.summary>` (strictly 120–160 Persian characters)
+- **Canonical URL**: `https://gholipourdental.com/articles/<article.slug>`
+- **Open Graph**: Type `article`, with author, published date, tags, and clinic name.
+- **Twitter Card**: `summary_large_image`
+
+### C. JSON-LD Structured Data (Rich Snippets)
+Every article injects valid JSON-LD schemas into the document:
+1. **`MedicalWebPage` / `Article`**: Declares medical publisher (`DentalClinic`), author, headline, inLanguage (`fa-IR`), and publication date.
+2. **`BreadcrumbList`**: Structured trail (`خانه > مقالات دندانپزشکی > عنوان مقاله`) for hierarchical Google SERP presentation.
+3. **`FAQPage`**: If `faqs` are defined, emits `FAQPage` schema enabling Google "People Also Ask" and expandable search results cards.
+

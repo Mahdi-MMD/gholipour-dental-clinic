@@ -61,7 +61,7 @@ export async function generateMetadata({
       type: 'article',
       locale: 'fa_IR',
       siteName: 'کلینیک دندانپزشکی شهید قلی‌پور',
-      authors: [article.author || 'دکتر مهدی محمد نژاد'],
+      authors: [article.author || 'دکتر مهدی محمدنژاد'],
       tags: article.keywords,
       images: ogImages,
     },
@@ -145,7 +145,7 @@ export default async function ArticleDetailPage({ params }: ArticleDetailProps) 
       : {}),
     author: {
       '@type': 'Person',
-      name: article.author || 'دکتر مهدی محمد نژاد',
+      name: article.author || 'دکتر مهدی محمدنژاد',
       jobTitle: 'دکترای حرفه‌ای دندان‌پزشکی',
       identifier: '229353',
       worksFor: {
@@ -155,7 +155,7 @@ export default async function ArticleDetailPage({ params }: ArticleDetailProps) 
     },
     reviewedBy: {
       '@type': 'Person',
-      name: 'دکتر مهدی محمد نژاد',
+      name: 'دکتر مهدی محمدنژاد',
       jobTitle: 'دکترای حرفه‌ای دندان‌پزشکی',
       identifier: '229353',
     },
@@ -168,6 +168,32 @@ export default async function ArticleDetailPage({ params }: ArticleDetailProps) 
         url: 'https://gholipourdental.com/assets/logo.png',
       },
     },
+    ...(article.citations && article.citations.length > 0
+      ? {
+          citation: article.citations.map((c) => ({
+            '@type': 'CreativeWork',
+            name: c.title,
+            publisher: c.source,
+            ...(c.url ? { url: c.url } : {}),
+          })),
+        }
+      : {}),
+    ...(article.sections && article.sections.some((s) => s.doctorComment)
+      ? {
+          hasPart: article.sections
+            .filter((s) => s.doctorComment)
+            .map((s) => ({
+              '@type': 'Comment',
+              name: `یادداشت بالینی: ${s.title}`,
+              text: s.doctorComment,
+              author: {
+                '@type': 'Person',
+                name: 'دکتر مهدی محمدنژاد',
+                identifier: '229353',
+              },
+            })),
+        }
+      : {}),
   };
 
   const breadcrumbSchema = {
@@ -410,6 +436,48 @@ export default async function ArticleDetailPage({ params }: ArticleDetailProps) 
               </figure>
             )}
 
+            {/* TL;DR / Quick Expert Summary Box (Fast Scanning & Featured Snippet) */}
+            {article.tldr && (
+              <div
+                style={{
+                  backgroundColor: '#eef8ff',
+                  border: '1.5px solid #bce1f5',
+                  borderRight: '5px solid var(--color-primary)',
+                  borderRadius: '14px',
+                  padding: '18px 22px',
+                  marginBottom: '22px',
+                  boxShadow: '0 2px 10px rgba(45, 106, 122, 0.05)',
+                }}
+              >
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    marginBottom: '8px',
+                    color: 'var(--color-primary-dark)',
+                    fontWeight: 800,
+                    fontSize: '15px',
+                  }}
+                >
+                  <i className="fa-solid fa-bolt" style={{ color: '#0284c7' }}></i>
+                  <span>خلاصه سریع و نکات کلیدی (TL;DR)</span>
+                </div>
+                <p
+                  style={{
+                    margin: 0,
+                    fontSize: '15px',
+                    lineHeight: 1.85,
+                    color: 'var(--color-text-body)',
+                    fontWeight: 600,
+                    textAlign: 'justify',
+                  }}
+                >
+                  {article.tldr}
+                </p>
+              </div>
+            )}
+
             {/* Summary Callout Box */}
             <div
               style={{
@@ -553,6 +621,90 @@ export default async function ArticleDetailPage({ params }: ArticleDetailProps) 
                       <p style={{ margin: 0, textAlign: 'justify' }}>
                         {renderFormattedBody(section.body)}
                       </p>
+
+                      {/* Inline Physician Annotation / Chairside Commentary */}
+                      {section.doctorComment && (
+                        <aside
+                          aria-label={`یادداشت بالینی دکتر مهدی محمدنژاد برای ${section.title}`}
+                          style={{
+                            marginTop: '16px',
+                            backgroundColor: '#f6fbfd',
+                            borderRight: '4px solid #0284c7',
+                            borderTop: '1px solid #e1eff5',
+                            borderBottom: '1px solid #e1eff5',
+                            borderLeft: '1px solid #e1eff5',
+                            borderRadius: '12px',
+                            padding: '16px 20px',
+                            boxShadow: '0 2px 8px rgba(2, 132, 199, 0.04)',
+                          }}
+                        >
+                          <div
+                            style={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: '10px',
+                              marginBottom: '8px',
+                            }}
+                          >
+                            <div
+                              style={{
+                                position: 'relative',
+                                width: '32px',
+                                height: '32px',
+                                borderRadius: '50%',
+                                overflow: 'hidden',
+                                flexShrink: 0,
+                                border: '1.5px solid #0284c7',
+                              }}
+                            >
+                              <Image
+                                src="/assets/doctor-mohammadnezhad.jpg"
+                                alt="دکتر مهدی محمدنژاد"
+                                fill
+                                style={{ objectFit: 'cover' }}
+                              />
+                            </div>
+                            <div>
+                              <div
+                                style={{
+                                  fontSize: '13.5px',
+                                  fontWeight: 800,
+                                  color: 'var(--color-primary-dark)',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  gap: '6px',
+                                }}
+                              >
+                                <span>نکته بالینی دکتر مهدی محمدنژاد</span>
+                                <span
+                                  style={{
+                                    fontSize: '10px',
+                                    fontWeight: 700,
+                                    backgroundColor: '#e0f2fe',
+                                    color: '#0284c7',
+                                    padding: '1px 7px',
+                                    borderRadius: '10px',
+                                  }}
+                                >
+                                  تجربه مطب
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                          <p
+                            style={{
+                              margin: 0,
+                              fontSize: '14px',
+                              lineHeight: 1.85,
+                              color: '#335362',
+                              fontWeight: 500,
+                              textAlign: 'justify',
+                            }}
+                          >
+                            {renderFormattedBody(section.doctorComment)}
+                          </p>
+                        </aside>
+                      )}
                     </section>
                   ))
                 : article.content.map((paragraph, index) => (
@@ -599,7 +751,7 @@ export default async function ArticleDetailPage({ params }: ArticleDetailProps) 
               >
                 <Image
                   src="/assets/doctor-mohammadnezhad.jpg"
-                  alt="دکتر مهدی محمد نژاد"
+                  alt="دکتر مهدی محمدنژاد"
                   fill
                   style={{ objectFit: 'cover' }}
                 />
@@ -613,7 +765,7 @@ export default async function ArticleDetailPage({ params }: ArticleDetailProps) 
                       color: 'var(--color-primary-dark)',
                     }}
                   >
-                    نویسنده و بازبین علمی: دکتر مهدی محمد نژاد
+                    نویسنده و بازبین علمی: دکتر مهدی محمدنژاد
                   </span>
                   <span
                     style={{
@@ -647,10 +799,75 @@ export default async function ArticleDetailPage({ params }: ArticleDetailProps) 
                     textAlign: 'justify',
                   }}
                 >
-                  این مقاله بر اساس آخرین شواهد و ژورنال‌های معتبر بین‌المللی دندانپزشکی نگارش یافته و با هدف ارتقای آگاهی بیماران، توسط دکتر مهدی محمد نژاد (کد نظام پزشکی ۲۲۹۳۵۳) بازبینی علمی و تایید شده است.
+                  این مقاله بر اساس آخرین شواهد و ژورنال‌های معتبر بین‌المللی دندانپزشکی نگارش یافته و با هدف ارتقای آگاهی بیماران، توسط دکتر مهدی محمدنژاد (کد نظام پزشکی ۲۲۹۳۵۳) بازبینی علمی و تایید شده است.
                 </p>
               </div>
             </aside>
+
+            {/* Scientific Sources & DOI Citations Footer (Factual Lineage & E-E-A-T) */}
+            {article.citations && article.citations.length > 0 && (
+              <footer
+                aria-label="منابع علمی و ژورنال‌های معتبر بین‌المللی"
+                style={{
+                  marginTop: '32px',
+                  padding: '20px 24px',
+                  backgroundColor: '#f8fafc',
+                  border: '1px solid #e2e8f0',
+                  borderRadius: '14px',
+                }}
+              >
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    fontSize: '14px',
+                    fontWeight: 800,
+                    color: '#1e293b',
+                    marginBottom: '12px',
+                  }}
+                >
+                  <i className="fa-solid fa-book-medical" style={{ color: 'var(--color-primary)' }}></i>
+                  <span>منابع علمی و مقالات استناد شده (DOI / Medical Journals):</span>
+                </div>
+                <ol
+                  style={{
+                    margin: 0,
+                    paddingRight: '20px',
+                    fontSize: '13px',
+                    lineHeight: 1.9,
+                    color: '#475569',
+                  }}
+                >
+                  {article.citations.map((cite, index) => (
+                    <li key={index} style={{ marginBottom: '6px' }}>
+                      <span style={{ fontWeight: 600 }}>{cite.title}</span> —{' '}
+                      <span style={{ color: '#0284c7' }}>{cite.source}</span>
+                      {cite.doi && (
+                        <span style={{ fontSize: '11.5px', color: '#64748b', marginRight: '6px' }}>
+                          (DOI: {cite.doi})
+                        </span>
+                      )}
+                      {cite.url && (
+                        <a
+                          href={cite.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{
+                            marginRight: '8px',
+                            color: 'var(--color-primary)',
+                            fontSize: '12px',
+                            textDecoration: 'underline',
+                          }}
+                        >
+                          مشاهده مقاله اصلی ↗
+                        </a>
+                      )}
+                    </li>
+                  ))}
+                </ol>
+              </footer>
+            )}
 
             {/* Keywords / Tags for SEO & Contextual Navigation */}
             {article.keywords && article.keywords.length > 0 && (

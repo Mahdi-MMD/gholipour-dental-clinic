@@ -234,7 +234,7 @@ export default function AboutPage() {
               <div className="doctor-hybrid-card doctor-hybrid-portrait">
                 <Image
                   src="/assets/doctor-portrait.jpg"
-                  alt="دکتر مهدی محمد نژاد - دکترای حرفه‌ای دندان‌پزشکی"
+                  alt="دکتر مهدی محمدنژاد - دکترای حرفه‌ای دندان‌پزشکی"
                   className="doctor-portrait-image"
                   width={500}
                   height={500}

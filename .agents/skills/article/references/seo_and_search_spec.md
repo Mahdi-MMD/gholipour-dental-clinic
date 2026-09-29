@@ -10,14 +10,22 @@ Every article item in `src/data/articlesData.ts` follows this exact TypeScript c
 
 ```typescript
 export interface ArticleSection {
-  id: string;      // kebab-case english slug for deep linking: e.g. 'recovery-tips'
-  title: string;   // Friendly Persian sub-heading (H2)
-  body: string;    // Rich, detailed Persian paragraph (120-220 words)
+  id: string;             // kebab-case english slug for deep linking: e.g. 'recovery-tips'
+  title: string;          // Friendly Persian sub-heading (H2)
+  body: string;           // Rich, detailed Persian paragraph (120-220 words)
+  doctorComment?: string; // 30-60 word chairside clinical observation by Dr. Mahdi Mohammadnezhad
+}
+
+export interface ArticleCitation {
+  title: string;          // Paper / study title
+  source: string;         // Peer-reviewed journal (PubMed, ADA, JADA, Cochrane)
+  url?: string;           // Direct publication URL
+  doi?: string;           // Digital Object Identifier
 }
 
 export interface ArticleFAQ {
-  question: string; // High-intent patient question (e.g. 'آیا لمینت نیاز به تراش دارد؟')
-  answer: string;   // Clear, conversational, reassuring medical answer (50-90 words)
+  question: string;       // High-intent patient question (e.g. 'آیا لمینت نیاز به تراش دارد؟')
+  answer: string;         // Clear, conversational, reassuring medical answer (50-90 words)
 }
 
 export interface ArticleItem {
@@ -27,11 +35,13 @@ export interface ArticleItem {
   category: string;            // One of the standard clinic categories
   readTime: string;            // Persian reading time (e.g. '۵ دقیقه')
   date: string;                // Persian Shamsi date (e.g. '۶ مهر ۱۴۰۵')
-  author: string;              // Always: 'دکتر مهدی محمد نژاد'
+  author: string;              // Always: 'دکتر مهدی محمدنژاد'
   summary: string;             // 2-3 sentence engaging teaser & SEO meta description (130-160 chars)
+  tldr?: string;               // 1-2 sentence quick summary written by agent for fast scanning & featured snippet
   keywords: string[];          // 8-15 high-volume search tokens & patient symptoms
-  sections: ArticleSection[];  // 3-5 structured sections with deep anchors
+  sections: ArticleSection[];  // 3-5 structured sections with deep anchors & optional doctorComment
   faqs?: ArticleFAQ[];         // 2-4 patient FAQs for FAQPage schema & accordion
+  citations?: ArticleCitation[]; // Scientific journal & DOI citations footer
   image?: string;              // Featured image path (e.g. '/assets/article-implant-dos-donts.jpg')
   imageAlt?: string;           // Descriptive Persian alt text for Google Images & accessibility
   imageCaption?: string;       // Helpful clinical caption under hero image
@@ -125,6 +135,9 @@ Every article injects valid JSON-LD schemas into the document:
 - **SEO Social Output**: Automatically populates `og:image` (1200x630) and `twitter:image` for rich social snippet cards.
 
 ### B. Medical Authority & Author E-E-A-T
-- **Fixed Author & Medical Reviewer**: **دکتر مهدی محمد نژاد** (Dr. Mahdi Mohammadnezhad | Medical Registration Code: ۲۲۹۳۵۳).
+- **Fixed Author & Medical Reviewer**: **دکتر مهدی محمدنژاد** (Dr. Mahdi Mohammadnezhad | Medical Registration Code: ۲۲۹۳۵۳).
 - **Credentials Box**: An author biography card rendered beneath the article and FAQ sections, highlighting clinical review, doctor portrait (`/assets/doctor-mohammadnezhad.jpg`), and medical registration code (`کد نظام پزشکی : ۲۲۹۳۵۳`).
 - **Structured Data**: Injects `author` and `reviewedBy` as `Person` objects in the `MedicalWebPage` JSON-LD schema with `identifier: "229353"`.
+- **Inline Physician Annotations (`doctorComment`)**: Mid-page `<aside>` callouts placed directly after relevant section paragraphs containing chairside observations. Wrapped in `MedicalWebPage.hasPart` with `@type: "Comment"` attributed to Dr. Mahdi.
+- **Scientific Citations Footer**: Grounded links and DOI references rendered at the article base and mapped to schema `citation`.
+- **TL;DR Box**: 1–2 sentence expert summary positioned above the fold for immediate user comprehension and Google snippet capture.

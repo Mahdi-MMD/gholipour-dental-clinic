@@ -15,7 +15,7 @@ const doctorsData = [
     img: '/assets/doctor-heydari.jpg',
   },
   {
-    name: 'دکتر مهدی محمد نژاد',
+    name: 'دکتر مهدی محمدنژاد',
     title: 'دکترای حرفه‌ای دندان‌پزشکی',
     img: '/assets/doctor-mohammadnezhad.jpg',
   },
@@ -30,7 +30,7 @@ const doctorsData = [
     img: '/assets/doctor-heydari.jpg',
   },
   {
-    name: 'دکتر مهدی محمد نژاد',
+    name: 'دکتر مهدی محمدنژاد',
     title: 'دکترای حرفه‌ای دندان‌پزشکی',
     img: '/assets/doctor-mohammadnezhad.jpg',
   },

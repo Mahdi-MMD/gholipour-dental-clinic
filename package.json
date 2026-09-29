@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "optimize-images": "node scripts/optimize-images.js",
+    "prebuild": "node scripts/optimize-images.js",
+    "dev": "node scripts/optimize-images.js && next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"

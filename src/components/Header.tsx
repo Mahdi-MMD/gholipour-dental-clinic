@@ -51,7 +51,7 @@ export default function Header({
         <div className="header-logo">
           <Link href="/">
             <Image
-              src="/assets/logo.png"
+              src="/assets/logo.webp"
               alt="کلینیک دندانپزشکی قلی‌پور"
               className="logo-img"
               width={160}

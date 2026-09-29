@@ -96,7 +96,7 @@ export default function Testimonials() {
         <div className="testimonials-header-col">
           <div className="testimonials-watermark-wrap">
             <Image
-              src="/assets/COMMENTS.png"
+              src="/assets/COMMENTS.webp"
               alt="COMMENTS"
               className="testimonials-watermark-img"
               width={260}
@@ -138,7 +138,7 @@ export default function Testimonials() {
                     <div className="v-card-header">
                       <div className="v-card-avatar">
                         <Image
-                          src="/assets/user-avatar.png"
+                          src="/assets/user-avatar.webp"
                           alt="مراجع کلینیک قلی‌پور"
                           width={48}
                           height={48}

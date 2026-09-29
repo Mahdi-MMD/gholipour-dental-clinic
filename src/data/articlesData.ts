@@ -63,7 +63,7 @@ export const ARTICLES_DATA: ArticleItem[] = [
       'شستشو با آب نمک ولرم',
       'دهانشویه کلرهگزیدین'
     ],
-    image: '/assets/article-implant-care.jpg',
+    image: '/assets/article-implant-care.webp',
     imageAlt: 'راهنمای گام به گام مراقبت های بهداشتی و تغذیه ای بعد از جراحی کاشت ایمپلنت دندان',
     imageCaption: 'رعایت دقیق مراقبت‌های پس از جراحی ضامن جوش‌خوردن مستحکم (اسئواینتگریشن) پایه تیتانیومی به استخوان فک است',
     sections: [
@@ -185,7 +185,7 @@ export const ARTICLES_DATA: ArticleItem[] = [
       'افتادن دندان شیری',
       'دندان های قدامی و خلفی شیری'
     ],
-    image: '/assets/article-primary-teeth-care.jpg',
+    image: '/assets/article-primary-teeth-care.webp',
     imageAlt: 'راهنمای جامع مراقبت از دندان های شیری کودکان و بررسی آناتومی و روکش فلزی',
     imageCaption: 'دندان‌های شیری نقش اساسی در تغذیه، تکلم صحیح و هدایت رویش مرتب دندان‌های دائمی ایفا می‌کنند',
     sections: [
@@ -281,7 +281,7 @@ export const ARTICLES_DATA: ArticleItem[] = [
       'دندانپزشکی کودکان',
       'جدول رویش دندان'
     ],
-    image: '/assets/article-tooth-eruption-timeline.jpg',
+    image: '/assets/article-tooth-eruption-timeline.webp',
     imageAlt: 'معاینه و آموزش تقویم رویش دندان‌های شیری و دائمی توسط دندانپزشک کودکان',
     imageCaption: 'آموزش بالینی تقویم رویش و تفاوت دندان‌های شیری و دائمی به والدین در کلینیک دندانپزشکی شهید قلی‌پور',
     sections: [
@@ -382,7 +382,7 @@ export const ARTICLES_DATA: ArticleItem[] = [
       'دندانپزشکی کودکان رشت',
       'استامینوفن برای دندان درآوردن'
     ],
-    image: '/assets/article-baby-teething-relief.jpg',
+    image: '/assets/article-baby-teething-relief.webp',
     imageAlt: 'راهکارهای تسکین خارش و بی‌قراری لثه نوزاد در زمان رویش دندان‌های شیری',
     imageCaption: 'استفاده از دندان‌گیرهای سیلیکونی بهداشتی خنک و ماساژ لثه، ایمن‌ترین راهکار تسکین بی‌قراری نوزاد است',
     sections: [

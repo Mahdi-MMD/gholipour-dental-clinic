@@ -16,31 +16,31 @@ import '@/app/about.css';
 
 const clinicGalleryImages = [
   {
-    src: '/assets/clinic-waiting-room.jpg',
+    src: '/assets/clinic-waiting-room.webp',
     title: 'سالن انتظار و پذیرش مراجعین',
     subtitle: 'فضای انتظار آرام، ارگونومیک و مجهز به سیستم تهویه مطبوع',
     tag: 'بخش انتظار',
   },
   {
-    src: '/assets/clinic-dental-unit.jpg',
+    src: '/assets/clinic-dental-unit.webp',
     title: 'یونیت‌های تخصصی دندانپزشکی',
     subtitle: 'تجهیزات مدرن با بالاترین استانداردهای استریلیزاسیون و راحتی بیمار',
     tag: 'بخش دندانپزشکی',
   },
   {
-    src: '/assets/clinic-reception.jpg',
+    src: '/assets/clinic-reception.webp',
     title: 'کانتر پذیرش و اطلاعات کلینیک',
     subtitle: 'پاسخگویی منظم و هدایت سریع بیماران با سیستم نوبت‌دهی مکانیزه',
     tag: 'پذیرش و تریاژ',
   },
   {
-    src: '/assets/clinic-pharmacy.jpg',
+    src: '/assets/clinic-pharmacy.webp',
     title: 'داروخانه مرکز',
     subtitle: 'تأمین کامل داروها و اقلام بهداشتی-درمانی مورد نیاز مراجعین',
     tag: 'داروخانه',
   },
   {
-    src: '/assets/clinic-inpatient-ward.jpg',
+    src: '/assets/clinic-inpatient-ward.webp',
     title: 'بخش تحت نظر و بستری موقت',
     subtitle: 'تخت‌های بستری استاندارد با مراقبت مستمر کادر درمانی و پرستاری',
     tag: 'بستری و تحت‌نظر',
@@ -233,7 +233,7 @@ export default function AboutPage() {
               {/* 1. Doctor Portrait Card (Right on desktop in RTL, Top on mobile) */}
               <div className="doctor-hybrid-card doctor-hybrid-portrait">
                 <Image
-                  src="/assets/doctor-portrait.jpg"
+                  src="/assets/doctor-portrait.webp"
                   alt="دکتر مهدی محمدنژاد - دکترای حرفه‌ای دندان‌پزشکی"
                   className="doctor-portrait-image"
                   width={500}

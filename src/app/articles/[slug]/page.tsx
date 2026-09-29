@@ -165,7 +165,7 @@ export default async function ArticleDetailPage({ params }: ArticleDetailProps) 
       url: 'https://gholipourdental.com',
       logo: {
         '@type': 'ImageObject',
-        url: 'https://gholipourdental.com/assets/logo.png',
+        url: 'https://gholipourdental.com/assets/logo.webp',
       },
     },
     ...(article.citations && article.citations.length > 0
@@ -658,7 +658,7 @@ export default async function ArticleDetailPage({ params }: ArticleDetailProps) 
                               }}
                             >
                               <Image
-                                src="/assets/doctor-mohammadnezhad.jpg"
+                                src="/assets/doctor-mohammadnezhad.webp"
                                 alt="دکتر مهدی محمدنژاد"
                                 fill
                                 style={{ objectFit: 'cover' }}
@@ -750,7 +750,7 @@ export default async function ArticleDetailPage({ params }: ArticleDetailProps) 
                 }}
               >
                 <Image
-                  src="/assets/doctor-mohammadnezhad.jpg"
+                  src="/assets/doctor-mohammadnezhad.webp"
                   alt="دکتر مهدی محمدنژاد"
                   fill
                   style={{ objectFit: 'cover' }}

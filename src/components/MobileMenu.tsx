@@ -183,7 +183,7 @@ export default function MobileMenu({
           <div className="mobile-drawer-header">
             <Link href="/" onClick={handleLinkClick} className="mobile-drawer-logo">
               <Image
-                src="/assets/logo.png"
+                src="/assets/logo.webp"
                 alt="کلینیک دندانپزشکی قلی‌پور"
                 className="drawer-logo-img"
                 width={150}

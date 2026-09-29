@@ -62,7 +62,7 @@ export default function BookingDrawer({ isOpen, onClose }: BookingDrawerProps) {
         <div className="drawer-header">
           <div className="drawer-brand">
             <Image
-              src="/assets/logo.png"
+              src="/assets/logo.webp"
               alt="کلینیک دندانپزشکی قلی‌پور"
               className="drawer-logo-img"
               width={140}

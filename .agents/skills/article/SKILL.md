@@ -94,7 +94,7 @@ flowchart TD
 94:    - `readTime`: e.g. `'۵ دقیقه'`
 95:    - `date`: Current Persian Shamsi date (e.g. `'۶ مهر ۱۴۰۵'`)
 96:    - `author`: Fixed author & medical reviewer: `'دکتر مهدی محمدنژاد'` (دکترای حرفه‌ای دندان‌پزشکی کلینیک شهید قلی‌پور | کد نظام پزشکی: ۲۲۹۳۵۳)
-97:    - `image`: Relative asset path (e.g. `'/assets/article-implant-dos-donts.jpg'`). Priority 1: Check existing `public/assets/` images. Priority 2: Generate a realistic dental graphic with `generate_image` (aspectRatio `'16:9'`). Placed immediately after title with responsive hero styling.
+97:    - `image`: Relative asset path (e.g. `'/assets/article-implant-dos-donts.webp'`). Priority 1: Check existing `public/assets/` images. Priority 2: Generate a realistic dental graphic with `generate_image` (aspectRatio `'16:9'`). Placed immediately after title with responsive hero styling.
 98:    - `imageAlt`: Descriptive Persian alt text for SEO and accessibility
 99:    - `imageCaption`: Engaging Persian caption explaining the clinical graphic
 100:    - `summary`: 2–3 sentence engaging hook and search meta description (120–160 characters, natural keyword integration)
@@ -107,13 +107,13 @@ flowchart TD
 107:    - `content`: Array of section texts for backward compatibility
 108: 
 109: 2. **Featured Editorial Image Workflow**:
-110:    - **Step 1 (Priority)**: Scan `public/assets/` for an existing relevant dental image (e.g., `article-implant-dos-donts.jpg`, `article-whitening.jpg`, `article-toothpaste.jpg`, `article-orthodontics.jpg`, `article-anesthesia.jpg`).
+110:    - **Step 1 (Priority)**: Scan `public/assets/` for an existing relevant dental image (e.g., `article-implant-dos-donts.webp`, `article-whitening.webp`, `article-toothpaste.webp`, `article-orthodontics.webp`, `article-anesthesia.webp`).
 111:    - **Step 2 (Creation)**: If no matching asset exists, use the `generate_image` tool with aspectRatio `'16:9'` and a photorealistic medical dental prompt to generate the asset into the clinic image repository.
 112:    - **Step 3 (Placement)**: Assign `image`, `imageAlt`, and `imageCaption` in `ArticleItem`. The page renders it as an editorial 16:9 hero image directly beneath the title and header metadata.
 113: 
 114: 3. **Author E-E-A-T & Reviewer Persona**:
 115:    - Author is always set to **`دکتر مهدی محمدنژاد`** (Doctor of Dental Surgery, Gholipour Dental Clinic | Medical Council Code: ۲۲۹۳۵۳).
-116:    - Injects both author bio credentials card (displaying portrait `/assets/doctor-mohammadnezhad.jpg` and code ۲۲۹۳۵۳) and structured schema markup (`author`, `reviewedBy`, with `identifier: "229353"`) to establish strong Google E-E-A-T and medical trust.
+116:    - Injects both author bio credentials card (displaying portrait `/assets/doctor-mohammadnezhad.webp` and code ۲۲۹۳۵۳) and structured schema markup (`author`, `reviewedBy`, with `identifier: "229353"`) to establish strong Google E-E-A-T and medical trust.
 117: 
 118: 4. **Technical SEO & Schema Integration**:
 119:    - Verify that the new slug automatically pre-renders via `generateStaticParams()` in `src/app/articles/[slug]/page.tsx`.

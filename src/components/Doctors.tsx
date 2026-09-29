@@ -12,32 +12,32 @@ const doctorsData = [
   {
     name: 'دکتر فاطمه حیدری',
     title: 'دکترای حرفه‌ای دندان‌پزشکی',
-    img: '/assets/doctor-heydari.jpg',
+    img: '/assets/doctor-heydari.webp',
   },
   {
     name: 'دکتر مهدی محمدنژاد',
     title: 'دکترای حرفه‌ای دندان‌پزشکی',
-    img: '/assets/doctor-mohammadnezhad.jpg',
+    img: '/assets/doctor-mohammadnezhad.webp',
   },
   {
     name: 'دکتر امیرحسین پورقاسم',
     title: 'دکترای حرفه‌ای دندان‌پزشکی',
-    img: '/assets/doctor-pourghasem.jpg',
+    img: '/assets/doctor-pourghasem.webp',
   },
   {
     name: 'دکتر فاطمه حیدری',
     title: 'دکترای حرفه‌ای دندان‌پزشکی',
-    img: '/assets/doctor-heydari.jpg',
+    img: '/assets/doctor-heydari.webp',
   },
   {
     name: 'دکتر مهدی محمدنژاد',
     title: 'دکترای حرفه‌ای دندان‌پزشکی',
-    img: '/assets/doctor-mohammadnezhad.jpg',
+    img: '/assets/doctor-mohammadnezhad.webp',
   },
   {
     name: 'دکتر امیرحسین پورقاسم',
     title: 'دکترای حرفه‌ای دندان‌پزشکی',
-    img: '/assets/doctor-pourghasem.jpg',
+    img: '/assets/doctor-pourghasem.webp',
   },
 ];
 

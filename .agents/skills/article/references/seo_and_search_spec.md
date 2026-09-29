@@ -42,7 +42,7 @@ export interface ArticleItem {
   sections: ArticleSection[];  // 3-5 structured sections with deep anchors & optional doctorComment
   faqs?: ArticleFAQ[];         // 2-4 patient FAQs for FAQPage schema & accordion
   citations?: ArticleCitation[]; // Scientific journal & DOI citations footer
-  image?: string;              // Featured image path (e.g. '/assets/article-implant-dos-donts.jpg')
+  image?: string;              // Featured image path (e.g. '/assets/article-implant-dos-donts.webp')
   imageAlt?: string;           // Descriptive Persian alt text for Google Images & accessibility
   imageCaption?: string;       // Helpful clinical caption under hero image
   content: string[];           // Array of section body strings (backwards compatibility)
@@ -136,7 +136,7 @@ Every article injects valid JSON-LD schemas into the document:
 
 ### B. Medical Authority & Author E-E-A-T
 - **Fixed Author & Medical Reviewer**: **دکتر مهدی محمدنژاد** (Dr. Mahdi Mohammadnezhad | Medical Registration Code: ۲۲۹۳۵۳).
-- **Credentials Box**: An author biography card rendered beneath the article and FAQ sections, highlighting clinical review, doctor portrait (`/assets/doctor-mohammadnezhad.jpg`), and medical registration code (`کد نظام پزشکی : ۲۲۹۳۵۳`).
+- **Credentials Box**: An author biography card rendered beneath the article and FAQ sections, highlighting clinical review, doctor portrait (`/assets/doctor-mohammadnezhad.webp`), and medical registration code (`کد نظام پزشکی : ۲۲۹۳۵۳`).
 - **Structured Data**: Injects `author` and `reviewedBy` as `Person` objects in the `MedicalWebPage` JSON-LD schema with `identifier: "229353"`.
 - **Inline Physician Annotations (`doctorComment`)**: Mid-page `<aside>` callouts placed directly after relevant section paragraphs containing chairside observations. Wrapped in `MedicalWebPage.hasPart` with `@type: "Comment"` attributed to Dr. Mahdi.
 - **Scientific Citations Footer**: Grounded links and DOI references rendered at the article base and mapped to schema `citation`.

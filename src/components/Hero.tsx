@@ -37,7 +37,7 @@ export default function Hero({ onOpenBooking }: HeroProps) {
         </div>
         <div className="hero-image-wrap">
           <Image
-            src="/assets/hero-doctors.png"
+            src="/assets/hero-doctors.webp"
             alt="تیم پزشکان کلینیک دندانپزشکی قلی‌پور"
             className="hero-img"
             width={600}

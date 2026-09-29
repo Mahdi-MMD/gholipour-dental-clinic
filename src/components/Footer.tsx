@@ -19,7 +19,7 @@ export default function Footer({ onOpenBooking }: FooterProps) {
             <div className="footer-logo">
               <Link href="/">
                 <Image
-                  src="/assets/logo.png"
+                  src="/assets/logo.webp"
                   alt="کلینیک دندانپزشکی قلی‌پور"
                   className="footer-logo-img"
                   width={150}

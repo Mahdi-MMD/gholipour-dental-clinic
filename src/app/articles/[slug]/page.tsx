@@ -658,7 +658,7 @@ export default async function ArticleDetailPage({ params }: ArticleDetailProps) 
                               }}
                             >
                               <Image
-                                src="/assets/doctor-mohammadnezhad.webp"
+                                src="/assets/doctor-portrait.webp"
                                 alt="دکتر مهدی محمدنژاد"
                                 fill
                                 style={{ objectFit: 'cover' }}
@@ -750,7 +750,7 @@ export default async function ArticleDetailPage({ params }: ArticleDetailProps) 
                 }}
               >
                 <Image
-                  src="/assets/doctor-mohammadnezhad.webp"
+                  src="/assets/doctor-portrait.webp"
                   alt="دکتر مهدی محمدنژاد"
                   fill
                   style={{ objectFit: 'cover' }}

@@ -392,7 +392,7 @@
   padding: 0 11px; /* Narrowed width per user request */
   border-radius: 20px;
   background: #ffffff;
-  border: 1.2px solid #bce1f3;
+  border: 1.2px solid transparent; /* Completely transparent / white border per user request */
   color: #0c4a60; /* Clear readable blue text */
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   font-size: 13px;
@@ -402,14 +402,14 @@
   outline: none;
   user-select: none;
   letter-spacing: -0.1px;
-  box-shadow: 0 1px 2px rgba(12, 74, 96, 0.04);
+  box-shadow: 0 1px 3px rgba(12, 74, 96, 0.05);
   position: relative;
   z-index: 3;
 }
 
 .google-ai-mode-pill:hover {
   background: #f7fcfe;
-  border-color: #8cd2f0;
+  border-color: #ffffff;
   color: #0284c7;
 }
 
@@ -417,6 +417,14 @@
   font-size: 13px;
   font-weight: 700;
   white-space: nowrap;
+}
+
+.google-ai-mode-label-desktop {
+  display: inline-block;
+}
+
+.google-ai-mode-label-mobile {
+  display: none;
 }
 
 /* Active State */
@@ -820,8 +828,13 @@
     letter-spacing: -0.3px;
   }
   .articles-page-subtitle {
-    font-size: 12px;
+    font-size: clamp(10.5px, 2.9vw, 12px);
     margin: 6px 0 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    letter-spacing: -0.2px;
   }
   .articles-search-wrap {
     margin-bottom: 22px; /* More space between search box and wheel below */
@@ -829,7 +842,7 @@
   }
   .articles-search-input {
     height: 46px;
-    padding: 0 46px 0 42px; /* Right for search icon, Left for clear button */
+    padding: 0 46px 0 58px; /* Right for search icon, Left for text-only AI toggle + clear button */
     font-size: 13.5px;
   }
   .articles-search-icon {
@@ -837,9 +850,58 @@
     font-size: 17px;
   }
   .articles-clear-search-btn {
-    left: 12px;
+    left: 8px;
     font-size: 15px;
     padding: 4px;
+  }
+  /* Remove rotating react border effects completely in mobile view */
+  .google-ai-mode-pill-wrapper.is-active-reactor::before,
+  .google-ai-mode-pill-wrapper.is-active-reactor::after {
+    display: none !important;
+  }
+  .google-ai-mode-pill-wrapper {
+    padding: 0;
+  }
+  /* Plain text AI toggle with no border or box */
+  .google-ai-mode-pill {
+    height: auto;
+    padding: 4px 6px;
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: color 0.2s ease, text-shadow 0.2s ease;
+  }
+  /* Explicitly Gray when turned off */
+  .google-ai-mode-pill,
+  .google-ai-mode-pill.is-inactive,
+  .google-ai-mode-pill.is-inactive:hover,
+  .google-ai-mode-pill.is-inactive:focus {
+    color: #94a3b8 !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+  /* High contrast vibrant light blue when turned on */
+  .google-ai-mode-pill.is-active,
+  .google-ai-mode-pill.is-active:hover,
+  .google-ai-mode-pill.is-active:focus {
+    color: #0284c7 !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    text-shadow: 0 0 10px rgba(2, 132, 199, 0.4) !important;
+  }
+  .google-ai-mode-label-desktop {
+    display: none !important;
+  }
+  .google-ai-mode-label-mobile {
+    display: inline-block !important;
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 0.2px;
   }
   .articles-swiper-layout {
     height: 255px; /* Increased drawer height for looser wheel line spacing */

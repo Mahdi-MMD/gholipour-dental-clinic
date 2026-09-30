@@ -77,6 +77,16 @@ export default function ArticlesPage() {
   // Conversational Chat History in AI Mode
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
   const [followUpInput, setFollowUpInput] = useState('');
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const swiperRef = useRef<SwiperType | null>(null);
   const chatScrollRef = useRef<HTMLDivElement>(null);
@@ -334,7 +344,11 @@ export default function ArticlesPage() {
               </h1>
               <p className="articles-page-subtitle">
                 {isAiMode
-                  ? 'پاسخ هوشمند و دقیق تر، با استناد به مقالات علمی و تجارب بالینی دندانپزشکی'
+                  ? isMobile
+                    ? 'پاسخ هوشمند و دقیق‌تر، با استناد به مقالات علمی و تجارب بالینی'
+                    : 'پاسخ هوشمند و دقیق‌تر، با استناد به مقالات علمی و تجارب بالینی دندانپزشکی'
+                  : isMobile
+                  ? 'جستجوی هوشمند در علائم، داروها، درمان‌ها و مقالات تخصصی'
                   : 'جستجوی هوشمند به سبک گوگل در علائم، داروها، درمان‌ها و مقالات تخصصی کلینیک'}
               </p>
             </div>
@@ -354,6 +368,8 @@ export default function ArticlesPage() {
                   placeholder={
                     isAiMode
                       ? 'سوال دندانپزشکی خود را بپرسید...'
+                      : isMobile
+                      ? 'جستجوی مقاله ...'
                       : 'جستجوی مقاله، علائم، داروها یا موضوعات...'
                   }
                   value={searchQuery}
@@ -390,8 +406,9 @@ export default function ArticlesPage() {
                   <div className={`google-ai-mode-pill-wrapper ${isAiMode ? 'is-active-reactor' : ''}`}>
                     <button
                       type="button"
-                      className={`google-ai-mode-pill ${isAiMode ? 'is-active' : ''}`}
-                      onClick={() => {
+                      className={`google-ai-mode-pill ${isAiMode ? 'is-active' : 'is-inactive'}`}
+                      onClick={(e) => {
+                        e.currentTarget.blur();
                         const nextMode = !isAiMode;
                         setIsAiMode(nextMode);
                         if (!nextMode) {
@@ -401,10 +418,11 @@ export default function ArticlesPage() {
                           handleSendChatMessage(searchQuery.trim());
                         }
                       }}
-                      title={isAiMode ? 'Turn off AI Mode' : 'Turn on AI Mode'}
+                      title={isAiMode ? 'خاموش کردن حالت هوشمند' : 'روشن کردن حالت هوشمند'}
                       aria-label="Google AI Mode toggle"
                     >
-                      <span className="google-ai-mode-label">AI Mode</span>
+                      <span className="google-ai-mode-label google-ai-mode-label-desktop">AI Mode</span>
+                      <span className="google-ai-mode-label google-ai-mode-label-mobile">AI</span>
                     </button>
                   </div>
                 </div>

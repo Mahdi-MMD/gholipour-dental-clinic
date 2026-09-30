@@ -478,23 +478,6 @@ export default async function ArticleDetailPage({ params }: ArticleDetailProps) 
               </div>
             )}
 
-            {/* Summary Callout Box */}
-            <div
-              style={{
-                backgroundColor: '#f1faff',
-                borderRight: '4px solid var(--color-primary)',
-                padding: '20px 24px',
-                borderRadius: '12px',
-                fontSize: '16px',
-                fontWeight: 600,
-                color: 'var(--color-primary-dark)',
-                lineHeight: 1.9,
-                marginBottom: '32px',
-              }}
-            >
-              {article.summary}
-            </div>
-
             {/* Quick Table of Contents / Outline */}
             {article.sections && article.sections.length > 0 && (
               <nav

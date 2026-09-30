@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { ARTICLES_DATA } from '@/data/articlesData';
-import { normalizePersian } from '@/lib/search';
+import { normalizePersian, createArticlesSearchIndex, SearchableArticleDoc } from '@/lib/search';
 
 interface ChatMessage {
   role: 'user' | 'model';
@@ -16,6 +16,20 @@ interface RequestPayload {
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY || '';
 const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-flash-latest';
 
+// Initialize MiniSearch indexing once at module level
+const searchableDocs: SearchableArticleDoc[] = ARTICLES_DATA.map((art) => ({
+  id: art.id,
+  slug: art.slug,
+  title: art.title,
+  category: art.category,
+  summary: art.summary,
+  keywords: (art.keywords || []).join(' '),
+  content: art.content ? art.content.join(' ') : '',
+  author: art.author || '',
+}));
+
+const articleSearchIndex = createArticlesSearchIndex(searchableDocs);
+
 export async function POST(req: NextRequest) {
   try {
     const body: RequestPayload = await req.json();
@@ -27,77 +41,115 @@ export async function POST(req: NextRequest) {
 
     const cleanQuery = query.trim();
     const normQuery = normalizePersian(cleanQuery);
-    const queryTokens = normQuery.split(/\s+/).filter((t) => t.length > 1);
+    const rawTokens = normQuery.split(/\s+/).filter((t) => t.length > 1);
 
-    // 1. Retrieve most relevant articles and sections from ARTICLES_DATA
-    const scoredArticles = ARTICLES_DATA.map((art) => {
-      let score = 0;
-      const normTitle = normalizePersian(art.title);
-      const normSummary = normalizePersian(art.summary);
-      const normKeywords = normalizePersian((art.keywords || []).join(' '));
+    // Stop words to prevent irrelevant keyword matching
+    const stopWords = new Set([
+      'است', 'چیست', 'چه', 'چگونه', 'برای', 'در', 'با', 'به', 'از', 'که', 'این', 'آن',
+      'یا', 'تا', 'بر', 'روی', 'چند', 'آیا', 'کدام', 'چرا', 'باید', 'نباید', 'درباره',
+      'مورد', 'شدن', 'کردن', 'می', 'نمی', 'ها', 'های', 'هایش', 'دارد', 'کند', 'کنیم',
+      'هست', 'نیست', 'باشیم', 'باشید', 'شوند', 'شود', 'سلام', 'روز', 'بخیر', 'خسته'
+    ]);
+    const meaningfulTokens = rawTokens.filter((t) => !stopWords.has(t) && t.length > 1);
+    const searchQueryStr = meaningfulTokens.length > 0 ? meaningfulTokens.join(' ') : normQuery;
 
-      for (const token of queryTokens) {
-        if (normTitle.includes(token)) score += 5;
-        if (normKeywords.includes(token)) score += 4;
-        if (normSummary.includes(token)) score += 2;
-      }
+    // Search via MiniSearch with TF-IDF and field boosts
+    let searchHits = articleSearchIndex.search(searchQueryStr, { combineWith: 'AND' });
+    if (searchHits.length === 0 && meaningfulTokens.length > 1) {
+      searchHits = articleSearchIndex.search(searchQueryStr, { combineWith: 'OR' });
+    }
 
-      // Find best matching section
-      let bestSection: { id: string; title: string; body: string } | null = null;
-      let maxSecScore = 0;
+    // Filter hits by meaningful relevance score threshold (minimum 8 in MiniSearch with boost)
+    const validHits = searchHits.filter((hit) => hit.score >= 8).slice(0, 3);
 
-      if (art.sections && art.sections.length > 0) {
-        for (const sec of art.sections) {
-          let secScore = 0;
-          const normSec = normalizePersian(`${sec.title} ${sec.body}`);
-          for (const token of queryTokens) {
-            if (normSec.includes(token)) secScore += 1;
-          }
-          if (secScore > maxSecScore) {
-            maxSecScore = secScore;
-            bestSection = sec;
+    // 1. Retrieve most relevant articles and sections from ARTICLES_DATA (0 to 3 max)
+    const scoredArticles = validHits
+      .map((hit) => {
+        const art = ARTICLES_DATA.find((a) => a.id === hit.id);
+        if (!art) return null;
+
+        // Find best matching section for context
+        let bestSection: { id: string; title: string; body: string } | null = null;
+        let maxSecScore = 0;
+
+        if (art.sections && art.sections.length > 0) {
+          for (const sec of art.sections) {
+            let secScore = 0;
+            const normSec = normalizePersian(`${sec.title} ${sec.body}`);
+            for (const token of (meaningfulTokens.length > 0 ? meaningfulTokens : rawTokens)) {
+              if (normSec.includes(token)) secScore += 1;
+            }
+            if (secScore > maxSecScore) {
+              maxSecScore = secScore;
+              bestSection = sec;
+            }
           }
         }
-      }
 
-      score += maxSecScore * 2;
-
-      return {
-        article: art,
-        score,
-        bestSection,
-      };
-    })
-      .filter((item) => item.score > 0)
-      .sort((a, b) => b.score - a.score)
-      .slice(0, 4);
+        return {
+          article: art,
+          score: hit.score,
+          bestSection,
+        };
+      })
+      .filter(Boolean) as Array<{
+        article: (typeof ARTICLES_DATA)[0];
+        score: number;
+        bestSection: { id: string; title: string; body: string } | null;
+      }>;
 
     // Build context block from top matched articles & sections
-    const contextBlocks = scoredArticles.map((item) => {
+    const hasArticleMatches = scoredArticles.length > 0;
+    const contextBlocks = scoredArticles.map((item, idx) => {
       const art = item.article;
       const secInfo = item.bestSection
-        ? `بخش مرتبط: "${item.bestSection.title}"\nمتن: ${item.bestSection.body}`
-        : `خلاصه مقاله: ${art.summary}\nمتن: ${art.content.join(' ')}`;
+        ? `بخش مرتبط: "${item.bestSection.title}"\nمتن بخش: ${item.bestSection.body}`
+        : `خلاصه مقاله: ${art.summary}\nمتن مقاله: ${art.content.join(' ')}`;
 
-      return `مقاله: "${art.title}" (دسته‌بندی: ${art.category})\nکلیدواژه‌ها: ${art.keywords.join(', ')}\n${secInfo}\nلینک مقاله: /articles/${art.slug}${item.bestSection ? '#' + item.bestSection.id : ''}`;
+      return `[سند شماره ${idx + 1} از وب‌سایت کلینیک]:
+عنوان مقاله: "${art.title}" (دسته‌بندی: ${art.category})
+کلیدواژه‌ها: ${art.keywords.join('، ')}
+${secInfo}
+آدرس ارجاع: /articles/${art.slug}${item.bestSection ? '#' + item.bestSection.id : ''}`;
     });
 
-    const knowledgeBaseText = contextBlocks.length > 0
+    const knowledgeBaseText = hasArticleMatches
       ? contextBlocks.join('\n\n---\n\n')
-      : 'هیچ مقاله مستقیمی در وب‌سایت برای این عبارت تطابق نیافت.';
+      : 'در پایگاه مقالات فعلی وب‌سایت، مقاله‌ای مستقیماً منطبق با این پرسش یافت نشد.';
 
-    // 2. Strict Clinical System Prompt
-    const systemInstruction = `شما دستیار رسمی و هوشمند کلینیک دندانپزشکی شهید قلی‌پور هستید. وظیفه شما پاسخگویی دلسوزانه، دقیق، علمی و آرامش‌بخش به بیماران است.
+    // 2. Hybrid Clinical Reasoning & Paraphrasing System Prompt
+    const systemInstruction = `شما «دستیار هوشمند و پزشک‌ارتباطی کلینیک دندانپزشکی شهید قلی‌پور» هستید.
+شما با لحنی گرم، دلسوزانه، آگاه، متین و کاملاً علمی و بیمارپسند (فارسی روان و شیوا) با مراجعین گفتگو می‌کنید.
 
-قوانین و چارچوب‌های الزامی که باید مو به مو رعایت کنید:
-۱. حوزه موضوعی: شما صرفاً و منحصراً در زمینه «دندانپزشکی، بهداشت دهان و دندان، درمان‌های کلینیکی نظیر ایمپلنت، ارتودنسی، عصب‌کشی، لمینیت، کشیدن دندان، ترمیم و خدمات کلینیک قلی‌پور» پاسخ می‌دهید. اگر کاربر سوالی نامربوط (مانند برنامه‌نویسی، آشپزی، سیاست، پزشکی عمومی غیر مرتبط با فک و دهان یا مسائل دیگر) پرسید، با نهایت احترام و لحنی حرفه‌ای عذرخواهی کرده و اعلام کنید: «من دستیار تخصصی دندانپزشکی کلینیک شهید قلی‌پور هستم و تنها می‌توانم به سوالات و نگرانی‌های حوزه سلامت دهان و دندان پاسخ دهم.»
-۲. قانون پایبندی به دانشنامه کلینیک (قانون ۷۵٪):
-- اگر پاسخ سوال بیمار حداقل تا ۷۵٪ در مقالات و دانشنامه زیر موجود بود، از آن استفاده کنید و در صورت نیاز با دانش دندانپزشکی خود پاسخ را روان، کاربردی و کامل‌تر نمایید.
-- اگر سوال بیمار در زمینه دندانپزشکی است اما هیچ اطلاعاتی از آن در دانشنامه سایت وجود ندارد (یا اطلاعات بسیار ناقص است)، هرگز اقدام به ساختن فرضیه و توهم اطلاعاتی نکنید. با صراحت و ادب بگویید که جزئیات این درمان در دانشنامه سایت ثبت نشده است و بیمار را صمیمانه راهنمایی کنید که:
-  «برای دریافت پاسخ تخصصی این سوال، می‌توانید مستقیماً از ربات تلگرام کلینیک ما به آدرس @Qolipur-bot سوال خود را بپرسید یا جهت معاینه دقیق کلینیکی، از طریق سایت نوبت رزرو نمایید.»
-۳. سلب مسئولیت پزشکی الزامی: در انتهای هر پاسخ (مگر در احوالپرسی ساده)، یک یادآوری کوتاه و دوستانه بیاورید که این توضیحات جنبه آموزشی و آگاهی‌بخشی دارد و جایگزین ویزیت و معاینه حضوری دندانپزشک نیست.
-۴. زبان و لحن: فارسی روان، بسیار محترمانه، روشن و عاری از اصطلاحات سنگین انگلیسی مگر با توضیح ساده فارسی.
-۵. قالب‌بندی: از پاراگراف‌های منظم، فهرست‌های بالت‌دار در صورت نیاز و ارجاع محترمانه به خدمات کلینیک استفاده کنید.`;
+ماموریت اصلی شما:
+پاسخ دقیق، شفاف، متمرکز و شخصی‌سازی‌شده به سوال بیمار از طریق «ترکیب مقالات وب‌سایت (RAG)» و «دانش تخصصی دندانپزشکی خودتان».
+
+دستورالعمل‌های راهبردی الزامی:
+۱. اصل تمرکز لیزری بر سوال و پرهیز قطعی از زیاده‌گویی (Laser-Focus & Anti-Overexplaining):
+   - فقط و منحصراً به همان بخش دقیق یا موضوع مشخص که بیمار پرسیده پاسخ دهید.
+   - از آوردن اطلاعات حاشیه‌ای و محتویات متفرقه مقالات که بیمار نخواسته اکیداً بپرهیزید! (برای مثال: اگر بیمار درباره «زمان رویش اولین دندان شیری» سوال کرد، منحصراً پاسخ همان دندان اول را بدهید و به هیچ عنوان جدول زمانی سایر دندان‌های شیری، دندان‌های آسیاب یا دندان‌های دائمی را تشریح نکنید).
+   - گلچین هوشمند: از مقالات سایت فقط همان گزاره‌ای را استخراج کنید که مستقیماً پاسخ کاربر است، نه تمام مباحث مطرح در مقاله.
+   - پاسخ را مختصر، مفید، کاربردی و عاری از حاشیه‌پردازی و جملات پرکننده تنظیم کنید.
+
+۲. ساختار بصری پاسخ (تیترهای برجسته و فهرست‌های بالت‌دار):
+   - برای بخش‌بندی موضوعی حتماً از تیترهای برجسته با فرمت **عنوان** استفاده کنید (مانند: **پاسخ به سوال شما:** یا **نکات مراقبتی:**).
+   - هر زمان که چند مورد، علامت، گام، توصیه یا فاکتور را برمی‌شمارید، حتماً از فهرست بالت‌دار (علامت • یا - در ابتدای خط) استفاده کنید تا خوانایی به حداکثر برسد.
+
+۳. سلسله‌مراتب منابع دانش (رویکرد هیبرید):
+   - اولویت ۱ (اسناد و مقالات وب‌سایت کلینیک): در صورتی که مقالاتی در بخش [مقالات استخراج‌شده از وب‌سایت کلینیک] وجود دارد، از اطلاعات معتبر آن‌ها به عنوان سند رسمی استفاده کنید و با بیان روان خود بازنویسی نمایید (هرگز کپی پیست نکنید).
+   - اولویت ۲ (دانش تخصصی درونی دندانپزشکی):
+     * اگر مقالات سایت پاسخ را به صورت کامل پوشش نمی‌دهند، حتماً از دانش بالینی و پزشکی خود برای ارائه پاسخ دقیق استفاده کنید.
+     * اگر هیچ مقاله‌ای در وب‌سایت برای سوال کاربر یافت نشد، هرگز مکالمه را قطع نکنید و نگویید نمی‌دانم! بلکه با اتکا به دانش جامع دندانپزشکی خود پاسخی کامل و متمرکز به کاربر ارائه دهید.
+
+۴. عدم اشاره به رزرو نوبت یا ربات تلگرام در متن:
+   - در زیر پاسخ شما یک بنر اختصاصی برای رزرو نوبت و ارتباط با ربات تلگرام تعبیه شده است؛ بنابراین به هیچ وجه در متن پاسخ خود به رزرو نوبت، نوبت‌گیری اینترنتی یا ربات تلگرام (@Qolipur-bot) اشاره نکنید تا از تکرار بیهوده پرهیز شود.
+
+۵. خط قرمز موضوعی (صرفاً دندانپزشکی):
+   - شما منحصراً در زمینه «دندانپزشکی، بهداشت دهان و دندان، بیماری‌های لثه، فک و صورت، درمان‌های ترمیمی، زیبایی، ارتودنسی، ایمپلنت، دندانپزشکی کودکان و خدمات کلینیک قلی‌پور» پاسخ می‌دهید.
+   - اگر کاربر درباره موضوعات غیرمرتبط پرسید، بسیار مودبانه بفرمایید: «من دستیار هوشمند دندانپزشکی کلینیک شهید قلی‌پور هستم و تخصص من پاسخ به سوالات حوزه بهداشت و درمان‌های دندانپزشکی است.»
+
+۶. یادآوری پزشکی الزامی:
+   - در پایان پاسخ‌ها (به جز سلام و احوالپرسی‌های ساده)، یک جمله کوتاه یادآوری کنید که توضیحات ارائه شده جنبه آگاهی‌بخشی دارد و جایگزین ویزیت حضوری دندانپزشک نیست.`;
 
     // 3. Format contents for Gemini API (including multi-turn history)
     const geminiContents: Array<{ role: string; parts: Array<{ text: string }> }> = [];
@@ -111,13 +163,19 @@ export async function POST(req: NextRequest) {
     }
 
     // Current prompt with injected knowledge base
-    const currentPrompt = `[دانشنامه و مقالات استخراج‌شده از وب‌سایت کلینیک]:
+    const currentPrompt = `[وضعیت مقالات وب‌سایت کلینیک]:
+${hasArticleMatches ? 'مقالات مرتبط زیر یافت شدند؛ فقط بخش مرتبط با پرسش بیمار را استخراج کرده و به شکلی روان و دقیق بازنویسی کنید:' : 'مقاله‌ای در دانشنامه سایت تطابق نیافت؛ با تکیه بر دانش تخصصی دندانپزشکی خود مستقیماً به بیمار پاسخ دهید:'}
+
 ${knowledgeBaseText}
 
+----------------------------------------
 [پرسش جدید بیمار / کاربر]:
 ${cleanQuery}
 
-لطفاً طبق دستورالعمل‌های محول‌شده، پاسخی شیوا، دلسوزانه و مستند ارائه دهید.`;
+دستور اجرایی:
+- منحصراً روی پاسخ دقیق به پرسش بیمار تمرکز کنید و از ذکر حواشی یا تشریح سایر دندان‌ها/موارد خودداری کنید.
+- از تیترهای برجسته (**عنوان**) و لیست‌های بالت‌دار (- مورد) برای ساختاردهی منظم و خوانا استفاده فرمایید.
+- به هیچ عنوان در متن به رزرو نوبت یا ربات تلگرام اشاره نکنید (باکس مربوطه به صورت مجزا در پایین پاسخ نمایش می‌یابد).`;
 
     geminiContents.push({
       role: 'user',
@@ -131,14 +189,14 @@ ${cleanQuery}
       },
       contents: geminiContents,
       generationConfig: {
-        temperature: 0.3,
+        temperature: 0.4,
         maxOutputTokens: 900,
       },
     };
 
-    // 4. Request Gemini API:
-    // Primary: gemini-flash-latest (Always routes to Google's newest Flash generation)
-    // Fallback: gemini-flash-lite-latest (Independent rate quota, ultralight, generous free tier)
+    // Candidate models cascade:
+    // Primary: gemini-flash-latest (Google's latest Flash model)
+    // Fallback: gemini-flash-lite-latest (Ultralight model with independent quota)
     const candidateModels = [
       process.env.GEMINI_MODEL || 'gemini-flash-latest',
       'gemini-flash-lite-latest',
@@ -198,6 +256,7 @@ ${cleanQuery}
     return NextResponse.json({
       answer: candidateText,
       sources,
+      usedInternalKnowledge: sources.length === 0,
       mode,
     });
   } catch (error: any) {

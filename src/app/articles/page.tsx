@@ -39,6 +39,7 @@ interface ChatMessage {
     sectionId?: string;
     sectionTitle?: string;
   }>;
+  usedInternalKnowledge?: boolean;
 }
 
 // Smart Title Compressor for 3D wheel
@@ -58,6 +59,94 @@ function formatWheelTitle(title: string, maxWords: number = 8, maxChars: number 
   return trimmed;
 }
 
+// Formatted Chat Message supporting bold headers, inline bolding, and bullet lists
+function FormattedChatMessage({ text }: { text: string }) {
+  if (!text) return null;
+
+  const parseInline = (str: string) => {
+    const parts: React.ReactNode[] = [];
+    const regex = /\*\*(.*?)\*\*/g;
+    let lastIndex = 0;
+    let match;
+
+    while ((match = regex.exec(str)) !== null) {
+      if (match.index > lastIndex) {
+        parts.push(str.substring(lastIndex, match.index));
+      }
+      parts.push(
+        <strong key={match.index} className="chat-ai-bold">
+          {match[1]}
+        </strong>
+      );
+      lastIndex = regex.lastIndex;
+    }
+
+    if (lastIndex < str.length) {
+      parts.push(str.substring(lastIndex));
+    }
+
+    return parts.length > 0 ? parts : str;
+  };
+
+  const lines = text.split('\n');
+  const elements: React.ReactNode[] = [];
+  let currentList: string[] = [];
+
+  const flushList = (keyPrefix: number | string) => {
+    if (currentList.length > 0) {
+      elements.push(
+        <ul key={`ul-${keyPrefix}`} className="chat-ai-bullet-list">
+          {currentList.map((item, idx) => (
+            <li key={idx} className="chat-ai-bullet-item">
+              {parseInline(item)}
+            </li>
+          ))}
+        </ul>
+      );
+      currentList = [];
+    }
+  };
+
+  lines.forEach((line, index) => {
+    let trimmed = line.trim();
+    if (!trimmed) {
+      flushList(index);
+      return;
+    }
+
+    // Strip Markdown header hashes if any (e.g. ### **عنوان** or ## عنوان)
+    const headerMatch = trimmed.match(/^#{1,4}\s+(.+)$/);
+    let isHeader = false;
+    if (headerMatch) {
+      trimmed = headerMatch[1];
+      isHeader = true;
+    }
+
+    // Check for bullet list item: starts with -, *, or •
+    const bulletMatch = trimmed.match(/^[-*•]\s+(.+)$/);
+    if (bulletMatch) {
+      currentList.push(bulletMatch[1]);
+      return;
+    }
+
+    // Flush any pending list
+    flushList(index);
+
+    elements.push(
+      <div
+        key={`p-${index}`}
+        className={isHeader ? 'chat-ai-heading' : 'chat-ai-paragraph'}
+      >
+        {parseInline(trimmed)}
+      </div>
+    );
+  });
+
+  flushList('end');
+
+  return <div className="chat-ai-formatted-body">{elements}</div>;
+}
+
 export default function ArticlesPage() {
   const [isBookingOpen, setIsBookingOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -69,10 +158,6 @@ export default function ArticlesPage() {
   // AI Mode States
   const [isAiMode, setIsAiMode] = useState(false);
   const [isAiLoading, setIsAiLoading] = useState(false);
-  const [aiOverview, setAiOverview] = useState<{
-    answer: string;
-    sources: Array<{ title: string; slug: string; sectionId?: string; sectionTitle?: string }>;
-  } | null>(null);
 
   // Conversational Chat History in AI Mode
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
@@ -191,33 +276,8 @@ export default function ArticlesPage() {
       setSearchQuery('');
       await handleSendChatMessage(q);
     } else {
-      // Standard Google-style search with AI Overview at top
+      // Standard search: display matching article list only
       setSubmittedQuery(q);
-      fetchAiOverview(q);
-    }
-  };
-
-  // Fetch AI Overview (for standard search mode)
-  const fetchAiOverview = async (queryToRun: string) => {
-    setIsAiLoading(true);
-    setAiOverview(null);
-    try {
-      const res = await fetch('/api/articles/ai-search', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ query: queryToRun, mode: 'overview' }),
-      });
-      if (res.ok) {
-        const data = await res.json();
-        setAiOverview({
-          answer: data.answer,
-          sources: data.sources || [],
-        });
-      }
-    } catch (err) {
-      console.error('Failed to fetch AI Overview:', err);
-    } finally {
-      setIsAiLoading(false);
     }
   };
 
@@ -253,7 +313,8 @@ export default function ArticlesPage() {
         const aiMsg: ChatMessage = {
           role: 'model',
           text: data.answer,
-          sources: data.sources || [],
+          sources: (data.sources && data.sources.length > 0) ? data.sources.slice(0, 3) : [],
+          usedInternalKnowledge: data.usedInternalKnowledge ?? (!data.sources || data.sources.length === 0),
         };
         setChatHistory([...newHistory, aiMsg]);
       } else {
@@ -344,12 +405,8 @@ export default function ArticlesPage() {
               </h1>
               <p className="articles-page-subtitle">
                 {isAiMode
-                  ? isMobile
-                    ? 'پاسخ هوشمند و دقیق‌تر، با استناد به مقالات علمی و تجارب بالینی'
-                    : 'پاسخ هوشمند و دقیق‌تر، با استناد به مقالات علمی و تجارب بالینی دندانپزشکی'
-                  : isMobile
-                  ? 'جستجوی هوشمند در علائم، داروها، درمان‌ها و مقالات تخصصی'
-                  : 'جستجوی هوشمند به سبک گوگل در علائم، داروها، درمان‌ها و مقالات تخصصی کلینیک'}
+                  ? 'پاسخ هوشمند و دقیقتر، با استناد به مقالات علمی و تجارب بالینی'
+                  : 'جستجوی هوشمند در علائم، داروها، درمانها و مقالات تخصصی'}
               </p>
             </div>
 
@@ -392,7 +449,6 @@ export default function ArticlesPage() {
                       onClick={() => {
                         setSearchQuery('');
                         setSubmittedQuery('');
-                        setAiOverview(null);
                         setActiveIndex(defaultMiddleIndex);
                       }}
                       aria-label="پاک کردن جستجو"
@@ -470,28 +526,37 @@ export default function ArticlesPage() {
                             </div>
                           )}
 
-                          <div style={{ whiteSpace: 'pre-line' }}>{msg.text}</div>
+                          <FormattedChatMessage text={msg.text} />
 
-                          {/* Source citations chips */}
-                          {msg.sources && msg.sources.length > 0 && (
-                            <div className="ai-overview-sources">
-                              <div className="ai-overview-sources-title">
-                                <i className="fa-solid fa-book-open" style={{ marginLeft: '6px' }}></i>
-                                <span>مقالات مرجع در سایت:</span>
+                          {/* Reference sources (1 to 3 articles) OR internal knowledge indicator */}
+                          {msg.role === 'model' && (
+                            msg.sources && msg.sources.length > 0 ? (
+                              <div className="ai-overview-sources">
+                                <div className="ai-overview-sources-title">
+                                  <i className="fa-solid fa-book-open" style={{ marginLeft: '6px' }}></i>
+                                  <span>مقالات مرجع در سایت ({msg.sources.slice(0, 3).length} مقاله):</span>
+                                </div>
+                                <div className="ai-overview-sources-list">
+                                  {msg.sources.slice(0, 3).map((src, sIdx) => (
+                                    <Link
+                                      key={sIdx}
+                                      href={`/articles/${src.slug}${src.sectionId ? '#' + src.sectionId : ''}`}
+                                      className="ai-source-chip"
+                                    >
+                                      <span>{src.title}</span>
+                                      <i className="fa-solid fa-arrow-left" style={{ fontSize: '9px' }}></i>
+                                    </Link>
+                                  ))}
+                                </div>
                               </div>
-                              <div className="ai-overview-sources-list">
-                                {msg.sources.map((src, sIdx) => (
-                                  <Link
-                                    key={sIdx}
-                                    href={`/articles/${src.slug}${src.sectionId ? '#' + src.sectionId : ''}`}
-                                    className="ai-source-chip"
-                                  >
-                                    <span>{src.title}</span>
-                                    <i className="fa-solid fa-arrow-left" style={{ fontSize: '9px' }}></i>
-                                  </Link>
-                                ))}
+                            ) : (
+                              <div className="ai-overview-sources ai-internal-source-box">
+                                <div className="ai-internal-source-content">
+                                  <i className="fa-solid fa-brain" style={{ marginLeft: '6px', color: '#0284c7' }}></i>
+                                  <span>منبع پاسخ: استخراج و تدوین‌شده بر پایه <strong>دانش تخصصی دندانپزشکی</strong> (بدون مقاله مرجع در دانشنامه سایت)</span>
+                                </div>
                               </div>
-                            </div>
+                            )
                           )}
 
                           {/* Telegram Bot redirection banner */}
@@ -529,12 +594,17 @@ export default function ArticlesPage() {
                   {isAiLoading && (
                     <div className="chat-msg-ai-loading">
                       <div className="ai-typing-inline-wrap">
+                        <span className="ai-typing-text ai-typing-text-desktop">
+                          دستیار در حال بررسی مقالات و نگارش پاسخ است
+                        </span>
+                        <span className="ai-typing-text ai-typing-text-mobile">
+                          درحال بررسی مقالات
+                        </span>
                         <div className="ai-typing-indicator">
                           <span className="ai-typing-dot" />
                           <span className="ai-typing-dot" />
                           <span className="ai-typing-dot" />
                         </div>
-                        <span className="ai-typing-text">دستیار در حال بررسی مقالات و نگارش پاسخ است</span>
                       </div>
                     </div>
                   )}
@@ -552,64 +622,6 @@ export default function ArticlesPage() {
                     حدود {totalCount} نتیجه برای «<strong>{submittedQuery || searchQuery}</strong>»
                   </span>
                 </div>
-
-                {/* Google-Style AI Overview Card at top */}
-                {(isAiLoading || aiOverview) && (
-                  <div className="google-ai-overview-card">
-                    <div className="ai-overview-header">
-                      <div className="ai-overview-title-group">
-                        <i className="fa-solid fa-sparkles"></i>
-                        <span>نمای کلی هوش مصنوعی (AI Overview)</span>
-                      </div>
-                      <span style={{ fontSize: '11px', color: '#64748b' }}>بر اساس دانشنامه کلینیک قلی‌پور</span>
-                    </div>
-
-                    {isAiLoading ? (
-                      <div style={{ padding: '10px 0', color: '#64748b', fontSize: '13.5px' }}>
-                        <div className="ai-typing-indicator">
-                          <span className="ai-typing-dot" />
-                          <span className="ai-typing-dot" />
-                          <span className="ai-typing-dot" />
-                        </div>
-                        <span style={{ marginRight: '10px' }}>در حال ترکیب و تحلیل مقالات مرتبط...</span>
-                      </div>
-                    ) : aiOverview ? (
-                      <>
-                        <div className="ai-overview-body">
-                          {aiOverview.answer}
-                        </div>
-
-                        {aiOverview.sources && aiOverview.sources.length > 0 && (
-                          <div className="ai-overview-sources">
-                            <div className="ai-overview-sources-title">
-                              <i className="fa-solid fa-book-open" style={{ marginLeft: '6px' }}></i>
-                              <span>منابع مطالعه بیشتر:</span>
-                            </div>
-                            <div className="ai-overview-sources-list">
-                              {aiOverview.sources.map((src, i) => (
-                                <Link
-                                  key={i}
-                                  href={`/articles/${src.slug}${src.sectionId ? '#' + src.sectionId : ''}`}
-                                  className="ai-source-chip"
-                                >
-                                  <span>{src.title}</span>
-                                  <i className="fa-solid fa-arrow-left" style={{ fontSize: '9px' }}></i>
-                                </Link>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-
-                        <div className="ai-medical-disclaimer-strip">
-                          <i className="fa-solid fa-circle-info"></i>
-                          <span>
-                            این پاسخ صرفاً جنبه آموزشی دارد. برای مشاوره پزشکی با متخصصان کلینیک یا ربات تلگرام @Qolipur-bot در تماس باشید.
-                          </span>
-                        </div>
-                      </>
-                    ) : null}
-                  </div>
-                )}
 
                 {/* Google-like List of Search Results */}
                 {totalCount === 0 ? (

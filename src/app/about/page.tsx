@@ -233,11 +233,11 @@ export default function AboutPage() {
               {/* 1. Doctor Portrait Card (Right on desktop in RTL, Top on mobile) */}
               <div className="doctor-hybrid-card doctor-hybrid-portrait">
                 <Image
-                  src="/assets/doctor-portrait.webp"
+                  src="/assets/doctor-about.webp"
                   alt="دکتر مهدی محمدنژاد - دکترای حرفه‌ای دندان‌پزشکی"
                   className="doctor-portrait-image"
-                  width={500}
-                  height={500}
+                  width={938}
+                  height={1024}
                   loading="eager"
                 />
               </div>

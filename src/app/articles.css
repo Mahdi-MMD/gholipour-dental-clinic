@@ -300,14 +300,14 @@
   z-index: 10;
 }
 
-/* Search Text Input: Pill Shape matching mockup (Padding: right for icon, left for clear button) */
+/* Search Text Input: Pill Shape matching Google bar (Right padding for magnifier, Left padding for narrower AI Mode button) */
 .articles-search-input {
   width: 100%;
   height: 56px;
   border-radius: 50px;
   border: 1.8px solid #95c5db;
   background-color: #ffffff;
-  padding: 0 58px 0 52px; /* Right: 58px for magnifier icon, Left: 52px for clear button */
+  padding: 0 58px 0 112px; /* Adjusted for narrower AI Mode button */
   font-family: var(--font-base);
   font-size: 15.5px;
   font-weight: 500;
@@ -336,14 +336,22 @@
   transform: rotate(0deg) scale(1.08);
 }
 
-/* Clear Search Button: inside pill on the LEFT */
-.articles-clear-search-btn {
+/* Left actions group inside the search pill */
+.articles-search-left-actions {
   position: absolute;
-  left: 18px;
+  left: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  z-index: 10;
+}
+
+/* Clear Search Button */
+.articles-clear-search-btn {
   background: none;
   border: none;
   color: #7f9ca8;
-  font-size: 17px;
+  font-size: 16px;
   cursor: pointer;
   padding: 6px;
   display: flex;
@@ -351,13 +359,121 @@
   justify-content: center;
   border-radius: 50%;
   transition: all 0.2s ease;
-  z-index: 10;
 }
 
 .articles-clear-search-btn:hover {
   color: #d9534f;
   background: rgba(217, 83, 79, 0.08);
   transform: scale(1.1);
+}
+
+/* ==========================================================
+   GOOGLE "AI MODE" PILL BUTTON (INSIDE SEARCH BOX)
+   Narrow, White Background, Soft Light Blue Border & Dark Blue Text
+   Soft Rotating Light: Fading between Soft Light Blue & White only
+   Subtle, elegant border rotation with reduced glow
+   ========================================================== */
+
+.google-ai-mode-pill-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 24px;
+  padding: 1.5px;
+  box-sizing: border-box;
+}
+
+.google-ai-mode-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 34px;
+  padding: 0 11px; /* Narrowed width per user request */
+  border-radius: 20px;
+  background: #ffffff;
+  border: 1.2px solid #bce1f3;
+  color: #0c4a60; /* Clear readable blue text */
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  outline: none;
+  user-select: none;
+  letter-spacing: -0.1px;
+  box-shadow: 0 1px 2px rgba(12, 74, 96, 0.04);
+  position: relative;
+  z-index: 3;
+}
+
+.google-ai-mode-pill:hover {
+  background: #f7fcfe;
+  border-color: #8cd2f0;
+  color: #0284c7;
+}
+
+.google-ai-mode-label {
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* Active State */
+.google-ai-mode-pill.is-active {
+  background: #ffffff;
+  border-color: transparent;
+  color: #0369a1;
+}
+
+/* 1. Subtle, gentle blurred halo (Soft Light Blue to White fading, reduced intensity) */
+.google-ai-mode-pill-wrapper.is-active-reactor::before {
+  content: '';
+  position: absolute;
+  inset: -1.5px;
+  border-radius: 24px;
+  background: conic-gradient(
+    from var(--glow-angle),
+    #93c5fd 0deg,
+    #e0f2fe 45deg,
+    #ffffff 90deg,
+    #bae6fd 135deg,
+    #7dd3fc 180deg,
+    #e0f2fe 225deg,
+    #ffffff 270deg,
+    #bae6fd 315deg,
+    #93c5fd 360deg
+  );
+  filter: blur(2.5px);
+  opacity: 0.45;
+  z-index: 1;
+  pointer-events: none;
+  animation: rotateBorderGlow 5s linear infinite;
+}
+
+/* 2. Crisp, thin rotating border light (Soft Light Blue & White only) */
+.google-ai-mode-pill-wrapper.is-active-reactor::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 22px;
+  background: conic-gradient(
+    from var(--glow-angle),
+    #7dd3fc 0deg,
+    #bae6fd 40deg,
+    #ffffff 80deg,
+    #bae6fd 120deg,
+    #7dd3fc 160deg,
+    #38bdf8 180deg,
+    #7dd3fc 220deg,
+    #bae6fd 260deg,
+    #ffffff 300deg,
+    #bae6fd 340deg,
+    #7dd3fc 360deg
+  );
+  z-index: 2;
+  pointer-events: none;
+  animation: rotateBorderGlow 5s linear infinite;
 }
 
 /* ==========================================================
@@ -900,3 +1016,536 @@
   gap: 6px;
   font-weight: 600;
 }
+
+/* ==========================================================
+   GOOGLE AI MODE TOGGLE BUTTON & REACTOR ANIMATION
+   ========================================================== */
+
+.google-ai-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 14px;
+  border-radius: 24px;
+  border: 1.5px solid #d0e7f3;
+  background: linear-gradient(135deg, #ffffff 0%, #f4faff 100%);
+  color: #2a6478;
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  position: relative;
+  overflow: visible;
+  outline: none;
+  user-select: none;
+}
+
+.google-ai-toggle-btn:hover {
+  background: #f0f8fd;
+  border-color: #8acfe8;
+  transform: translateY(-1px);
+}
+
+.google-ai-sparkle-icon {
+  width: 17px;
+  height: 17px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.4s ease;
+}
+
+/* Active Glowing Reactor State */
+.google-ai-toggle-btn.is-active {
+  background: linear-gradient(135deg, #0284c7 0%, #0369a1 50%, #4338ca 100%);
+  color: #ffffff;
+  border-color: #38bdf8;
+  box-shadow: 0 0 20px rgba(2, 132, 199, 0.55), 0 0 40px rgba(99, 102, 241, 0.3);
+  animation: reactorPulse 2.2s infinite ease-in-out;
+}
+
+.google-ai-toggle-btn.is-active .google-ai-sparkle-icon {
+  animation: reactorSpinGlow 3.5s infinite linear;
+}
+
+@keyframes reactorPulse {
+  0% {
+    box-shadow: 0 0 12px rgba(2, 132, 199, 0.4), 0 0 24px rgba(99, 102, 241, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 22px rgba(56, 189, 248, 0.8), 0 0 45px rgba(129, 140, 248, 0.5);
+    border-color: #7dd3fc;
+  }
+  100% {
+    box-shadow: 0 0 12px rgba(2, 132, 199, 0.4), 0 0 24px rgba(99, 102, 241, 0.2);
+  }
+}
+
+@keyframes reactorSpinGlow {
+  0% { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(180deg) scale(1.15); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+
+.ai-status-pill {
+  font-size: 10px;
+  padding: 1px 6px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.25);
+  letter-spacing: 0.3px;
+}
+
+/* ==========================================================
+   GOOGLE-STYLE SEARCH RESULTS LAYOUT
+   ========================================================== */
+
+.google-results-container {
+  width: 100%;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 10px 4px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-height: 480px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+}
+
+.google-results-container::-webkit-scrollbar {
+  width: 6px;
+}
+.google-results-container::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 6px;
+}
+
+.google-results-meta {
+  font-size: 13px;
+  color: #70757a;
+  border-bottom: 1px solid #ebebeb;
+  padding-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Individual Google-style search link card */
+.google-result-item {
+  display: flex;
+  flex-direction: column;
+  background: transparent;
+  padding: 8px 12px 14px;
+  border-radius: 12px;
+  text-decoration: none;
+  transition: background 0.2s ease, transform 0.15s ease;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.google-result-item:hover {
+  background: #f8fafc;
+  transform: translateX(-3px);
+}
+
+.google-result-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #4b5563;
+  margin-bottom: 4px;
+}
+
+.google-result-breadcrumb i {
+  font-size: 10px;
+  color: #9ca3af;
+}
+
+.google-result-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #124e69;
+  line-height: 1.4;
+  margin: 0 0 6px;
+  transition: color 0.15s ease;
+}
+
+.google-result-item,
+.google-result-item * {
+  text-decoration: none !important;
+}
+
+.google-result-item:hover .google-result-title {
+  color: #0284c7;
+  text-decoration: none !important;
+}
+
+.google-result-snippet {
+  font-size: 13.5px;
+  color: #4d5156;
+  line-height: 1.65;
+  margin: 0;
+}
+
+/* Theme-matched search highlight badge instead of default yellow mark */
+mark.highlight-term {
+  background: #e0f2fe;
+  color: #0369a1;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 6px;
+  border-bottom: none;
+  text-decoration: none !important;
+  display: inline-block;
+}
+
+.google-result-section-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 6px;
+  font-size: 11.5px;
+  color: #0284c7;
+  background: #f0f9ff;
+  border: 1px solid #e0f2fe;
+  padding: 2px 10px;
+  border-radius: 12px;
+  align-self: flex-start;
+  font-weight: 600;
+}
+
+/* ==========================================================
+   GOOGLE-STYLE AI OVERVIEW CARD
+   ========================================================== */
+
+.google-ai-overview-card {
+  background: linear-gradient(180deg, #f8fbff 0%, #ffffff 100%);
+  border: 1.5px solid #d6e8f7;
+  border-radius: 20px;
+  padding: 20px 24px;
+  box-shadow: 0 4px 20px rgba(2, 132, 199, 0.06);
+  position: relative;
+  overflow: hidden;
+}
+
+.google-ai-overview-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
+}
+
+.ai-overview-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.ai-overview-title-group {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 15.5px;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.ai-overview-title-group i {
+  color: #0284c7;
+  font-size: 17px;
+  animation: pulseRotate 3s infinite ease-in-out;
+}
+
+@keyframes pulseRotate {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.15) rotate(15deg); color: #6366f1; }
+  100% { transform: scale(1); }
+}
+
+.ai-overview-body {
+  font-size: 14.5px;
+  line-height: 1.85;
+  color: #334155;
+  white-space: pre-line;
+}
+
+.ai-overview-sources {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px dashed #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  width: 100%;
+}
+
+.ai-overview-sources-title {
+  font-size: 12px;
+  color: #64748b;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ai-overview-sources-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.ai-source-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #0369a1;
+  background: #f0f9ff;
+  border: 1px solid #bae6fd;
+  padding: 5px 12px;
+  border-radius: 14px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.ai-source-chip:hover {
+  background: #0284c7;
+  color: #ffffff;
+  border-color: #0284c7;
+}
+
+.ai-medical-disclaimer-strip {
+  margin-top: 12px;
+  font-size: 11.5px;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ==========================================================
+   GOOGLE AI CHAT MODE ENVIRONMENT
+   ========================================================== */
+
+.google-ai-chat-stage {
+  width: 100%;
+  max-width: 860px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-sizing: border-box;
+}
+
+/* Chat History: Scrollbar completely removed per user request */
+.ai-chat-history-scroll {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  flex: 1;
+  min-height: 0;
+  max-height: calc(min(620px, calc(100dvh - 120px)) - 220px);
+  overflow-y: auto;
+  padding: 10px 16px 40px; /* Equal horizontal padding on both sides + safe bottom clearance */
+  scrollbar-width: none; /* Firefox: completely hide scrollbar */
+  -ms-overflow-style: none; /* IE and Edge */
+  box-sizing: border-box;
+}
+
+.ai-chat-history-scroll::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera: completely hide scrollbar */
+}
+
+/* Safe margin spacer ensuring bottom elements don't get clipped by bottom border */
+.chat-bottom-safe-spacer {
+  height: 28px;
+  flex-shrink: 0;
+  width: 100%;
+}
+
+/* User Message Bubble: Aligned cleanly to the Right (RTL start) */
+.chat-msg-user {
+  align-self: flex-start;
+  margin-right: 0;
+  max-width: 80%;
+  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+  color: #ffffff;
+  padding: 12px 20px;
+  border-radius: 20px 20px 4px 20px;
+  font-size: 14.5px;
+  line-height: 1.6;
+  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.15);
+  box-sizing: border-box;
+}
+
+/* AI Assistant Message Bubble: Aligned cleanly to the Left (RTL end) */
+.chat-msg-ai {
+  align-self: flex-end;
+  margin-left: 0;
+  max-width: 92%;
+  background: #ffffff;
+  border: 1.5px solid #dbeafe;
+  padding: 18px 24px;
+  border-radius: 20px 20px 20px 4px;
+  font-size: 14.5px;
+  line-height: 1.85;
+  color: #1e293b;
+  box-shadow: 0 6px 20px rgba(30, 58, 138, 0.05);
+  box-sizing: border-box;
+}
+
+.chat-ai-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #0284c7;
+}
+
+/* Telegram Bot CTA banner in Chat */
+.chat-telegram-cta {
+  margin-top: 14px;
+  padding: 12px 16px;
+  background: linear-gradient(135deg, #f0fdf4 0%, #e0f2fe 100%);
+  border: 1px solid #bbf7d0;
+  border-radius: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 13px;
+}
+
+.telegram-bot-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #0284c7;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.telegram-bot-badge:hover {
+  text-decoration: underline;
+}
+
+/* Follow-up Question Input inside Chat */
+.ai-followup-input-bar {
+  display: flex;
+  align-items: center;
+  background: #ffffff;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 28px;
+  padding: 4px 6px 4px 18px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+  transition: all 0.25s ease;
+}
+
+.ai-followup-input-bar:focus-within {
+  border-color: #0284c7;
+  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+}
+
+.ai-followup-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-family: inherit;
+  font-size: 14px;
+  background: transparent;
+  color: #1e293b;
+  padding: 8px 0;
+}
+
+.ai-send-btn {
+  background: #0284c7;
+  color: #ffffff;
+  border: none;
+  border-radius: 50%;
+  width: 38px;
+  height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.ai-send-btn:hover {
+  background: #0369a1;
+  transform: scale(1.05);
+}
+
+.ai-send-btn:disabled {
+  background: #94a3b8;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* AI Loading Bubble: Aligned cleanly to the Left (matching AI responses) */
+.chat-msg-ai-loading {
+  align-self: flex-end;
+  margin-left: 0;
+  margin-right: auto;
+  max-width: 92%;
+  background: #ffffff;
+  border: 1.5px solid #dbeafe;
+  padding: 12px 20px;
+  border-radius: 20px 20px 20px 4px;
+  box-shadow: 0 4px 16px rgba(30, 58, 138, 0.05);
+  box-sizing: border-box;
+}
+
+.ai-typing-inline-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  direction: rtl;
+}
+
+.ai-typing-text {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #0284c7;
+  white-space: nowrap;
+}
+
+/* Loading Dots animation */
+.ai-typing-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  background: #eff6ff;
+  border-radius: 12px;
+  margin-top: 0;
+}
+
+.ai-typing-dot {
+  width: 6px;
+  height: 6px;
+  background: #0284c7;
+  border-radius: 50%;
+  animation: typingBounce 1.4s infinite ease-in-out both;
+}
+
+.ai-typing-dot:nth-child(1) { animation-delay: -0.32s; }
+.ai-typing-dot:nth-child(2) { animation-delay: -0.16s; }
+
+@keyframes typingBounce {
+  0%, 80%, 100% { transform: scale(0); }
+  40% { transform: scale(1); }
+}
+

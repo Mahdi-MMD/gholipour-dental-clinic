@@ -4,7 +4,6 @@ import React, { useState, useEffect, useRef, useMemo } from 'react';
 import Link from 'next/link';
 import Header from '@/components/Header';
 import BookingDrawer from '@/components/BookingDrawer';
-import FloatingBubble from '@/components/FloatingBubble';
 import { ARTICLES_DATA, ArticleItem } from '@/data/articlesData';
 import {
   createArticlesSearchIndex,
@@ -802,9 +801,6 @@ export default function ArticlesPage() {
           </section>
         </div>
       </main>
-
-      {/* Floating Action Button */}
-      <FloatingBubble isMobileMenuOpen={mobileMenuOpen} />
 
       {/* Booking Drawer */}
       <BookingDrawer isOpen={isBookingOpen} onClose={handleCloseBooking} />

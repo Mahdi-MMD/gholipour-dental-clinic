@@ -1298,6 +1298,15 @@ button, input {
   pointer-events: none;
 }
 
+/* Visibility Toggles */
+.doctors-cards-wrap-mobile {
+  display: none;
+}
+
+.doctors-carousel-wrap-desktop {
+  display: block;
+}
+
 @media (max-width: 1060px) {
   .doctor-arrow-prev,
   .doctor-arrow-left { left: 4px; }
@@ -1307,19 +1316,101 @@ button, input {
 
 @media (max-width: 640px) {
   .doctors-section {
-    padding: 60px 0;
+    padding: 55px 0 65px;
+    overflow: visible;
   }
-  .doctors-swiper {
-    padding: 35px 4px;
+
+  .doctors-carousel-wrap-desktop {
+    display: none;
   }
-  .doctor-arrow-btn {
-    font-size: 26px;
-    padding: 6px;
+
+  .doctors-cards-wrap-mobile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 100%;
+    padding: 10px 0 20px;
+    margin: 0 auto;
   }
-  .doctor-arrow-prev,
-  .doctor-arrow-left { left: 0px; }
-  .doctor-arrow-next,
-  .doctor-arrow-right { right: 0px; }
+
+  .doctors-cards-swiper {
+    width: min(290px, 80vw);
+    height: auto;
+    padding: 15px 0 35px;
+    overflow: visible;
+  }
+
+  .doctor-cards-slide {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 24px;
+    background: transparent;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+  }
+
+  .doctor-cards-item {
+    width: 100%;
+    position: relative;
+    background: #ffffff;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 14px 34px rgba(28, 131, 170, 0.16), 0 4px 14px rgba(0, 0, 0, 0.06);
+    border: 1px solid rgba(28, 131, 170, 0.14);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .doctor-cards-item img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 938 / 1024;
+    object-fit: contain;
+    display: block;
+    background: linear-gradient(180deg, #f7fbfc 0%, #edf6f9 100%);
+    user-select: none;
+    -webkit-user-drag: none;
+  }
+
+  .doctor-card-bottom-spacer {
+    height: 48px;
+    width: 100%;
+    background: #ffffff;
+  }
+
+  .doctor-mobile-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    margin-top: 15px;
+  }
+
+  .doctor-mobile-nav .doctor-arrow-btn {
+    position: static;
+    transform: none;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: 1px solid rgba(28, 131, 170, 0.2);
+    box-shadow: 0 4px 12px rgba(28, 131, 170, 0.12);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-primary, #1c83aa);
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .doctor-mobile-nav .doctor-arrow-btn:active {
+    transform: scale(0.92);
+    background: var(--color-primary, #1c83aa);
+    color: #ffffff;
+  }
 }
 
 /* ==================== ARTICLES (EXACT REFERENCE DESIGN) ==================== */

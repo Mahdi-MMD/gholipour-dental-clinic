@@ -74,22 +74,25 @@ export async function generateMetadata({
   };
 }
 
-// Helper to render markdown links [label](url) inside section body
-function renderFormattedBody(text: string) {
-  if (!text) return null;
+// Helper to render inline markdown (bold text **text** and links [label](url))
+function renderInlineFormatting(inlineText: string): React.ReactNode {
+  if (!inlineText) return null;
+
+  // Process markdown links [label](url)
   const linkRegex = /\[(.*?)\]\((.*?)\)/g;
-  if (!linkRegex.test(text)) {
-    return text;
-  }
-  const parts: React.ReactNode[] = [];
-  let lastIndex = 0;
-  text.replace(linkRegex, (match, linkText, url, offset) => {
-    if (offset > lastIndex) {
-      parts.push(text.slice(lastIndex, offset));
+  const segments: React.ReactNode[] = [];
+  let lastIdx = 0;
+  let match: RegExpExecArray | null;
+
+  while ((match = linkRegex.exec(inlineText)) !== null) {
+    if (match.index > lastIdx) {
+      const boldNodes = parseBold(inlineText.slice(lastIdx, match.index));
+      segments.push(...boldNodes);
     }
-    parts.push(
+    const [_, linkText, url] = match;
+    segments.push(
       <Link
-        key={offset}
+        key={`link-${match.index}`}
         href={url}
         style={{
           color: 'var(--color-primary)',
@@ -101,13 +104,188 @@ function renderFormattedBody(text: string) {
         {linkText}
       </Link>
     );
-    lastIndex = offset + match.length;
-    return match;
-  });
+    lastIdx = match.index + match[0].length;
+  }
+
+  if (lastIdx < inlineText.length) {
+    const boldNodes = parseBold(inlineText.slice(lastIdx));
+    segments.push(...boldNodes);
+  }
+
+  return segments;
+}
+
+// Sub-helper to parse **bold** into <strong> tags
+function parseBold(text: string): React.ReactNode[] {
+  if (!text) return [];
+  const boldRegex = /\*\*(.*?)\*\*/g;
+  if (!boldRegex.test(text)) {
+    return [text];
+  }
+  const parts: React.ReactNode[] = [];
+  let lastIndex = 0;
+  let m: RegExpExecArray | null;
+  boldRegex.lastIndex = 0;
+
+  while ((m = boldRegex.exec(text)) !== null) {
+    if (m.index > lastIndex) {
+      parts.push(text.slice(lastIndex, m.index));
+    }
+    parts.push(
+      <strong key={`bold-${m.index}`} style={{ fontWeight: 700, color: 'var(--color-primary-dark)' }}>
+        {m[1]}
+      </strong>
+    );
+    lastIndex = m.index + m[0].length;
+  }
   if (lastIndex < text.length) {
     parts.push(text.slice(lastIndex));
   }
   return parts;
+}
+
+// Structured block parser for section body: handles paragraphs, lists (ordered/unordered), and headings
+function renderFormattedBody(text: string) {
+  if (!text) return null;
+
+  // Split by double line breaks into distinct block elements
+  const rawBlocks = text.split(/\n\s*\n/).map((b) => b.trim()).filter(Boolean);
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', textAlign: 'justify' }}>
+      {rawBlocks.map((block, blockIdx) => {
+        const lines = block.split('\n').map((l) => l.trim()).filter(Boolean);
+
+        // Check if block is a sub-heading (### Heading)
+        if (block.startsWith('###')) {
+          const headingText = block.replace(/^###\s*/, '');
+          return (
+            <h3
+              key={`h3-${blockIdx}`}
+              style={{
+                fontSize: '17px',
+                fontWeight: 700,
+                color: 'var(--color-primary-dark)',
+                margin: '8px 0 2px 0',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+              }}
+            >
+              <span
+                style={{
+                  display: 'inline-block',
+                  width: '8px',
+                  height: '8px',
+                  borderRadius: '50%',
+                  backgroundColor: 'var(--color-primary)',
+                }}
+              />
+              <span>{headingText}</span>
+            </h3>
+          );
+        }
+
+        // Check if all lines are numbered list items (e.g. "۱. ...", "1. ...")
+        const isOrderedList = lines.every((line) => /^[0-9۰-۹]+[\.\-]\s+/.test(line));
+        if (isOrderedList && lines.length > 0) {
+          return (
+            <ol
+              key={`ol-${blockIdx}`}
+              style={{
+                margin: '4px 0',
+                paddingRight: '24px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '10px',
+                listStyleType: 'decimal',
+              }}
+            >
+              {lines.map((line, lineIdx) => {
+                const itemContent = line.replace(/^[0-9۰-۹]+[\.\-]\s+/, '');
+                return (
+                  <li key={`oli-${lineIdx}`} style={{ lineHeight: 1.9, color: 'var(--color-text-body)' }}>
+                    {renderInlineFormatting(itemContent)}
+                  </li>
+                );
+              })}
+            </ol>
+          );
+        }
+
+        // Check if all lines are bullet list items (e.g. "- ...", "* ...")
+        const isBulletList = lines.every((line) => /^[\-\*•]\s+/.test(line));
+        if (isBulletList && lines.length > 0) {
+          return (
+            <ul
+              key={`ul-${blockIdx}`}
+              style={{
+                margin: '4px 0',
+                paddingRight: '22px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '8px',
+                listStyleType: 'disc',
+              }}
+            >
+              {lines.map((line, lineIdx) => {
+                const itemContent = line.replace(/^[\-\*•]\s+/, '');
+                return (
+                  <li key={`uli-${lineIdx}`} style={{ lineHeight: 1.9, color: 'var(--color-text-body)' }}>
+                    {renderInlineFormatting(itemContent)}
+                  </li>
+                );
+              })}
+            </ul>
+          );
+        }
+
+        // Mixed block: has lines starting with bullet/number or plain paragraph
+        if (lines.length > 1 && lines.some((l) => /^([0-9۰-۹]+[\.\-]|[\-\*•])\s+/.test(l))) {
+          return (
+            <div key={`mixed-${blockIdx}`} style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              {lines.map((line, lineIdx) => {
+                if (/^[0-9۰-۹]+[\.\-]\s+/.test(line)) {
+                  return (
+                    <div key={`mline-${lineIdx}`} style={{ paddingRight: '12px', display: 'flex', gap: '8px', alignItems: 'baseline' }}>
+                      <span style={{ color: 'var(--color-primary)', fontWeight: 700 }}>
+                        {line.match(/^[0-9۰-۹]+[\.\-]/)?.[0]}
+                      </span>
+                      <span style={{ lineHeight: 1.9 }}>
+                        {renderInlineFormatting(line.replace(/^[0-9۰-۹]+[\.\-]\s+/, ''))}
+                      </span>
+                    </div>
+                  );
+                }
+                if (/^[\-\*•]\s+/.test(line)) {
+                  return (
+                    <div key={`mline-${lineIdx}`} style={{ paddingRight: '12px', display: 'flex', gap: '8px', alignItems: 'baseline' }}>
+                      <span style={{ color: 'var(--color-primary)', fontSize: '14px' }}>•</span>
+                      <span style={{ lineHeight: 1.9 }}>
+                        {renderInlineFormatting(line.replace(/^[\-\*•]\s+/, ''))}
+                      </span>
+                    </div>
+                  );
+                }
+                return (
+                  <p key={`mline-${lineIdx}`} style={{ margin: 0, lineHeight: 2.1 }}>
+                    {renderInlineFormatting(line)}
+                  </p>
+                );
+              })}
+            </div>
+          );
+        }
+
+        // Regular paragraph block
+        return (
+          <p key={`p-${blockIdx}`} style={{ margin: 0, lineHeight: 2.1 }}>
+            {renderInlineFormatting(block)}
+          </p>
+        );
+      })}
+    </div>
+  );
 }
 
 export default async function ArticleDetailPage({ params }: ArticleDetailProps) {
@@ -601,9 +779,9 @@ export default async function ArticleDetailPage({ params }: ArticleDetailProps) 
                         ></i>
                         <span>{section.title}</span>
                       </h2>
-                      <p style={{ margin: 0, textAlign: 'justify' }}>
+                      <div style={{ margin: 0, textAlign: 'justify' }}>
                         {renderFormattedBody(section.body)}
-                      </p>
+                      </div>
 
                       {/* Inline Physician Annotation / Chairside Commentary */}
                       {section.doctorComment && (

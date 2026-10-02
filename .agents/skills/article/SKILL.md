@@ -77,10 +77,15 @@ flowchart TD
 ## Phase 3: Conversational Tone & Text Humanization
 
 1. **Target Audience**: Everyday patients and families—NOT medical professionals.
-2. **Tone Guidelines** (see [Tone and Humanization Guide](./references/tone_and_humanization.md)):
+2. **Tone & Formatting Guidelines** (see [Tone and Humanization Guide](./references/tone_and_humanization.md)):
    - **Warm & Empathetic**: Acknowledge patient anxieties, fear of pain, or cost concerns immediately.
    - **Simple Everyday Persian**: Replace academic jargon with daily conversational terms (e.g., use *«عصب دندان»* instead of *«پالپ دندان»*, *«کشیدن دندان»* instead of *«اکستراکشن»*). If technical terms are necessary, explain them in plain language in parentheses.
    - **Zero AI Clichés**: Ban formulas such as *«در این مقاله قصد داریم...»*, *«بر هیچ‌کس پوشیده نیست...»*, *«امروزه سلامت دندان اهمیت بالایی دارد...»*. Start directly with an engaging patient scenario or question.
+   - **Structured Lists & Neat Typography (MANDATORY)**:
+     - Always use standard markdown numbered lists (`۱. `, `۲. `) for sequential steps/protocols so the parser renders them into semantic HTML `<ol>` elements.
+     - Always use standard bullet items (`- `) for categorized tips, food recommendations, and symptom checklists so the parser renders them into clean semantic `<ul>` lists.
+     - Use `### Subheading` for subsections so they render with colored accent indicators.
+     - Never leave raw asterisk characters or irregular comma-separated run-on walls of text. Ensure bold markers (`**text**`) wrap terms tightly without spaces so they seamlessly render as styled `<strong>` elements.
 
 ---
 

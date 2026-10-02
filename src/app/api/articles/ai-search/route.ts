@@ -190,7 +190,10 @@ ${cleanQuery}
       contents: geminiContents,
       generationConfig: {
         temperature: 0.4,
-        maxOutputTokens: 900,
+        maxOutputTokens: 1500,
+        thinkingConfig: {
+          thinkingBudget: 0,
+        },
       },
     };
 

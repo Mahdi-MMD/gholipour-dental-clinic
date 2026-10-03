@@ -186,6 +186,113 @@ function renderFormattedBody(text: string) {
           );
         }
 
+        // Check if block is a Markdown Table (contains | and has header separator |---|)
+        const isTable =
+          lines.length >= 2 &&
+          lines[0].includes('|') &&
+          lines.some((l) => /^\|?\s*:?-+:?\s*\|/.test(l));
+
+        if (isTable) {
+          const tableLines = lines.filter((l) => l.includes('|'));
+          // Find separator row index (e.g. |---|---|)
+          const separatorIdx = tableLines.findIndex((l) => /^\|?\s*:?-+:?\s*\|/.test(l));
+          const headerLine = separatorIdx > 0 ? tableLines[0] : null;
+          const bodyLines = separatorIdx >= 0 ? tableLines.slice(separatorIdx + 1) : tableLines;
+
+          const parseRow = (rowStr: string) =>
+            rowStr
+              .replace(/^\|/, '')
+              .replace(/\|$/, '')
+              .split('|')
+              .map((c) => c.trim());
+
+          const headers = headerLine ? parseRow(headerLine) : [];
+
+          return (
+            <div
+              key={`table-wrap-${blockIdx}`}
+              style={{
+                width: '100%',
+                overflowX: 'auto',
+                margin: '8px 0 16px 0',
+                borderRadius: '12px',
+                border: '1px solid var(--color-border)',
+                backgroundColor: 'var(--color-card-bg)',
+                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)',
+                WebkitOverflowScrolling: 'touch',
+              }}
+            >
+              <table
+                style={{
+                  width: '100%',
+                  borderCollapse: 'collapse',
+                  textAlign: 'right',
+                  fontSize: '14.5px',
+                  lineHeight: 1.8,
+                }}
+              >
+                {headers.length > 0 && (
+                  <thead>
+                    <tr
+                      style={{
+                        backgroundColor: 'var(--color-primary-ultralight, rgba(14, 165, 233, 0.08))',
+                        borderBottom: '2px solid var(--color-primary)',
+                      }}
+                    >
+                      {headers.map((h, hIdx) => (
+                        <th
+                          key={`th-${hIdx}`}
+                          style={{
+                            padding: '12px 16px',
+                            fontWeight: 700,
+                            color: 'var(--color-primary-dark)',
+                            whiteSpace: 'nowrap',
+                          }}
+                        >
+                          {renderInlineFormatting(h)}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                )}
+                <tbody>
+                  {bodyLines.map((rowStr, rIdx) => {
+                    const cells = parseRow(rowStr);
+                    const isEven = rIdx % 2 === 0;
+                    return (
+                      <tr
+                        key={`tr-${rIdx}`}
+                        style={{
+                          backgroundColor: isEven
+                            ? 'transparent'
+                            : 'var(--color-bg-subtle, rgba(0, 0, 0, 0.02))',
+                          borderBottom:
+                            rIdx === bodyLines.length - 1
+                              ? 'none'
+                              : '1px solid var(--color-border-subtle, rgba(0, 0, 0, 0.06))',
+                          transition: 'background-color 0.15s ease',
+                        }}
+                      >
+                        {cells.map((cell, cIdx) => (
+                          <td
+                            key={`td-${cIdx}`}
+                            style={{
+                              padding: '12px 16px',
+                              color: 'var(--color-text-body)',
+                            }}
+                          >
+                            {renderInlineFormatting(cell)}
+                          </td>
+                        ))}
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          );
+        }
+
         // Check if all lines are numbered list items (e.g. "۱. ...", "1. ...")
         const isOrderedList = lines.every((line) => /^[0-9۰-۹]+[\.\-]\s+/.test(line));
         if (isOrderedList && lines.length > 0) {
@@ -639,7 +746,7 @@ export default async function ArticleDetailPage({ params }: ArticleDetailProps) 
                   }}
                 >
                   <i className="fa-solid fa-bolt" style={{ color: '#0284c7' }}></i>
-                  <span>خلاصه سریع و نکات کلیدی (TL;DR)</span>
+                  <span>خلاصه سریع و نکات کلیدی</span>
                 </div>
                 <p
                   style={{

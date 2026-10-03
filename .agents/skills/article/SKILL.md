@@ -81,11 +81,12 @@ flowchart TD
    - **Warm & Empathetic**: Acknowledge patient anxieties, fear of pain, or cost concerns immediately.
    - **Simple Everyday Persian**: Replace academic jargon with daily conversational terms (e.g., use *«عصب دندان»* instead of *«پالپ دندان»*, *«کشیدن دندان»* instead of *«اکستراکشن»*). If technical terms are necessary, explain them in plain language in parentheses.
    - **Zero AI Clichés**: Ban formulas such as *«در این مقاله قصد داریم...»*, *«بر هیچ‌کس پوشیده نیست...»*, *«امروزه سلامت دندان اهمیت بالایی دارد...»*. Start directly with an engaging patient scenario or question.
-   - **Structured Lists & Neat Typography (MANDATORY)**:
-     - Always use standard markdown numbered lists (`۱. `, `۲. `) for sequential steps/protocols so the parser renders them into semantic HTML `<ol>` elements.
-     - Always use standard bullet items (`- `) for categorized tips, food recommendations, and symptom checklists so the parser renders them into clean semantic `<ul>` lists.
-     - Use `### Subheading` for subsections so they render with colored accent indicators.
-     - Never leave raw asterisk characters or irregular comma-separated run-on walls of text. Ensure bold markers (`**text**`) wrap terms tightly without spaces so they seamlessly render as styled `<strong>` elements.
+   - **Structured Lists, Tables & Neat Typography (MANDATORY)**:
+     - Always use standard markdown numbered lists (۱. , ۲. ) for sequential steps/protocols so the parser renders them into semantic HTML <ol> elements.
+     - Always use standard bullet items (- ) for categorized tips, food recommendations, and symptom checklists so the parser renders them into clean semantic <ul> lists.
+     - Always use standard Markdown tables (| ستون اول | ستون دوم | with |---|---| header divider) for comparative data, timelines, schedules, dosages, or age ranges so the parser renders them into clean, responsive HTML <table> containers.
+     - Use ### Subheading for subsections so they render with colored accent indicators.
+     - Never leave raw asterisk characters, unformatted piped text, or irregular comma-separated run-on walls of text. Ensure bold markers (**text**) wrap terms tightly without spaces so they seamlessly render as styled <strong> elements.
 
 ---
 

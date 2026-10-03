@@ -8,7 +8,9 @@
     "dev": "node scripts/optimize-images.js && next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "clean": "node -e \"require('fs').rmSync('.next', { recursive: true, force: true })\"",
+    "dev:clean": "npm run clean && npm run dev"
   },
   "dependencies": {
     "minisearch": "^7.2.0",

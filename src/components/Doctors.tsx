@@ -48,7 +48,7 @@ export default function Doctors() {
       <div className="container">
         <div className="section-header">
           <span className="section-watermark">OUR TEAM</span>
-          <h2 className="section-title">پزشکان کلینیک قلی‌پور</h2>
+          <h2 className="section-title">پزشکان کلینیک دندانپزشکی قلی‌پور</h2>
         </div>
 
         {/* Mobile View: Cards Swiper Effect */}

@@ -85,7 +85,7 @@ export default function ContactPage() {
                       </div>
                       <h3>پیام شما با موفقیت ثبت شد!</h3>
                       <p>
-                        از همراهی شما متشکریم. کارشناسان کلینیک تخصصی دندانپزشکی قلی‌پور به زودی با شما تماس خواهند گرفت.
+                        از همراهی شما متشکریم. کارشناسان کلینیک دندانپزشکی قلی‌پور به زودی با شما تماس خواهند گرفت.
                       </p>
                       <button
                         type="button"
@@ -267,7 +267,7 @@ export default function ContactPage() {
                   <div className="map-frame-wrapper">
                     <iframe
                       src={googleMapsEmbed}
-                      title="موقعیت مکانی کلینیک دندانپزشکی شهید قلی پور"
+                      title="موقعیت مکانی کلینیک دندانپزشکی قلی‌پور"
                       loading="lazy"
                       referrerPolicy="no-referrer-when-downgrade"
                     ></iframe>

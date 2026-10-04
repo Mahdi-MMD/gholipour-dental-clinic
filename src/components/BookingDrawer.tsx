@@ -126,7 +126,7 @@ export default function BookingDrawer({ isOpen, onClose }: BookingDrawerProps) {
             <div className="booking-success-msg" id="bookingSuccessMsg" style={{ display: 'block' }}>
               <i className="fa-solid fa-circle-check"></i>
               <h4>درخواست شما با موفقیت ثبت شد</h4>
-              <p>کارشناسان کلینیک قلی‌پور به زودی با شما تماس خواهند گرفت.</p>
+              <p>کارشناسان کلینیک دندانپزشکی قلی‌پور به زودی با شما تماس خواهند گرفت.</p>
             </div>
           )}
         </div>

@@ -29,7 +29,7 @@ export async function generateMetadata({
 
   if (!article) {
     return {
-      title: 'مقاله مورد نظر یافت نشد | کلینیک دندانپزشکی شهید قلی‌پور',
+      title: 'مقاله مورد نظر یافت نشد | کلینیک دندانپزشکی قلی‌پور',
     };
   }
 
@@ -48,7 +48,7 @@ export async function generateMetadata({
     : undefined;
 
   return {
-    title: `${article.title} | کلینیک دندانپزشکی شهید قلی‌پور`,
+    title: `${article.title} | کلینیک دندانپزشکی قلی‌پور`,
     description: article.summary,
     keywords: article.keywords,
     alternates: {
@@ -60,7 +60,7 @@ export async function generateMetadata({
       url: pageUrl,
       type: 'article',
       locale: 'fa_IR',
-      siteName: 'کلینیک دندانپزشکی شهید قلی‌پور',
+      siteName: 'کلینیک دندانپزشکی قلی‌پور',
       authors: [article.author || 'دکتر مهدی محمدنژاد'],
       tags: article.keywords,
       images: ogImages,
@@ -375,9 +375,9 @@ function renderFormattedBody(text: string) {
                   );
                 }
                 return (
-                  <p key={`mline-${lineIdx}`} style={{ margin: 0, lineHeight: 2.1 }}>
+                  <div key={`mline-${lineIdx}`} style={{ margin: 0, lineHeight: 2.1 }}>
                     {renderInlineFormatting(line)}
-                  </p>
+                  </div>
                 );
               })}
             </div>
@@ -386,9 +386,9 @@ function renderFormattedBody(text: string) {
 
         // Regular paragraph block
         return (
-          <p key={`p-${blockIdx}`} style={{ margin: 0, lineHeight: 2.1 }}>
+          <div key={`p-${blockIdx}`} style={{ margin: 0, lineHeight: 2.1 }}>
             {renderInlineFormatting(block)}
-          </p>
+          </div>
         );
       })}
     </div>
@@ -435,7 +435,7 @@ export default async function ArticleDetailPage({ params }: ArticleDetailProps) 
       identifier: '229353',
       worksFor: {
         '@type': 'DentalClinic',
-        name: 'کلینیک دندانپزشکی شهید قلی‌پور',
+        name: 'کلینیک دندانپزشکی قلی‌پور',
       },
     },
     reviewedBy: {
@@ -446,7 +446,7 @@ export default async function ArticleDetailPage({ params }: ArticleDetailProps) 
     },
     publisher: {
       '@type': 'DentalClinic',
-      name: 'کلینیک دندانپزشکی شهید قلی‌پور',
+      name: 'کلینیک دندانپزشکی قلی‌پور',
       url: 'https://gholipourdental.com',
       logo: {
         '@type': 'ImageObject',
@@ -748,7 +748,7 @@ export default async function ArticleDetailPage({ params }: ArticleDetailProps) 
                   <i className="fa-solid fa-bolt" style={{ color: '#0284c7' }}></i>
                   <span>خلاصه سریع و نکات کلیدی</span>
                 </div>
-                <p
+                <div
                   style={{
                     margin: 0,
                     fontSize: '15px',
@@ -759,7 +759,7 @@ export default async function ArticleDetailPage({ params }: ArticleDetailProps) 
                   }}
                 >
                   {article.tldr}
-                </p>
+                </div>
               </div>
             )}
 
@@ -959,7 +959,7 @@ export default async function ArticleDetailPage({ params }: ArticleDetailProps) 
                               </div>
                             </div>
                           </div>
-                          <p
+                          <div
                             style={{
                               margin: 0,
                               fontSize: '14px',
@@ -970,18 +970,18 @@ export default async function ArticleDetailPage({ params }: ArticleDetailProps) 
                             }}
                           >
                             {renderFormattedBody(section.doctorComment)}
-                          </p>
+                          </div>
                         </aside>
                       )}
                     </section>
                   ))
                 : article.content.map((paragraph, index) => (
-                    <p
+                    <div
                       key={index}
                       style={{ marginBottom: '22px', textAlign: 'justify' }}
                     >
                       {renderFormattedBody(paragraph)}
-                    </p>
+                    </div>
                   ))}
             </article>
 
@@ -1048,7 +1048,7 @@ export default async function ArticleDetailPage({ params }: ArticleDetailProps) 
                     تایید شده پزشکی
                   </span>
                 </div>
-                <p
+                <div
                   style={{
                     fontSize: '13px',
                     color: 'var(--color-text-muted)',
@@ -1056,9 +1056,9 @@ export default async function ArticleDetailPage({ params }: ArticleDetailProps) 
                     lineHeight: 1.6,
                   }}
                 >
-                  دکترای حرفه‌ای دندان‌پزشکی کلینیک تخصصی دندانپزشکی شهید قلی‌پور | <span style={{ fontWeight: 700, color: 'var(--color-primary-dark)' }}>کد نظام پزشکی: ۲۲۹۳۵۳</span>
-                </p>
-                <p
+                  دکترای حرفه‌ای دندان‌پزشکی کلینیک دندانپزشکی قلی‌پور | <span style={{ fontWeight: 700, color: 'var(--color-primary-dark)' }}>کد نظام پزشکی: ۲۲۹۳۵۳</span>
+                </div>
+                <div
                   style={{
                     fontSize: '12.5px',
                     color: '#4e707e',
@@ -1068,7 +1068,7 @@ export default async function ArticleDetailPage({ params }: ArticleDetailProps) 
                   }}
                 >
                   این مقاله بر اساس آخرین شواهد و ژورنال‌های معتبر بین‌المللی دندانپزشکی نگارش یافته و با هدف ارتقای آگاهی بیماران، توسط دکتر مهدی محمدنژاد (کد نظام پزشکی ۲۲۹۳۵۳) بازبینی علمی و تایید شده است.
-                </p>
+                </div>
               </div>
             </aside>
 
@@ -1283,15 +1283,15 @@ export default async function ArticleDetailPage({ params }: ArticleDetailProps) 
                 >
                   نیاز به مشاوره دندانپزشکی در این زمینه دارید؟
                 </h3>
-                <p
+                <div
                   style={{
                     fontSize: '14px',
                     color: 'var(--color-text-muted)',
                     margin: '6px 0 0',
                   }}
                 >
-                  همکاران ما در کلینیک دندانپزشکی شهید قلی‌پور آماده پاسخگویی و ارائه نوبت هستند.
-                </p>
+                  همکاران ما در کلینیک دندانپزشکی قلی‌پور آماده پاسخگویی و ارائه نوبت هستند.
+                </div>
               </div>
 
               <ArticleBookingButton />

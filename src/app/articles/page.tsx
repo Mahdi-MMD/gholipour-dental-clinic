@@ -497,7 +497,7 @@ export default function ArticlesPage() {
                         <i className="fa-solid fa-wand-magic-sparkles"></i>
                       </div>
                       <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#0f172a', margin: '0 0 8px' }}>
-                        دستیار هوشمند کلینیک قلی‌پور
+                        دستیار هوشمند کلینیک دندانپزشکی قلی‌پور
                       </h3>
                       <p style={{ fontSize: '14px', maxWidth: '520px', margin: '0 auto', lineHeight: 1.7 }}>
                         هر سوالی درباره دندان‌درد، مراحل درمان، مراقبت‌های پس از جراحی یا تفاوت روش‌ها دارید در کادر بالا بپرسید؛ هوش مصنوعی با استناد به دانشنامه علمی کلینیک به شما پاسخ خواهد داد.
@@ -519,7 +519,7 @@ export default function ArticlesPage() {
                             <div className="chat-ai-header">
                               <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
                                 <i className="fa-solid fa-sparkles"></i>
-                                <span>دستیار کلینیک قلی‌پور</span>
+                                <span>دستیار کلینیک دندانپزشکی قلی‌پور</span>
                               </span>
                               <span style={{ fontSize: '11px', color: '#64748b' }}>هوش مصنوعی</span>
                             </div>
@@ -643,7 +643,7 @@ export default function ArticlesPage() {
                         className="google-result-item"
                       >
                         <div className="google-result-breadcrumb">
-                          <span>کلینیک قلی‌پور</span>
+                          <span>کلینیک دندانپزشکی قلی‌پور</span>
                           <i className="fa-solid fa-chevron-left"></i>
                           <span>مقالات</span>
                           <i className="fa-solid fa-chevron-left"></i>

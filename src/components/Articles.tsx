@@ -2,56 +2,24 @@
 
 import React from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Autoplay } from 'swiper/modules';
+import { ARTICLES_DATA } from '@/data/articlesData';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
 
 interface ArticlesProps {
-  onOpenBooking: () => void;
+  onOpenBooking?: () => void;
 }
 
-const articlesData = [
-  {
-    title: 'مراقبت‌های بعد از جراحی ایمپلنت دندانی',
-    excerpt:
-      'راهنمای کامل بیماران کلینیک دندانپزشکی قلی‌پور؛ نکات طلایی تغذیه، کاهش تورم و بهداشت اصولی دهان پس از کاشت دندان برای بهبودی سریع و ماندگاری موفقیت‌آمیز ایمپلنت.',
-    img: '/assets/article-implant-care.webp',
-  },
-  {
-    title: 'بلیچینگ دندان چیست و چه تفاوتی با لمینیت دارد؟',
-    excerpt:
-      'سفید بودن دندان‌ها نقش کلیدی در زیبایی لبخند دارد؛ بررسی تفاوت‌های اساسی بلیچینگ مطبی با لمینیت سرامیکی و نحوه انتخاب بهترین روش در کلینیک دندانپزشکی قلی‌پور.',
-    img: '/assets/article-whitening.webp',
-  },
-  {
-    title: 'بهترین خمیر دندان برای استفاده روزمره کدام است؟',
-    excerpt:
-      'انتخاب خمیر دندان مناسب نقش بنیادین در پیشگیری از پوسیدگی دندان دارد؛ معیارهای انتخاب خمیر دندان حاوی فلوراید، ضدحساسیت و کنترل‌کننده پلاک دندانی.',
-    img: '/assets/article-toothpaste.webp',
-  },
-  {
-    title: 'روش‌های نوین بی‌حسی، دندان‌پزشکی بدون درد',
-    excerpt:
-      'کنترل اضطراب و درد بیماران یکی از اهداف اصلی کلینیک دندانپزشکی قلی‌پور است؛ معرفی تکنیک‌های بی‌حسی موضعی و کامپیوتری پیشرفته برای درمانی بدون هیچ‌گونه ترس یا احساس ناخوشایند.',
-    img: '/assets/article-anesthesia.webp',
-  },
-  {
-    title: 'ارتودنسی دندان چقدر طول می‌کشد و چه مراحلی دارد؟',
-    excerpt:
-      'ارتودنسی تخصصی به اصلاح موقعیت دندان‌ها و نظم فک‌ها می‌پردازد؛ بررسی طول دوره درمان، فازهای نگهدارنده و مراقبت‌های بهداشتی با براکت‌های ثابت و نامرئی.',
-    img: '/assets/article-orthodontics.webp',
-  },
-  {
-    title: 'بایدها و نبایدهای حیاتی پس از کاشت ایمپلنت',
-    excerpt:
-      'ایمپلنت دندان زمانی پایدارترین نتیجه را دارد که توصیه‌های بعد از جراحی رعایت شوند؛ از مصرف آنتی‌بیوتیک‌ها تا محافظت از بافت پیوندی لثه در روزهای نخست.',
-    img: '/assets/article-implant-dos-donts.webp',
-  },
-];
-
 export default function Articles({ onOpenBooking }: ArticlesProps) {
+  // Always select the 5 most recent articles
+  const latestArticles = React.useMemo(() => {
+    return [...ARTICLES_DATA].slice(-5).reverse();
+  }, []);
+
   return (
     <section className="articles-section" id="articles">
       <div className="container">
@@ -116,61 +84,53 @@ export default function Articles({ onOpenBooking }: ArticlesProps) {
               },
             }}
           >
-            {articlesData.map((art, idx) => (
-              <SwiperSlide key={idx} className="article-slide">
-                <article className="article-interactive-card">
-                  <div className="article-photo-wrap">
-                    <a
-                      href="#bookingDrawer"
-                      className="open-booking-btn article-photo-link"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        onOpenBooking();
-                      }}
-                    >
-                      <Image
-                        src={art.img}
-                        alt={art.title}
-                        width={600}
-                        height={420}
-                        loading="eager"
-                      />
-                    </a>
-                  </div>
-                  <div className="article-floating-box">
-                    <div className="article-title-row">
-                      <span className="article-accent-bar"></span>
-                      <h3 className="article-box-title">
-                        <a
-                          href="#bookingDrawer"
-                          className="open-booking-btn"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            onOpenBooking();
-                          }}
-                        >
-                          {art.title}
-                        </a>
-                      </h3>
-                    </div>
-                    <p className="article-box-excerpt">{art.excerpt}</p>
-                    <div className="article-card-footer">
-                      <a
-                        href="#bookingDrawer"
-                        className="open-booking-btn article-read-more"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          onOpenBooking();
-                        }}
+            {latestArticles.map((art) => {
+              const articleHref = `/articles/${art.slug}`;
+              const imageSrc = art.image || '/assets/article-implant-care.webp';
+              const displayTitle = art.seoTitle || art.title;
+              const excerptText = art.tldr || art.summary;
+
+              return (
+                <SwiperSlide key={art.id || art.slug} className="article-slide">
+                  <article className="article-interactive-card">
+                    <div className="article-photo-wrap">
+                      <Link
+                        href={articleHref}
+                        className="article-photo-link"
                       >
-                        <span>مشاهده جزئیات</span>
-                        <i className="fa-solid fa-arrow-left"></i>
-                      </a>
+                        <Image
+                          src={imageSrc}
+                          alt={art.imageAlt || displayTitle}
+                          width={600}
+                          height={420}
+                          loading="eager"
+                        />
+                      </Link>
                     </div>
-                  </div>
-                </article>
-              </SwiperSlide>
-            ))}
+                    <div className="article-floating-box">
+                      <div className="article-title-row">
+                        <span className="article-accent-bar"></span>
+                        <h3 className="article-box-title">
+                          <Link href={articleHref} title={art.title}>
+                            {displayTitle}
+                          </Link>
+                        </h3>
+                      </div>
+                      <p className="article-box-excerpt">{excerptText}</p>
+                      <div className="article-card-footer">
+                        <Link
+                          href={articleHref}
+                          className="article-read-more"
+                        >
+                          <span>مشاهده جزئیات</span>
+                          <i className="fa-solid fa-arrow-left"></i>
+                        </Link>
+                      </div>
+                    </div>
+                  </article>
+                </SwiperSlide>
+              );
+            })}
           </Swiper>
         </div>
       </div>

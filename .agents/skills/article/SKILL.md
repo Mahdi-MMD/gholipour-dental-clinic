@@ -48,9 +48,19 @@ flowchart TD
      - Next sequential `id`
      - English kebab-case `slug` (e.g. `clear-aligners-vs-braces`)
      - Clinic `category`
-3. **Title Optimization & SEO Refinement**:
-   - The agent is **explicitly authorized and encouraged to adjust/refine the raw user topic title** to improve organic search visibility (SEO) and click-through rates, while perfectly reflecting the detailed article content.
-   - *Example*: A plain topic `"تفاوت لمینت و کامپوزیت"` can be refined to `"لمینت سرامیکی یا کامپوزیت دندان؟ مقایسه کامل ماندگاری، هزینه و زیبایی لبخند"`.
+3. **Dual-Title Architecture & SEO Refinement (MANDATORY)**:
+   - The agent MUST generate two distinct titles for every article:
+     1. **`title` (On-Page `<h1>` Heading)**:
+        - **Target length**: 70 to 100 characters (approx. 12–18 words).
+        - **Purpose**: Authoritative, educational, reassuring headline for patients reading on the website.
+        - *Example*: `"راهنمای جامع مراقبت‌های بعد از جراحی ایمپلنت دندان؛ نکات حیاتی جوش‌خوردن موفق استخوان و کنترل درد"`
+     2. **`seoTitle` (SERP / Google Meta Title)**:
+        - **STRICT MAXIMUM**: 40 to 55 characters (NEVER exceed 58 characters).
+        - **Target word count**: 6 to 10 words.
+        - **Purpose**: Google search results snippet (SERP), browser tab, and social previews.
+        - **Why**: Google cuts off titles longer than ~600px (~55–60 Persian characters). Since `" | کلینیک دندانپزشکی قلی‌پور"` (or `" | دندانپزشکی قلی‌پور"`) is automatically appended in `<title>`, an `seoTitle` over 55 characters WILL truncate in search results.
+        - **Format**: Front-load the exact search query patients type into Google, followed by the key outcome/topic in parentheses.
+        - *Example*: `"مراقبت‌های بعد از ایمپلنت دندان (کنترل درد و ورم)"` (49 chars)
    - The headline should remain honest, reassuring, and aligned with user search intent.
 
 ---
@@ -90,15 +100,16 @@ flowchart TD
 
 ---
 
-87: ## Phase 4: Technical SEO, Data Schema Sync & Internal Linking (Backlinks)
-88: 
-89: 1. **Format into `ArticleItem`**:
-90:    - `id`: Unique incremental ID
-91:    - `slug`: Clean kebab-case string
-92:    - `title`: Catchy, friendly Persian title (included in dynamic `<title>` and Open Graph)
-93:    - `category`: Matching clinic specialty
-94:    - `readTime`: e.g. `'۵ دقیقه'`
-95:    - `date`: Current Persian Shamsi date (e.g. `'۶ مهر ۱۴۰۵'`)
+## Phase 4: Technical SEO, Data Schema Sync & Internal Linking (Backlinks)
+
+1. **Format into `ArticleItem`**:
+   - `id`: Unique incremental ID
+   - `slug`: Clean kebab-case string
+   - `title`: Authoritative, engaging Persian title for the on-page <h1> heading (70–100 characters)
+   - `seoTitle`: High-CTR, search-optimized meta title (STRICTLY 40–55 characters, max 58) targeting the primary query for Google SERP
+   - `category`: Matching clinic specialty
+   - `readTime`: e.g. `'۵ دقیقه'`
+   - `date`: Current Persian Shamsi date (e.g. `'۶ مهر ۱۴۰۵'`)
 96:    - `author`: Fixed author & medical reviewer: `'دکتر مهدی محمدنژاد'` (دکترای حرفه‌ای دندان‌پزشکی کلینیک شهید قلی‌پور | کد نظام پزشکی: ۲۲۹۳۵۳)
 97:    - `image`: Relative asset path (e.g. `'/assets/article-implant-dos-donts.webp'`). Priority 1: Check existing `public/assets/` images. Priority 2: Generate a realistic dental graphic with `generate_image` (aspectRatio `'16:9'`). Placed immediately after title with responsive hero styling.
 98:    - `imageAlt`: Descriptive Persian alt text for SEO and accessibility

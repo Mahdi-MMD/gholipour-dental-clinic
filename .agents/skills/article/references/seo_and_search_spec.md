@@ -31,7 +31,8 @@ export interface ArticleFAQ {
 export interface ArticleItem {
   id: string;                  // Next incremental sequential string (e.g. '9')
   slug: string;                // URL path kebab-case (e.g. 'wisdom-tooth-recovery-tips')
-  title: string;               // Compelling, intent-focused Persian title
+  title: string;               // Compelling, intent-focused on-page Persian title (70-100 chars)
+  seoTitle?: string;           // Concise SERP/browser title (45-58 chars, max 60 chars) targeting primary search query
   category: string;            // One of the standard clinic categories
   readTime: string;            // Persian reading time (e.g. '۵ دقیقه')
   date: string;                // Persian Shamsi date (e.g. '۶ مهر ۱۴۰۵')

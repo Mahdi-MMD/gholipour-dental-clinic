@@ -47,15 +47,17 @@ export async function generateMetadata({
       ]
     : undefined;
 
+  const effectiveTitle = article.seoTitle || article.title;
+
   return {
-    title: `${article.title} | کلینیک دندانپزشکی قلی‌پور`,
+    title: `${effectiveTitle} | کلینیک دندانپزشکی قلی‌پور`,
     description: article.summary,
     keywords: article.keywords,
     alternates: {
       canonical: pageUrl,
     },
     openGraph: {
-      title: article.title,
+      title: effectiveTitle,
       description: article.summary,
       url: pageUrl,
       type: 'article',
@@ -67,7 +69,7 @@ export async function generateMetadata({
     },
     twitter: {
       card: 'summary_large_image',
-      title: article.title,
+      title: effectiveTitle,
       description: article.summary,
       images: article.image ? [article.image] : undefined,
     },

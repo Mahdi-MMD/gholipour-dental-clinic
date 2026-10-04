@@ -66,3 +66,22 @@ query: "third molar extraction complications recovery guidelines ADA OR Cochrane
 - **Extracting Clinical Consensus**: Prioritize systematic reviews, meta-analyses, and consensus statements over isolated single-case reports.
 - **Statistical Relevance to Patient Realities**: Extract real percentage success rates (e.g., *«میزان موفقیت ایمپلنت در افراد عادی بیش از ۹۵ تا ۹۸ درصد گزارش شده است»*).
 - **Contraindications and Safety**: Always check and document medically established contraindications (e.g. uncontrolled HbA1c in diabetes, bisphosphonate medications for bone density, active periodontal infection).
+---
+
+## 5. Mandatory Citation Title-to-URL & DOI Verification Protocol
+
+To prevent mismatched links, dead URLs, or AI-hallucinated citations, every citation record added to citations: [...] in rticlesData.ts MUST strictly adhere to this validation procedure:
+
+### A. Title-to-Target Accuracy Requirement
+- **Exact Match Required**: The link (url or doi) provided for a citation MUST directly resolve to the exact paper named in 	itle. It is strictly forbidden to pair an article title with a DOI or URL belonging to an unrelated paper or medical topic.
+- **Deep-Link Rule**: Avoid generic homepage links (such as https://ada.org or https://jada.ada.org) when specific paper DOIs or PubMed URLs exist. Link directly to the article abstract or full-text (e.g., https://pubmed.ncbi.nlm.nih.gov/<PMID>/ or https://doi.org/<DOI>).
+
+### B. Mandatory Verification Steps Before Writing Citations
+1. **Verify Article Title & URL Match**:
+   - Query PubMed or CrossRef with the candidate title or PMID/DOI.
+   - Confirm that the URL leads to the exact published study bearing that title, authors, and journal.
+2. **Fallback / Non-Existent Article Rule**:
+   - If an article title or reference does not exist, cannot be verified, or has no functioning direct link/DOI: **DO NOT guess or hallucinate a link**.
+   - Instead, search PubMed or Cochrane for an authentic, existing seminal peer-reviewed paper or guideline on the exact same clinical subject, and cite that verified paper with its genuine title, journal, and URL/DOI.
+3. **Double-Check Before Git Commit**:
+   - Inspect the candidate citations array to ensure 100% of URLs are live, canonical, and accurately titled.

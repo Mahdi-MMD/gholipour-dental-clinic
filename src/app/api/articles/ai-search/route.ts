@@ -191,24 +191,23 @@ ${cleanQuery}
       generationConfig: {
         temperature: 0.4,
         maxOutputTokens: 1500,
-        thinkingConfig: {
-          thinkingBudget: 0,
-        },
       },
     };
 
-    // Candidate models cascade:
-    // Primary: gemini-flash-latest (Google's latest Flash model)
-    // Fallback: gemini-flash-lite-latest (Ultralight model with independent quota)
+    // Candidate models cascade: primary 3.5-flash, fallback 3.5-flash-lite
     const candidateModels = [
-      process.env.GEMINI_MODEL || 'gemini-flash-latest',
-      'gemini-flash-lite-latest',
-    ];
+      process.env.GEMINI_MODEL,
+      'gemini-3.5-flash',
+      'gemini-3.5-flash-lite',
+    ].filter(Boolean) as string[];
+
+    // Ensure unique model names
+    const uniqueCandidateModels = Array.from(new Set(candidateModels));
 
     let candidateText = '';
     let lastErrorDetails = '';
 
-    for (const modelName of candidateModels) {
+    for (const modelName of uniqueCandidateModels) {
       try {
         const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${GEMINI_API_KEY}`;
         const geminiRes = await fetch(apiUrl, {
@@ -221,18 +220,22 @@ ${cleanQuery}
 
         if (geminiRes.ok) {
           const geminiData = await geminiRes.json();
-          candidateText =
-            geminiData.candidates?.[0]?.content?.parts?.[0]?.text || '';
-          if (candidateText) {
+          const parts = geminiData.candidates?.[0]?.content?.parts || [];
+          candidateText = parts
+            .map((p: { text?: string }) => p.text || '')
+            .filter(Boolean)
+            .join('');
+
+          if (candidateText && candidateText.trim().length > 0) {
             break; // Success!
           }
         } else {
           lastErrorDetails = await geminiRes.text();
-          console.warn(`Model ${modelName} returned status ${geminiRes.status}, falling back...`);
+          console.warn(`Model ${modelName} returned status ${geminiRes.status}, trying fallback...`);
         }
       } catch (err: any) {
         lastErrorDetails = err?.message || 'Network error';
-        console.warn(`Failed calling ${modelName}, trying next fallback...`);
+        console.warn(`Failed calling ${modelName}, trying fallback...`);
       }
     }
 

@@ -412,10 +412,16 @@ export default function ArticlesPage() {
             {/* 2. Google-Style Search Bar with internal "AI Mode" button */}
             <div className="articles-search-wrap">
               <div className="articles-search-inner-box">
-                {/* Right side: Traditional Search Magnifier Icon (for Persian RTL) */}
-                <span className="articles-search-icon" aria-hidden="true">
+                {/* Right side: Traditional Search Magnifier Button (for Persian RTL) */}
+                <button
+                  type="button"
+                  className="articles-search-icon"
+                  onClick={() => handlePerformSearch()}
+                  aria-label="جستجو یا ارسال سوال"
+                  title="جستجو یا ارسال سوال"
+                >
                   <i className="fa-solid fa-magnifying-glass"></i>
-                </span>
+                </button>
 
                 {/* Center: Search Text Input */}
                 <input

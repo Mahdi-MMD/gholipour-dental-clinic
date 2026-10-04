@@ -285,19 +285,27 @@
   width: 100%;
 }
 
-/* Search Magnifier Icon: inside pill on the RIGHT (Persian RTL) */
+/* Search Magnifier Icon / Submit Button: inside pill on the RIGHT (Persian RTL) */
 .articles-search-icon {
   position: absolute;
   right: 20px;
   color: #5596b6;
   font-size: 22px;
-  pointer-events: none;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   transform: rotate(-10deg);
   transition: transform 0.3s ease, color 0.3s ease;
   z-index: 10;
+}
+
+.articles-search-icon:hover {
+  color: #1c83aa;
+  transform: rotate(0deg) scale(1.15);
 }
 
 /* Search Text Input: Pill Shape matching Google bar (Right padding for magnifier, Left padding for narrower AI Mode button) */

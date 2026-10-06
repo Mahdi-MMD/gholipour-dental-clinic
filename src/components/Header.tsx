@@ -9,7 +9,7 @@ interface HeaderProps {
   onOpenBooking: () => void;
   mobileMenuOpen: boolean;
   setMobileMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  activePage?: 'home' | 'contact' | 'about' | 'articles';
+  activePage?: 'home' | 'contact' | 'about' | 'articles' | 'gallery';
 }
 
 export default function Header({
@@ -96,10 +96,10 @@ export default function Header({
                 </li>
               </ul>
             </li>
-            <li className="nav-item">
-              <a href={`${prefix}#portfolio`} className="nav-link" onClick={closeMobileMenu}>
+            <li className={`nav-item ${activePage === 'gallery' ? 'active' : ''}`}>
+              <Link href="/gallery" className="nav-link" onClick={closeMobileMenu}>
                 نمونه کارها
-              </a>
+              </Link>
             </li>
             <li className={`nav-item ${activePage === 'articles' ? 'active' : ''}`}>
               <Link href="/articles" className="nav-link" onClick={closeMobileMenu}>

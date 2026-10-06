@@ -6,6 +6,7 @@
     "optimize-images": "node scripts/optimize-images.js",
     "prebuild": "node scripts/optimize-images.js",
     "dev": "node scripts/optimize-images.js && next dev",
+    "dev:poll": "node scripts/optimize-images.js && next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -13,6 +14,7 @@
     "dev:clean": "npm run clean && npm run dev"
   },
   "dependencies": {
+    "@fancyapps/ui": "^6.1.15",
     "minisearch": "^7.2.0",
     "next": "^15.2.0",
     "react": "^19.0.0",

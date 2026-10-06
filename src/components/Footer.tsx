@@ -48,7 +48,7 @@ export default function Footer({ onOpenBooking }: FooterProps) {
                   <Link href="/contact">تماس با ما</Link>
                 </li>
                 <li>
-                  <a href="/#portfolio">نمونه کارها</a>
+                  <Link href="/gallery">نمونه کارها</Link>
                 </li>
                 <li>
                   <a href="/#articles">مقالات</a>

@@ -81,6 +81,11 @@ export default function Header({
                 </li>
                 <li>
                   <a href={`${prefix}#services`} onClick={closeMobileMenu}>
+                    کامپوزیت و لیمنت
+                  </a>
+                </li>
+                <li>
+                  <a href={`${prefix}#services`} onClick={closeMobileMenu}>
                     عصب کشی دندان
                   </a>
                 </li>
@@ -92,6 +97,11 @@ export default function Header({
                 <li>
                   <a href={`${prefix}#services`} onClick={closeMobileMenu}>
                     روکش دندان
+                  </a>
+                </li>
+                <li>
+                  <a href={`${prefix}#services`} onClick={closeMobileMenu}>
+                    دندان مصنوعی
                   </a>
                 </li>
               </ul>

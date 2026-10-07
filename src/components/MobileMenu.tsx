@@ -230,6 +230,12 @@ export default function MobileMenu({
                     <li>
                       <a href={`${prefix}#services`} onClick={handleLinkClick}>
                         <i className="fa-solid fa-chevron-left sub-dot"></i>
+                        <span>کامپوزیت و لیمنت</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href={`${prefix}#services`} onClick={handleLinkClick}>
+                        <i className="fa-solid fa-chevron-left sub-dot"></i>
                         <span>عصب کشی دندان</span>
                       </a>
                     </li>
@@ -243,6 +249,12 @@ export default function MobileMenu({
                       <a href={`${prefix}#services`} onClick={handleLinkClick}>
                         <i className="fa-solid fa-chevron-left sub-dot"></i>
                         <span>روکش دندان</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href={`${prefix}#services`} onClick={handleLinkClick}>
+                        <i className="fa-solid fa-chevron-left sub-dot"></i>
+                        <span>دندان مصنوعی</span>
                       </a>
                     </li>
                   </ul>

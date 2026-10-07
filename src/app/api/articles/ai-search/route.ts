@@ -186,8 +186,12 @@ Execution Guidelines:
       },
     };
 
-    // Candidate models cascade: primary 3.5-flash-lite (fast & high availability), fallback 3.5-flash
+    // Candidate models cascade:
+    // 1. gemini-3.1-flash-lite: consistently fast & stable under peak hours
+    // 2. gemini-3.5-flash-lite: high quality lightweight
+    // 3. gemini-3.5-flash: full model fallback
     const candidateModels = [
+      'gemini-3.1-flash-lite',
       'gemini-3.5-flash-lite',
       'gemini-3.5-flash',
     ];
@@ -199,7 +203,7 @@ Execution Guidelines:
       try {
         const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${GEMINI_API_KEY}`;
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 12000);
+        const timeoutId = setTimeout(() => controller.abort(), 22000);
 
         const geminiRes = await fetch(apiUrl, {
           method: 'POST',

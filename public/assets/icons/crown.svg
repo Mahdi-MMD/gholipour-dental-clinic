@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- Scaled group for prominent, recognizable display -->
+  <g transform="translate(50, 50) scale(0.96) translate(-50, -50)">
+    <!-- Prepared Natural Tooth / Roots (lower portion) -->
+    <path 
+      d="M 28 45 
+         C 28 57 31 71 36 85 
+         C 38 89 43 89 45.5 84 
+         C 48 79 50 70 50 64 
+         C 50 70 52 79 54.5 84 
+         C 57 89 62 89 64 85 
+         C 69 71 72 57 72 45" 
+      stroke="#1c2d37" 
+      stroke-width="2.6" 
+      stroke-linecap="round" 
+      stroke-linejoin="round"
+    />
+
+    <!-- Prepared tooth stump / margin seated inside the crown -->
+    <path 
+      d="M 32 46 
+         C 34 39 40 36 50 36 
+         C 60 36 66 39 68 46" 
+      stroke="#1c2d37" 
+      stroke-width="2" 
+      stroke-linecap="round" 
+      stroke-dasharray="2 3"
+    />
+
+    <!-- Dental Prosthetic Crown (upper anatomical cap fitted over the prepared tooth) -->
+    <path 
+      d="M 26 46
+         C 23 37 24 23 35 21
+         C 41 20 46 24 50 25
+         C 54 24 59 20 65 21
+         C 76 23 77 37 74 46
+         C 72 48.5 66 49.5 50 49.5
+         C 34 49.5 28 48.5 26 46 Z" 
+      stroke="#1c2d37" 
+      stroke-width="2.8" 
+      stroke-linecap="round" 
+      stroke-linejoin="round"
+    />
+
+    <!-- Anatomical Occlusal Groove / Cusp Contours -->
+    <path 
+      d="M 38 25 C 42 30 46 31 50 31 C 54 31 58 30 62 25" 
+      stroke="#1c2d37" 
+      stroke-width="2.2" 
+      stroke-linecap="round"
+    />
+    <path 
+      d="M 50 31 L 50 40" 
+      stroke="#1c2d37" 
+      stroke-width="2" 
+      stroke-linecap="round"
+    />
+  </g>
+</svg>

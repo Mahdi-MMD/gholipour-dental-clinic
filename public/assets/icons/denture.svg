@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- Scaled group for optical harmony with other icons -->
+  <g transform="translate(50, 50) scale(0.84) translate(-50, -50)">
+    <!-- Natural Acrylic Gum Ridge / Denture Base (Arch) -->
+    <path 
+      d="M 20 62 
+         C 20 40 33 26 50 26 
+         C 67 26 80 40 80 62 
+         C 80 65 77 67 74 66 
+         C 69 64 68 56 66 48
+         C 63 36 57 33 50 33 
+         C 43 33 37 36 34 48
+         C 32 56 31 64 26 66 
+         C 23 67 20 65 20 62 Z" 
+      stroke="#1c2d37" 
+      stroke-width="2.6" 
+      stroke-linecap="round" 
+      stroke-linejoin="round"
+    />
+
+    <!-- Prosthetic Teeth Mounted on Denture Base Arch -->
+    <!-- Central Incisors -->
+    <path 
+      d="M 46 26 C 46 20 48 18 50 18 C 52 18 54 20 54 26" 
+      stroke="#1c2d37" 
+      stroke-width="2" 
+      stroke-linecap="round"
+    />
+    <path 
+      d="M 50 18 L 50 26" 
+      stroke="#1c2d37" 
+      stroke-width="1.8" 
+      stroke-linecap="round"
+    />
+
+    <!-- Right Lateral & Canine -->
+    <path 
+      d="M 54 26 C 56 21 60 21 61 28" 
+      stroke="#1c2d37" 
+      stroke-width="1.8" 
+      stroke-linecap="round"
+    />
+    <path 
+      d="M 61 28 C 64 24 68 25 68 33" 
+      stroke="#1c2d37" 
+      stroke-width="1.8" 
+      stroke-linecap="round"
+    />
+    <path 
+      d="M 68 33 C 71 30 75 33 74 41" 
+      stroke="#1c2d37" 
+      stroke-width="1.8" 
+      stroke-linecap="round"
+    />
+
+    <!-- Left Lateral & Canine -->
+    <path 
+      d="M 46 26 C 44 21 40 21 39 28" 
+      stroke="#1c2d37" 
+      stroke-width="1.8" 
+      stroke-linecap="round"
+    />
+    <path 
+      d="M 39 28 C 36 24 32 25 32 33" 
+      stroke="#1c2d37" 
+      stroke-width="1.8" 
+      stroke-linecap="round"
+    />
+    <path 
+      d="M 32 33 C 29 30 25 33 26 41" 
+      stroke="#1c2d37" 
+      stroke-width="1.8" 
+      stroke-linecap="round"
+    />
+
+    <!-- Precision Retention Clasp / Stabilizer (Creative indicator of modern prosthesis/denture) -->
+    <path 
+      d="M 30 68 C 26 73 23 75 20 73" 
+      stroke="#1c2d37" 
+      stroke-width="2" 
+      stroke-linecap="round"
+    />
+    <path 
+      d="M 70 68 C 74 73 77 75 80 73" 
+      stroke="#1c2d37" 
+      stroke-width="2" 
+      stroke-linecap="round"
+    />
+
+    <!-- Lower Harmony Foundation Guide / Supportive Arch -->
+    <path 
+      d="M 32 76 C 40 82 60 82 68 76" 
+      stroke="#1c2d37" 
+      stroke-width="2" 
+      stroke-linecap="round" 
+      stroke-dasharray="2 3.5"
+    />
+  </g>
+</svg>

@@ -1,0 +1,110 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- Scaled group for prominent, recognizable denture prosthesis display -->
+  <g transform="translate(50, 50) scale(0.98) translate(-50, -50)">
+    
+    <!-- Central Lingual/Palatal Connector Bar with top arched bridge and retention loops -->
+    <path 
+      d="M 32 37
+         C 32 32 37 29 40 31
+         C 42 33 44 37 48 37
+         L 52 37
+         C 56 37 58 33 60 31
+         C 63 29 68 32 68 37" 
+      stroke="#1c2d37" 
+      stroke-width="2.7" 
+      stroke-linecap="round" 
+      stroke-linejoin="round"
+    />
+
+    <!-- Inner Arch Vault (lingual cutout) -->
+    <path 
+      d="M 35 49
+         C 37 38 44 40 50 40
+         C 56 40 63 38 65 49
+         C 67 56 69 64 71 72" 
+      stroke="#1c2d37" 
+      stroke-width="2.5" 
+      stroke-linecap="round"
+    />
+    <path 
+      d="M 35 49
+         C 33 56 31 64 29 72" 
+      stroke="#1c2d37" 
+      stroke-width="2.5" 
+      stroke-linecap="round"
+    />
+
+    <!-- RIGHT SIDE SADDLE & TEETH -->
+    <!-- Outer saddle base & border -->
+    <path 
+      d="M 68 37
+         C 70 34 74 35 75 39
+         C 76 43 77 49 80 53
+         C 83 58 84 67 82 73
+         C 80 78 76 77 73 74
+         C 71 72 71 70 71 70" 
+      stroke="#1c2d37" 
+      stroke-width="2.7" 
+      stroke-linecap="round" 
+      stroke-linejoin="round"
+    />
+
+    <!-- Retention Clasp (Upper Right loop) -->
+    <path 
+      d="M 67 34 C 70 31 73 33 72 36" 
+      stroke="#1c2d37" 
+      stroke-width="2.3" 
+      stroke-linecap="round"
+    />
+
+    <!-- Right Premolar & Molar Anatomy -->
+    <!-- Molar 1 (Top right tooth) -->
+    <ellipse cx="70" cy="45" rx="5.8" ry="4.8" stroke="#1c2d37" stroke-width="2.3" />
+    
+    <!-- Molar 2 (Bottom right tooth) -->
+    <ellipse cx="74" cy="58" rx="6.8" ry="5.8" stroke="#1c2d37" stroke-width="2.5" />
+    <!-- Molar 2 Occlusal groove detail (+) -->
+    <path d="M 74 55.5 L 74 60.5 M 71.5 58 L 76.5 58" stroke="#1c2d37" stroke-width="1.9" stroke-linecap="round" />
+
+    <!-- Molar 3 (Distal lower right tooth) -->
+    <ellipse cx="75" cy="70" rx="5.2" ry="4.2" stroke="#1c2d37" stroke-width="2.1" />
+    <path d="M 75 68.5 L 75 71.5 M 73.5 70 L 76.5 70" stroke="#1c2d37" stroke-width="1.7" stroke-linecap="round" />
+
+    <!-- LEFT SIDE SADDLE & TEETH -->
+    <!-- Outer saddle base & border -->
+    <path 
+      d="M 32 37
+         C 30 34 26 35 25 39
+         C 24 43 23 49 20 53
+         C 17 58 16 67 18 73
+         C 20 78 24 77 27 74
+         C 29 72 29 70 29 70" 
+      stroke="#1c2d37" 
+      stroke-width="2.7" 
+      stroke-linecap="round" 
+      stroke-linejoin="round"
+    />
+
+    <!-- Retention Clasp (Upper Left loop) -->
+    <path 
+      d="M 33 34 C 30 31 27 33 28 36" 
+      stroke="#1c2d37" 
+      stroke-width="2.3" 
+      stroke-linecap="round"
+    />
+
+    <!-- Left Premolar & Molar Anatomy -->
+    <!-- Molar 1 (Top left tooth) -->
+    <ellipse cx="30" cy="45" rx="5.8" ry="4.8" stroke="#1c2d37" stroke-width="2.3" />
+
+    <!-- Molar 2 (Bottom left tooth) -->
+    <ellipse cx="26" cy="58" rx="6.8" ry="5.8" stroke="#1c2d37" stroke-width="2.5" />
+    <!-- Molar 2 Occlusal groove detail (+) -->
+    <path d="M 26 55.5 L 26 60.5 M 23.5 58 L 28.5 58" stroke="#1c2d37" stroke-width="1.9" stroke-linecap="round" />
+
+    <!-- Molar 3 (Distal lower left tooth) -->
+    <ellipse cx="25" cy="70" rx="5.2" ry="4.2" stroke="#1c2d37" stroke-width="2.1" />
+    <path d="M 25 68.5 L 25 71.5 M 23.5 70 L 26.5 70" stroke="#1c2d37" stroke-width="1.7" stroke-linecap="round" />
+
+  </g>
+</svg>

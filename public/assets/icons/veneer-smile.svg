@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- Scaled group for optical harmony with the other service icons -->
+  <g transform="translate(50, 50) scale(0.84) translate(-50, -50)">
+    <!-- Harmonious Smile Arc (Lower lip curve) -->
+    <path 
+      d="M 20 48 
+         C 28 72 72 72 80 48" 
+      stroke="#1c2d37" 
+      stroke-width="2.6" 
+      stroke-linecap="round" 
+      stroke-linejoin="round"
+    />
+
+    <!-- Upper Lip Line / Smile Contour -->
+    <path 
+      d="M 20 48 
+         C 32 54 44 56 50 56 
+         C 56 56 68 54 80 48" 
+      stroke="#1c2d37" 
+      stroke-width="2.4" 
+      stroke-linecap="round"
+    />
+
+    <!-- Perfect Veneer / Composite Anterior Teeth Row -->
+    <!-- Central Incisors (Right & Left) -->
+    <path 
+      d="M 50 43 L 50 56" 
+      stroke="#1c2d37" 
+      stroke-width="2" 
+      stroke-linecap="round"
+    />
+    <path 
+      d="M 40 42 C 40 54 41 55 41 56" 
+      stroke="#1c2d37" 
+      stroke-width="1.8" 
+      stroke-linecap="round"
+    />
+    <path 
+      d="M 60 42 C 60 54 59 55 59 56" 
+      stroke="#1c2d37" 
+      stroke-width="1.8" 
+      stroke-linecap="round"
+    />
+
+    <!-- Lateral Incisors / Canine separators -->
+    <path 
+      d="M 31 44 C 31 51 32 52 33 53" 
+      stroke="#1c2d37" 
+      stroke-width="1.6" 
+      stroke-linecap="round"
+    />
+    <path 
+      d="M 69 44 C 69 51 68 52 67 53" 
+      stroke="#1c2d37" 
+      stroke-width="1.6" 
+      stroke-linecap="round"
+    />
+
+    <!-- Upper Incisal Edge / Gum Silhouette -->
+    <path 
+      d="M 26 44 
+         C 36 39 64 39 74 44" 
+      stroke="#1c2d37" 
+      stroke-width="2.2" 
+      stroke-linecap="round"
+    />
+
+    <!-- Subtle Aesthetic Sparkle / Shine (Veneer & Composite Radiance) -->
+    <path 
+      d="M 76 22 L 76 34 M 70 28 L 82 28" 
+      stroke="#1c2d37" 
+      stroke-width="2" 
+      stroke-linecap="round"
+    />
+    <path 
+      d="M 27 28 L 27 34 M 24 31 L 30 31" 
+      stroke="#1c2d37" 
+      stroke-width="1.8" 
+      stroke-linecap="round"
+    />
+  </g>
+</svg>

@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- Scaled group for prominent, recognizable smile display -->
+  <g transform="translate(50, 50) scale(0.96) translate(-50, -48)">
+    <!-- Main Smile Crescent / Mouth Contour -->
+    <path 
+      d="M 14 38 
+         C 32 44 68 44 86 38 
+         C 85 68 69 79 50 79 
+         C 31 79 15 68 14 38 Z" 
+      stroke="#1c2d37" 
+      stroke-width="2.7" 
+      stroke-linecap="round" 
+      stroke-linejoin="round"
+    />
+
+    <!-- Horizontal Dental Arch Divider (separating upper & lower teeth) -->
+    <path 
+      d="M 16 51 
+         C 33 61 67 61 84 51" 
+      stroke="#1c2d37" 
+      stroke-width="2.3" 
+      stroke-linecap="round"
+    />
+
+    <!-- Vertical Tooth Separators (clean grid of white teeth) -->
+    <!-- Center separator (between central incisors) -->
+    <path 
+      d="M 50 42 L 50 78.5" 
+      stroke="#1c2d37" 
+      stroke-width="2.3" 
+      stroke-linecap="round"
+    />
+
+    <!-- Mid-left separator -->
+    <path 
+      d="M 37 41 C 37 48 37 61 37 76" 
+      stroke="#1c2d37" 
+      stroke-width="2.1" 
+      stroke-linecap="round"
+    />
+
+    <!-- Mid-right separator -->
+    <path 
+      d="M 63 41 C 63 48 63 61 63 76" 
+      stroke="#1c2d37" 
+      stroke-width="2.1" 
+      stroke-linecap="round"
+    />
+
+    <!-- Outer-left separator -->
+    <path 
+      d="M 25 39.5 C 25 48 25 56 25 70" 
+      stroke="#1c2d37" 
+      stroke-width="1.9" 
+      stroke-linecap="round"
+    />
+
+    <!-- Outer-right separator -->
+    <path 
+      d="M 75 39.5 C 75 48 75 56 75 70" 
+      stroke="#1c2d37" 
+      stroke-width="1.9" 
+      stroke-linecap="round"
+    />
+
+    <!-- Sparkle 1: Primary diamond sparkle on the upper right -->
+    <path 
+      d="M 85 20 
+         C 85 26 87.5 28.5 93 28.5 
+         C 87.5 28.5 85 31 85 37 
+         C 85 31 82.5 28.5 77 28.5 
+         C 82.5 28.5 85 26 85 20 Z" 
+      stroke="#1c2d37" 
+      stroke-width="2.3" 
+      stroke-linejoin="round"
+    />
+
+    <!-- Sparkle 2: Small accent diamond sparkle to the left of sparkle 1 -->
+    <path 
+      d="M 71 18 
+         C 71 22 72.8 23.5 76.5 23.5 
+         C 72.8 23.5 71 25 71 29 
+         C 71 25 69.2 23.5 65.5 23.5 
+         C 69.2 23.5 71 22 71 18 Z" 
+      stroke="#1c2d37" 
+      stroke-width="2.1" 
+      stroke-linejoin="round"
+    />
+  </g>
+</svg>

@@ -725,38 +725,57 @@ button, input {
   100% { background-position: -200% 0; }
 }
 
-/* Fallback Grid in case of CDN block */
-.nanogallery-fallback-grid {
+/* Fallback Mosaic in case CDN is restricted or loading */
+.nanogallery-fallback-mosaic {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  width: 100%;
 }
 
-.fallback-card {
+.fallback-tile {
   position: relative;
   border-radius: 16px;
   overflow: hidden;
-  box-shadow: var(--shadow-sm);
-  background-color: var(--color-white);
-  height: 240px;
+  box-shadow: 0 4px 16px rgba(28, 67, 79, 0.08);
+  background-color: #e9f1f5;
+  height: 220px;
+  transition: transform 0.3s ease;
 }
 
-.fallback-card img {
+.fallback-tile:hover {
+  transform: translateY(-4px);
+}
+
+.fallback-tile img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.fallback-card-title {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 12px;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
-  color: #fff;
-  font-size: 14px;
-  font-weight: 700;
+.fallback-tile-1,
+.fallback-tile-8 {
+  grid-column: span 2;
+  grid-row: span 2;
+  height: auto;
+  min-height: 380px;
+}
+
+@media (max-width: 768px) {
+  .nanogallery-fallback-mosaic {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  .fallback-tile {
+    height: 160px;
+  }
+  .fallback-tile-1,
+  .fallback-tile-8 {
+    grid-column: span 2;
+    grid-row: span 1;
+    height: 220px;
+    min-height: 220px;
+  }
 }
 
 /* Portfolio CTA Link */

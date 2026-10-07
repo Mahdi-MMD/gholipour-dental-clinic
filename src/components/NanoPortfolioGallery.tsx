@@ -18,29 +18,38 @@ export default function NanoPortfolioGallery() {
   useEffect(() => {
     let isMounted = true;
 
-    // Helper to dynamically inject script tag
-    const loadScript = (src: string): Promise<void> => {
+    // Helper to dynamically inject script tag with failover
+    const loadScriptWithFallback = (urls: string[]): Promise<void> => {
       return new Promise((resolve, reject) => {
-        const existing = document.querySelector(`script[src="${src}"]`) as HTMLScriptElement;
-        if (existing) {
-          if (existing.dataset.loaded === 'true') {
+        let index = 0;
+
+        const tryNext = () => {
+          if (index >= urls.length) {
+            reject(new Error('All script mirrors failed'));
+            return;
+          }
+          const src = urls[index++];
+          const existing = document.querySelector(`script[src="${src}"]`) as HTMLScriptElement;
+          if (existing && existing.dataset.loaded === 'true') {
             resolve();
             return;
           }
-          existing.addEventListener('load', () => resolve());
-          existing.addEventListener('error', () => reject());
-          return;
-        }
 
-        const script = document.createElement('script');
-        script.src = src;
-        script.async = false;
-        script.onload = () => {
-          script.dataset.loaded = 'true';
-          resolve();
+          const script = document.createElement('script');
+          script.src = src;
+          script.async = false;
+          script.onload = () => {
+            script.dataset.loaded = 'true';
+            resolve();
+          };
+          script.onerror = () => {
+            script.remove();
+            tryNext();
+          };
+          document.head.appendChild(script);
         };
-        script.onerror = () => reject(new Error(`Failed to load ${src}`));
-        document.head.appendChild(script);
+
+        tryNext();
       });
     };
 
@@ -56,17 +65,23 @@ export default function NanoPortfolioGallery() {
 
     const initializeGallery = async () => {
       try {
-        // 1. Ensure CSS is loaded
-        loadStyle('https://cdnjs.cloudflare.com/ajax/libs/nanogallery2/3.0.5/css/nanogallery2.min.css');
+        // 1. Load CSS
+        loadStyle('https://cdn.jsdelivr.net/npm/nanogallery2@3/dist/css/nanogallery2.min.css');
 
-        // 2. Load jQuery first
+        // 2. Load jQuery (with CDN failover)
         if (!window.jQuery) {
-          await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js');
+          await loadScriptWithFallback([
+            'https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js',
+            'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js',
+          ]);
         }
 
-        // 3. Load nanogallery2
+        // 3. Load nanogallery2 (with CDN failover)
         if (!window.jQuery?.fn?.nanogallery2) {
-          await loadScript('https://cdnjs.cloudflare.com/ajax/libs/nanogallery2/3.0.5/jquery.nanogallery2.min.js');
+          await loadScriptWithFallback([
+            'https://cdn.jsdelivr.net/npm/nanogallery2@3/dist/jquery.nanogallery2.min.js',
+            'https://cdnjs.cloudflare.com/ajax/libs/nanogallery2/3.0.5/jquery.nanogallery2.min.js',
+          ]);
         }
 
         if (!isMounted || !galleryRef.current || !window.jQuery?.fn?.nanogallery2) {
@@ -76,7 +91,7 @@ export default function NanoPortfolioGallery() {
         const $ = window.jQuery;
         const $gallery = $(galleryRef.current);
 
-        // Prepare items array formatted for nanogallery2 (without captions as requested)
+        // Prepare items array formatted for nanogallery2
         const items = PORTFOLIO_WORK_SAMPLES.map((item) => ({
           src: item.src,
           srct: item.srct,
@@ -87,18 +102,18 @@ export default function NanoPortfolioGallery() {
         // Mosaic pattern: 12 elements interlocking nicely
         const mosaicPattern = [
           { c: 1, r: 1, w: 2, h: 2 }, // Item 1 (portrait) -> 2x2 hero
-          { c: 3, r: 1, w: 1, h: 2 }, // Item 2 (portrait) -> 1x2
-          { c: 4, r: 1, w: 2, h: 1 }, // Item 7 (landscape) -> 2x1
-          { c: 4, r: 2, w: 2, h: 1 }, // Item 8 (landscape) -> 2x1
-          { c: 6, r: 1, w: 1, h: 2 }, // Item 3 (portrait) -> 1x2
+          { c: 3, r: 1, w: 1, h: 2 }, // Item 2 (landscape) -> 1x2
+          { c: 4, r: 1, w: 2, h: 1 }, // Item 3 (landscape) -> 2x1
+          { c: 4, r: 2, w: 2, h: 1 }, // Item 4 (portrait) -> 2x1
+          { c: 6, r: 1, w: 1, h: 2 }, // Item 5 (landscape) -> 1x2
 
-          { c: 1, r: 3, w: 2, h: 1 }, // Item 9 (landscape) -> 2x1
-          { c: 3, r: 3, w: 1, h: 2 }, // Item 4 (portrait) -> 1x2
-          { c: 4, r: 3, w: 2, h: 2 }, // Item 5 (portrait) -> 2x2 hero
-          { c: 6, r: 3, w: 1, h: 2 }, // Item 6 (portrait) -> 1x2
-          { c: 1, r: 4, w: 2, h: 1 }, // Item 10 (landscape) -> 2x1
+          { c: 1, r: 3, w: 2, h: 1 }, // Item 6 (landscape) -> 2x1
+          { c: 3, r: 3, w: 1, h: 2 }, // Item 7 (portrait) -> 1x2
+          { c: 4, r: 3, w: 2, h: 2 }, // Item 8 (portrait) -> 2x2 hero
+          { c: 6, r: 3, w: 1, h: 2 }, // Item 9 (landscape) -> 1x2
+          { c: 1, r: 4, w: 2, h: 1 }, // Item 10 (portrait) -> 2x1
 
-          { c: 1, r: 5, w: 3, h: 1 }, // Item 11 (landscape) -> 3x1
+          { c: 1, r: 5, w: 3, h: 1 }, // Item 11 (portrait) -> 3x1
           { c: 4, r: 5, w: 3, h: 1 }, // Item 12 (landscape) -> 3x1
         ];
 
@@ -113,7 +128,12 @@ export default function NanoPortfolioGallery() {
 
         $gallery.nanogallery2({
           items: items,
-          galleryTheme: 'light',
+          galleryTheme: {
+            thumbnail: {
+              background: '#e9f1f5',
+              borderColor: 'transparent',
+            },
+          },
           thumbnailHeight: 180,
           thumbnailWidth: 180,
           galleryMosaic: mosaicPattern,
@@ -122,11 +142,11 @@ export default function NanoPortfolioGallery() {
           thumbnailBorderHorizontal: 0,
           thumbnailBorderVertical: 0,
           thumbnailDisplayTransition: 'slideUp',
-          thumbnailDisplayInterval: 30,
-          thumbnailHoverEffect2: null, // Disabled JS hover animation to prevent null reading length error (handled smoothly via CSS)
+          thumbnailDisplayInterval: 20,
+          thumbnailHoverEffect2: null,
           thumbnailAlignment: 'center',
           thumbnailLabel: {
-            display: false, // User requested no caption needed
+            display: false,
           },
           viewerToolbar: {
             display: true,
@@ -144,7 +164,7 @@ export default function NanoPortfolioGallery() {
 
         setIsLoaded(true);
       } catch (err) {
-        console.error('Failed to initialize nanogallery2:', err);
+        console.error('Failed to initialize nanogallery2, falling back to clean CSS grid:', err);
         if (isMounted) setHasError(true);
       }
     };
@@ -176,11 +196,15 @@ export default function NanoPortfolioGallery() {
       )}
 
       {hasError && (
-        <div className="nanogallery-fallback-grid" dir="rtl">
-          {PORTFOLIO_WORK_SAMPLES.map((item) => (
-            <div key={item.id} className="fallback-card">
+        <div className="nanogallery-fallback-mosaic" dir="ltr">
+          {PORTFOLIO_WORK_SAMPLES.map((item, idx) => (
+            <div key={item.id} className={`fallback-tile fallback-tile-${idx + 1}`}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={item.src} alt="نمونه کار درمان کلینیک قلی‌پور" loading="lazy" />
+              <img
+                src={item.srct || item.src}
+                alt="نمونه کار کلینیک دندانپزشکی قلی‌پور"
+                loading="lazy"
+              />
             </div>
           ))}
         </div>

@@ -186,29 +186,30 @@ Execution Guidelines:
       },
     };
 
-    // Candidate models cascade: primary 3.5-flash, fallback 3.5-flash-lite
+    // Candidate models cascade: primary 3.5-flash-lite (fast & high availability), fallback 3.5-flash
     const candidateModels = [
-      process.env.GEMINI_MODEL,
-      'gemini-3.5-flash',
       'gemini-3.5-flash-lite',
-    ].filter(Boolean) as string[];
-
-    // Ensure unique model names
-    const uniqueCandidateModels = Array.from(new Set(candidateModels));
+      'gemini-3.5-flash',
+    ];
 
     let candidateText = '';
     let lastErrorDetails = '';
 
-    for (const modelName of uniqueCandidateModels) {
+    for (const modelName of candidateModels) {
       try {
         const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${GEMINI_API_KEY}`;
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 12000);
+
         const geminiRes = await fetch(apiUrl, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify(geminiPayload),
+          signal: controller.signal,
         });
+        clearTimeout(timeoutId);
 
         if (geminiRes.ok) {
           const geminiData = await geminiRes.json();
@@ -227,7 +228,7 @@ Execution Guidelines:
         }
       } catch (err: any) {
         lastErrorDetails = err?.message || 'Network error';
-        console.warn(`Failed calling ${modelName}, trying fallback...`);
+        console.warn(`Failed calling ${modelName} (${err?.message}), trying fallback...`);
       }
     }
 

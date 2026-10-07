@@ -4,10 +4,16 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 
 interface ServicesProps {
-  onOpenBooking: () => void;
+  onOpenBooking: (serviceName?: string) => void;
 }
 
-type ServiceTab = 'root-canal' | 'restoration' | 'crown' | 'implant';
+type ServiceTab =
+  | 'root-canal'
+  | 'restoration'
+  | 'crown'
+  | 'composite-laminate'
+  | 'denture'
+  | 'implant';
 
 export default function Services({ onOpenBooking }: ServicesProps) {
   const [activeTab, setActiveTab] = useState<ServiceTab>('implant');
@@ -92,7 +98,7 @@ export default function Services({ onOpenBooking }: ServicesProps) {
                 loading="eager"
               />
               <Image
-                src="https://qafdentalclinic.com/wp-content/uploads/2025/08/روکش-6.png"
+                src="/assets/icons/crown.svg"
                 className="pill-fg"
                 alt="روکش"
                 width={54}
@@ -101,6 +107,60 @@ export default function Services({ onOpenBooking }: ServicesProps) {
               />
             </div>
             <span className="pill-title">روکش دندان</span>
+          </div>
+
+          <div
+            className={`service-pill ${activeTab === 'composite-laminate' ? 'active' : ''}`}
+            onClick={() => setActiveTab('composite-laminate')}
+            role="button"
+            tabIndex={0}
+          >
+            <div className="pill-icon-box">
+              <Image
+                src="https://qafdentalclinic.com/wp-content/uploads/2025/08/درمان-ربشه-3.png"
+                className="pill-bg"
+                alt="کامپوزیت"
+                width={82}
+                height={82}
+                loading="eager"
+              />
+              <Image
+                src="/assets/icons/composite-smile.svg"
+                className="pill-fg"
+                alt="کامپوزیت"
+                width={54}
+                height={54}
+                loading="eager"
+              />
+            </div>
+            <span className="pill-title">کامپوزیت</span>
+          </div>
+
+          <div
+            className={`service-pill ${activeTab === 'denture' ? 'active' : ''}`}
+            onClick={() => setActiveTab('denture')}
+            role="button"
+            tabIndex={0}
+          >
+            <div className="pill-icon-box">
+              <Image
+                src="https://qafdentalclinic.com/wp-content/uploads/2025/08/درمان-ربشه-3.png"
+                className="pill-bg"
+                alt="دندان مصنوعی"
+                width={82}
+                height={82}
+                loading="eager"
+              />
+              <Image
+                src="/assets/icons/denture-prosthesis.svg"
+                className="pill-fg"
+                alt="دندان مصنوعی"
+                width={54}
+                height={54}
+                loading="eager"
+              />
+            </div>
+            <span className="pill-title">دندان مصنوعی</span>
           </div>
 
           <div
@@ -151,7 +211,7 @@ export default function Services({ onOpenBooking }: ServicesProps) {
                 </p>
                 <button
                   className="btn-primary open-booking-btn"
-                  onClick={onOpenBooking}
+                  onClick={() => onOpenBooking('ایمپلنت دندان')}
                 >
                   رزرو نوبت ایمپلنت
                 </button>
@@ -185,7 +245,7 @@ export default function Services({ onOpenBooking }: ServicesProps) {
                 </p>
                 <button
                   className="btn-primary open-booking-btn"
-                  onClick={onOpenBooking}
+                  onClick={() => onOpenBooking('ترمیم دندان')}
                 >
                   رزرو نوبت ترمیم
                 </button>
@@ -220,15 +280,15 @@ export default function Services({ onOpenBooking }: ServicesProps) {
                 </p>
                 <button
                   className="btn-primary open-booking-btn"
-                  onClick={onOpenBooking}
+                  onClick={() => onOpenBooking('روکش دندان')}
                 >
                   رزرو نوبت روکش
                 </button>
               </div>
               <div className="service-tab-graphic">
                 <Image
-                  src="https://qafdentalclinic.com/wp-content/uploads/2025/08/روکش-6.png"
-                  alt="روکش"
+                  src="/assets/icons/crown.svg"
+                  alt="روکش دندان"
                   width={220}
                   height={220}
                   loading="eager"
@@ -237,7 +297,78 @@ export default function Services({ onOpenBooking }: ServicesProps) {
             </div>
           </div>
 
-          {/* Tab 4: Root Canal */}
+          {/* Tab 4: Composite & Laminate */}
+          <div
+            className={`service-tab-content ${activeTab === 'composite-laminate' ? 'active' : ''}`}
+            id="tab-composite-laminate"
+          >
+            <div className="service-tab-body">
+              <div className="service-tab-text">
+                <h3 className="service-tab-title">
+                  ونیر کامپوزیت و لمینت
+                </h3>
+                <p>
+                  اصلاح طرح لبخند با ونیر کامپوزیت و لمینت‌های فوق‌نازک سرامیکی،
+                  ظاهری یکدست، شفاف و درخشان به دندان‌ها می‌بخشد. در کلینیک
+                  دندانپزشکی قلی‌پور با رعایت دقیق تناسبات طلایی چهره، فرم لثه
+                  و بدون تراش یا با حداقل تراش ممکن، لبخندی طبیعی و متناسب با چهره
+                  شما خلق می‌گردد.
+                </p>
+                <button
+                  className="btn-primary open-booking-btn"
+                  onClick={() => onOpenBooking('ونیر کامپوزیت و لمینت')}
+                >
+                  رزرو نوبت کامپوزیت و لمینت
+                </button>
+              </div>
+              <div className="service-tab-graphic">
+                <Image
+                  src="/assets/icons/composite-smile.svg"
+                  alt="ونیر کامپوزیت و لمینت"
+                  width={220}
+                  height={220}
+                  loading="eager"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Tab 5: Denture / Prosthetics */}
+          <div
+            className={`service-tab-content ${activeTab === 'denture' ? 'active' : ''}`}
+            id="tab-denture"
+          >
+            <div className="service-tab-body">
+              <div className="service-tab-text">
+                <h3 className="service-tab-title">
+                  پروتز متحرک و دندان مصنوعی
+                </h3>
+                <p>
+                  پروتزهای دندانی متحرک (دست دندان کامل و پارسیل) راه‌حلی کارآمد و
+                  مقرون‌به‌صرفه برای بازیابی قدرت جویدن، تکلم طبیعی و چهره‌ای شاداب
+                  هستند. در کلینیک قلی‌پور انواع پروتزهای ژله‌ای (فلکسیبل)، کروم
+                  کبالت و اوردنچر با تطابق بالا و حداکثر راحتی ساخته می‌شوند.
+                </p>
+                <button
+                  className="btn-primary open-booking-btn"
+                  onClick={() => onOpenBooking('پروتز و دندان مصنوعی')}
+                >
+                  رزرو نوبت دندان مصنوعی
+                </button>
+              </div>
+              <div className="service-tab-graphic">
+                <Image
+                  src="/assets/icons/denture-prosthesis.svg"
+                  alt="دندان مصنوعی"
+                  width={220}
+                  height={220}
+                  loading="eager"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Tab 6: Root Canal */}
           <div
             className={`service-tab-content ${activeTab === 'root-canal' ? 'active' : ''}`}
             id="tab-root-canal"
@@ -253,7 +384,7 @@ export default function Services({ onOpenBooking }: ServicesProps) {
                 </p>
                 <button
                   className="btn-primary open-booking-btn"
-                  onClick={onOpenBooking}
+                  onClick={() => onOpenBooking('عصب‌کشی دندان')}
                 >
                   رزرو نوبت عصب‌کشی
                 </button>

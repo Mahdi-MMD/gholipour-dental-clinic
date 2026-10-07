@@ -215,6 +215,14 @@ button, input {
   z-index: 2;
 }
 
+.section-subtitle {
+  position: relative;
+  z-index: 2;
+  margin-top: 8px;
+  font-size: 15px;
+  color: var(--color-text-muted);
+}
+
 /* ==================== SITE HEADER (FLOATING ROUNDED ISLAND BAR) ==================== */
 .site-header {
   position: -webkit-sticky;
@@ -478,24 +486,24 @@ button, input {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 24px;
+  gap: 16px;
   margin-bottom: 50px;
   flex-wrap: wrap;
 }
 
-/* Bigger & More Beautiful Service Pills */
+/* Balanced Service Pills for 6 Items */
 .service-pill {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 14px;
+  gap: 10px;
   cursor: pointer;
-  padding: 22px 26px;
+  padding: 16px 18px;
   border-radius: var(--radius-md);
   background-color: var(--color-bg-light);
   border: 1.5px solid var(--color-border);
   transition: var(--transition);
-  min-width: 145px;
+  min-width: 125px;
   box-shadow: var(--shadow-sm);
 }
 
@@ -515,14 +523,14 @@ button, input {
 
 .pill-icon-box {
   position: relative;
-  width: 82px;
-  height: 82px;
+  width: 68px;
+  height: 68px;
   display: flex;
   align-items: center;
   justify-content: center;
   background: #ffffff;
   border-radius: 50%;
-  box-shadow: 0 6px 18px rgba(28, 67, 79, 0.08);
+  box-shadow: 0 4px 14px rgba(28, 67, 79, 0.08);
   transition: var(--transition);
 }
 
@@ -531,28 +539,29 @@ button, input {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  opacity: 0.25;
+  opacity: 0.22;
 }
 
 .pill-fg {
-  width: 54px;
-  height: 54px;
+  width: 52px;
+  height: 52px;
   object-fit: contain;
   position: relative;
   z-index: 2;
-  filter: drop-shadow(0 4px 8px rgba(28, 131, 170, 0.25));
+  filter: drop-shadow(0 3px 6px rgba(28, 131, 170, 0.2));
   transition: var(--transition);
 }
 
 .service-pill:hover .pill-fg,
 .service-pill.active .pill-fg {
-  transform: scale(1.12);
+  transform: scale(1.1);
 }
 
 .pill-title {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 700;
   color: var(--color-primary-dark);
+  white-space: nowrap;
 }
 
 .service-pill.active .pill-title {
@@ -605,9 +614,19 @@ button, input {
 }
 
 .service-tab-graphic img {
-  max-width: 220px;
+  max-width: 190px;
+  max-height: 190px;
+  width: auto;
+  height: auto;
   margin: 0 auto;
   filter: drop-shadow(0 12px 24px rgba(28, 131, 170, 0.2));
+}
+
+/* Crown & Composite SVGs have larger visual optical weight than the illustrations, scale slightly to match */
+#tab-crown .service-tab-graphic img,
+#tab-composite-laminate .service-tab-graphic img {
+  max-width: 145px;
+  max-height: 145px;
 }
 
 /* ==================== PORTFOLIO / INTERACTIVE BEFORE-AFTER ==================== */
@@ -641,6 +660,141 @@ button, input {
   color: var(--color-white);
   border-color: var(--color-primary);
   box-shadow: 0 6px 20px rgba(28, 131, 170, 0.28);
+}
+
+/* ==================== NANOGALLERY2 MOSAIC SECTION ==================== */
+.portfolio-mosaic-wrap {
+  width: 100%;
+  margin: 35px 0 25px;
+  position: relative;
+}
+
+.nanogallery-wrapper {
+  width: 100%;
+  min-height: 400px;
+  position: relative;
+}
+
+/* Nanogallery2 custom styling overrides */
+.nGY2 .nGY2GThumbnail {
+  border-radius: 16px !important;
+  overflow: hidden !important;
+  box-shadow: 0 6px 20px rgba(28, 67, 79, 0.08) !important;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease !important;
+}
+
+.nGY2 .nGY2GThumbnail img {
+  transition: transform 0.4s ease !important;
+}
+
+.nGY2 .nGY2GThumbnail:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 16px 36px rgba(28, 131, 170, 0.25) !important;
+}
+
+.nGY2 .nGY2GThumbnail:hover img {
+  transform: scale(1.05) !important;
+}
+
+.nGY2 .nGY2GThumbnail .label {
+  display: none !important;
+}
+
+/* Skeleton Loading State */
+.nanogallery-skeleton {
+  width: 100%;
+  padding: 10px 0;
+}
+
+.nanogallery-skeleton-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.nanogallery-skeleton-tile {
+  height: 200px;
+  background: linear-gradient(90deg, #f0f4f7 25%, #e6eef3 50%, #f0f4f7 75%);
+  background-size: 200% 100%;
+  animation: skeletonPulse 1.6s infinite ease-in-out;
+  border-radius: 16px;
+}
+
+@keyframes skeletonPulse {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Fallback Grid in case of CDN block */
+.nanogallery-fallback-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.fallback-card {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  background-color: var(--color-white);
+  height: 240px;
+}
+
+.fallback-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.fallback-card-title {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 12px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+/* Portfolio CTA Link */
+.portfolio-cta-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 28px;
+}
+
+.portfolio-all-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+  color: #ffffff;
+  padding: 11px 26px;
+  border-radius: var(--radius-pill);
+  font-weight: 700;
+  font-size: 14.5px;
+  text-decoration: none;
+  box-shadow: 0 6px 20px rgba(28, 131, 170, 0.28);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.portfolio-all-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 26px rgba(28, 131, 170, 0.38);
+  color: #ffffff;
+}
+
+.portfolio-all-btn i {
+  transition: transform 0.25s ease;
+  font-size: 13px;
+}
+
+.portfolio-all-btn:hover i {
+  transform: translateX(-4px);
 }
 
 /* Interactive Before / After Sliders Grid */
@@ -2023,6 +2177,9 @@ body.booking-drawer-open .site-header {
   color: var(--color-text-muted);
   line-height: 1.8;
   margin-bottom: 24px;
+  text-align: justify;
+  text-align-last: right;
+  direction: rtl;
 }
 
 .booking-form .form-group {
@@ -2052,6 +2209,15 @@ body.booking-drawer-open .site-header {
   border-color: var(--color-primary);
   background-color: var(--color-white);
   box-shadow: 0 0 0 3px rgba(28, 131, 170, 0.15);
+}
+
+.form-error-msg {
+  display: block;
+  font-size: 12px;
+  color: #dc2626;
+  margin-top: 6px;
+  font-weight: 500;
+  line-height: 1.5;
 }
 
 .booking-success-msg {
@@ -2690,7 +2856,6 @@ body.booking-drawer-open .site-header {
   .hero-container {
     display: flex;
     flex-direction: column;
-    text-align: center;
     gap: 22px;
   }
   .hero-image-wrap {
@@ -2708,12 +2873,16 @@ body.booking-drawer-open .site-header {
   .hero-content {
     max-width: 600px;
     margin: 0 auto;
+    text-align: right;
   }
   .hero-subtitle {
+    display: block;
+    text-align: center;
     font-size: 15px;
     margin-bottom: 6px;
   }
   .hero-title {
+    text-align: center;
     font-size: 28px;
     line-height: 1.35;
     margin-bottom: 12px;
@@ -2722,7 +2891,8 @@ body.booking-drawer-open .site-header {
     font-size: 14.5px;
     line-height: 1.85;
     text-align: justify;
-    text-align-last: center;
+    text-align-last: right;
+    direction: rtl;
     margin-bottom: 20px;
   }
   .hero-actions {
@@ -2736,16 +2906,33 @@ body.booking-drawer-open .site-header {
   /* Services Tab Content on Tablet/Mobile */
   .service-tab-body {
     grid-template-columns: 1fr;
-    text-align: center;
+    text-align: right;
     gap: 24px;
+  }
+  .service-tab-title {
+    text-align: center;
+  }
+  .service-tab-text {
+    text-align: right;
+  }
+  .service-tab-text .btn-primary {
+    display: block;
+    margin: 0 auto;
   }
   .service-tab-text p {
     text-align: justify;
-    text-align-last: center;
+    text-align-last: right;
+    direction: rtl;
   }
   .service-tab-graphic img {
-    max-width: 160px;
+    max-width: 150px;
+    max-height: 150px;
     margin: 0 auto;
+  }
+  #tab-crown .service-tab-graphic img,
+  #tab-composite-laminate .service-tab-graphic img {
+    max-width: 125px;
+    max-height: 125px;
   }
 
   /* Footer on Tablet */
@@ -2786,32 +2973,67 @@ body.booking-drawer-open .site-header {
 }
 
 @media (max-width: 768px) {
-  /* Services 2x2 Grid */
+  /* Services Pills - Single Compact Row of Icon Buttons on Mobile */
   .services-section {
-    padding: 55px 0;
+    padding: 45px 0;
   }
   .services-pills {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-    margin-bottom: 28px;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 22px;
+    padding: 4px 0 8px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
   }
   .service-pill {
     min-width: unset;
-    padding: 16px 10px;
-    gap: 10px;
-    border-radius: var(--radius-md);
+    width: clamp(44px, 12.8vw, 52px);
+    height: clamp(44px, 12.8vw, 52px);
+    flex: 0 0 clamp(44px, 12.8vw, 52px);
+    padding: 0;
+    gap: 0;
+    border-radius: 50%;
+    border-width: 1.5px;
+    box-shadow: 0 2px 8px rgba(28, 67, 79, 0.08);
+    -webkit-tap-highlight-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  }
+  .service-pill.active {
+    transform: translateY(-2px) scale(1.08);
+    border-color: var(--color-primary);
+    box-shadow: 0 4px 14px rgba(28, 131, 170, 0.25);
+  }
+  .service-pill:hover {
+    transform: translateY(-2px);
   }
   .pill-icon-box {
-    width: 66px;
-    height: 66px;
+    width: 100%;
+    height: 100%;
+    box-shadow: none;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .pill-bg {
+    display: none;
   }
   .pill-fg {
-    width: 44px;
-    height: 44px;
+    width: 76%;
+    height: 76%;
+    max-width: 40px;
+    max-height: 40px;
+    filter: none;
   }
   .pill-title {
-    font-size: 14px;
+    display: none;
   }
   .service-tab-content {
     padding: 24px 18px;
@@ -2827,9 +3049,34 @@ body.booking-drawer-open .site-header {
     margin-bottom: 18px;
   }
 
-  /* Before/After Single-Column Cards */
+  /* Portfolio & Mosaic on Mobile */
   .portfolio-section {
-    padding: 55px 0;
+    padding: 45px 0 35px;
+  }
+  .portfolio-section .section-subtitle {
+    font-size: 13.5px;
+    line-height: 1.6;
+    white-space: normal;
+    margin-bottom: 20px;
+  }
+  .portfolio-mosaic-wrap {
+    margin: 15px 0 10px;
+  }
+  .nanogallery-wrapper {
+    min-height: 250px;
+  }
+  .portfolio-cta-wrap {
+    margin-top: 14px;
+    margin-bottom: 10px;
+  }
+  .portfolio-all-btn {
+    padding: 8px 18px;
+    font-size: 13px;
+    gap: 8px;
+    box-shadow: 0 4px 14px rgba(28, 131, 170, 0.22);
+  }
+  .portfolio-all-btn i {
+    font-size: 11px;
   }
   .before-after-grid,
   .gallery-grid {
@@ -2879,6 +3126,22 @@ body.booking-drawer-open .site-header {
 }
 
 @media (max-width: 480px) {
+  .services-pills {
+    gap: 4px;
+    padding: 2px 0 6px;
+    justify-content: space-between;
+  }
+  .service-pill {
+    width: clamp(42px, 12.5vw, 48px);
+    height: clamp(42px, 12.5vw, 48px);
+    flex: 0 0 clamp(42px, 12.5vw, 48px);
+  }
+  .pill-fg {
+    width: 76%;
+    height: 76%;
+    max-width: 38px;
+    max-height: 38px;
+  }
   .container {
     padding: 0 16px;
   }
@@ -3003,12 +3266,13 @@ body.booking-drawer-open .site-header {
     width: 100%;
   }
   .copyright-text {
-    font-size: 12px;
-    line-height: 1.6;
+    font-size: clamp(10px, 2.9vw, 11.5px);
+    line-height: 1.4;
+    white-space: nowrap;
     word-break: normal;
-    overflow-wrap: break-word;
+    overflow-wrap: normal;
     margin: 0;
-    padding: 0 10px;
+    padding: 0 4px;
   }
   .floating-social-bubble-container {
     bottom: 20px;

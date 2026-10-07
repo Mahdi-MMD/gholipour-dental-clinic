@@ -71,7 +71,8 @@ export default function StagesCard({ item }: StagesCardProps) {
       <div className="stages-hover-overlay">
         <div className="stages-zoom-btn">
           <i className="fa-solid fa-expand" />
-          <span>مشاهده مراحل درمان و بزرگ‌نمایی</span>
+          <span className="stages-zoom-text-desktop">مشاهده مراحل درمان و بزرگ‌نمایی</span>
+          <span className="stages-zoom-text-mobile">مشاهده مراحل</span>
         </div>
       </div>
     </div>

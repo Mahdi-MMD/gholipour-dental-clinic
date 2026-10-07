@@ -22,6 +22,14 @@ export interface GalleryItem {
   stages?: TreatmentStage[];
 }
 
+/**
+ * Maximum character and word limits for Gallery Item titles
+ * to ensure titles fit perfectly in 2-column mobile layouts on a single line
+ * without overflowing or wrapping awkwardly.
+ */
+export const GALLERY_TITLE_MAX_CHARS = 32;
+export const GALLERY_TITLE_MAX_WORDS = 5;
+
 export const DEFAULT_TREATMENT_STAGES: TreatmentStage[] = [
   {
     stepNumber: 1,

@@ -16,8 +16,10 @@ import ScrollIndicator from '@/components/ScrollIndicator';
 export default function HomePage() {
   const [isBookingOpen, setIsBookingOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [selectedService, setSelectedService] = useState<string>('');
 
-  const handleOpenBooking = () => {
+  const handleOpenBooking = (serviceName?: string) => {
+    setSelectedService(serviceName || '');
     setMobileMenuOpen(false);
     setIsBookingOpen(true);
   };
@@ -29,22 +31,23 @@ export default function HomePage() {
   return (
     <>
       <Header
-        onOpenBooking={handleOpenBooking}
+        onOpenBooking={() => handleOpenBooking()}
         mobileMenuOpen={mobileMenuOpen}
         setMobileMenuOpen={setMobileMenuOpen}
       />
       <main>
-        <Hero onOpenBooking={handleOpenBooking} />
+        <Hero onOpenBooking={() => handleOpenBooking()} />
         <Services onOpenBooking={handleOpenBooking} />
         <Portfolio />
         <Testimonials />
         <Doctors />
-        <Articles onOpenBooking={handleOpenBooking} />
+        <Articles onOpenBooking={() => handleOpenBooking()} />
       </main>
-      <Footer onOpenBooking={handleOpenBooking} />
+      <Footer onOpenBooking={() => handleOpenBooking()} />
       <BookingDrawer
         isOpen={isBookingOpen}
         onClose={handleCloseBooking}
+        initialService={selectedService}
       />
       <FloatingBubble isMobileMenuOpen={mobileMenuOpen} />
       <ScrollIndicator />

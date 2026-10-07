@@ -9,7 +9,7 @@ import FloatingBubble from '@/components/FloatingBubble';
 import ScrollIndicator from '@/components/ScrollIndicator';
 import MeridiqSlider from '@/components/gallery/MeridiqSlider';
 import StagesCard from '@/components/gallery/StagesCard';
-import { GALLERY_ITEMS, GALLERY_CATEGORIES, GalleryItem } from '@/data/galleryData';
+import { GALLERY_ITEMS, GALLERY_CATEGORIES, GalleryItem, GALLERY_TITLE_MAX_CHARS } from '@/data/galleryData';
 import '@/app/gallery.css';
 
 export default function GalleryClient() {
@@ -24,12 +24,12 @@ export default function GalleryClient() {
   const [isMobile, setIsMobile] = useState(false);
   const [categoryDropdownOpen, setCategoryDropdownOpen] = useState(false);
 
-  // Responsive initial count: 3 on mobile (<=768px), 6 on desktop
+  // Responsive initial count: 4 on mobile (<=768px, 2 rows of 2), 6 on desktop
   useEffect(() => {
     const checkMobile = () => {
       const mobile = window.innerWidth <= 768;
       setIsMobile(mobile);
-      setVisibleCount((prev) => (mobile ? Math.min(prev, 3) : Math.max(prev, 6)));
+      setVisibleCount((prev) => (mobile ? Math.min(prev, 4) : Math.max(prev, 6)));
     };
 
     checkMobile();
@@ -142,7 +142,7 @@ export default function GalleryClient() {
                   }`}
                   onClick={() => {
                     setSelectedCategory(cat.id);
-                    setVisibleCount(isMobile ? 3 : 6);
+                    setVisibleCount(isMobile ? 4 : 6);
                   }}
                 >
                   {cat.label}
@@ -187,7 +187,7 @@ export default function GalleryClient() {
                       }`}
                       onClick={() => {
                         setSelectedCategory(cat.id);
-                        setVisibleCount(3);
+                        setVisibleCount(4);
                         setCategoryDropdownOpen(false);
                       }}
                     >
@@ -245,10 +245,29 @@ export default function GalleryClient() {
                     <StagesCard item={item} />
                   )}
 
-                  {/* Card Footer matching reference screenshot */}
-                  <div className="gallery-card-footer">
+                  {/* Card Footer matching reference screenshot - tapping opens modal */}
+                  <div
+                    className="gallery-card-footer"
+                    onClick={() => setActiveModalItem(item)}
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        setActiveModalItem(item);
+                      }
+                    }}
+                    aria-label={`مشاهده جزئیات ${item.title}`}
+                  >
                     <div className="gallery-card-text">
-                      <h3 className="gallery-card-title">{item.title}</h3>
+                      <h3
+                        className="gallery-card-title"
+                        title={item.title}
+                      >
+                        {item.title.length > GALLERY_TITLE_MAX_CHARS
+                          ? `${item.title.slice(0, GALLERY_TITLE_MAX_CHARS)}...`
+                          : item.title}
+                      </h3>
                       <div className="gallery-card-tags">
                         <span className="gallery-tag-pill">{item.categoryLabel}</span>
                         {item.subCategoryLabel && (
@@ -263,7 +282,10 @@ export default function GalleryClient() {
                     <button
                       type="button"
                       className="gallery-card-cta-btn"
-                      onClick={() => setActiveModalItem(item)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setActiveModalItem(item);
+                      }}
                       aria-label={`مشاهده جزئیات ${item.title}`}
                       title="مشاهده جزئیات و بزرگ‌نمایی"
                     >
@@ -282,13 +304,13 @@ export default function GalleryClient() {
               )}
             </div>
 
-            {/* LOAD MORE BUTTON - Modern Minimalist Clinic Design */}
+            {/* LOAD MORE BUTTON - Modern Minimalist Clinic Design (adds 4 on mobile = 2 rows) */}
             {hasMore && (
               <div className="gallery-load-more-wrap">
                 <button
                   type="button"
                   className="gallery-load-more-btn"
-                  onClick={() => setVisibleCount((prev) => prev + 3)}
+                  onClick={() => setVisibleCount((prev) => prev + (isMobile ? 4 : 3))}
                   aria-label="مشاهده نمونه کارهای بیشتر"
                 >
                   <span className="gallery-load-more-text">نمایش موارد بیشتر</span>

@@ -222,10 +222,10 @@ export default function MobileMenu({
                 <div className={`drawer-submenu ${isServicesOpen ? 'open' : ''}`}>
                   <ul className="drawer-submenu-list">
                     <li>
-                      <a href={`${prefix}#services`} onClick={handleLinkClick}>
+                      <Link href="/services/implant" onClick={handleLinkClick}>
                         <i className="fa-solid fa-chevron-left sub-dot"></i>
                         <span>ایمپلنت دندان</span>
-                      </a>
+                      </Link>
                     </li>
                     <li>
                       <a href={`${prefix}#services`} onClick={handleLinkClick}>

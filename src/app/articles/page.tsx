@@ -412,15 +412,28 @@ export default function ArticlesPage() {
             {/* 2. Google-Style Search Bar with internal "AI Mode" button */}
             <div className="articles-search-wrap">
               <div className="articles-search-inner-box">
-                {/* Right side: Traditional Search Magnifier Button (for Persian RTL) */}
+                {/* Right side: Search Magnifier or Send Icon (converts to Send only in AI mode when typing) */}
                 <button
                   type="button"
-                  className="articles-search-icon"
+                  className={`articles-search-icon ${isAiMode && searchQuery.trim() ? 'is-send-active' : ''}`}
                   onClick={() => handlePerformSearch()}
-                  aria-label="جستجو یا ارسال سوال"
-                  title="جستجو یا ارسال سوال"
+                  aria-label={isAiMode && searchQuery.trim() ? 'ارسال سوال' : 'جستجو'}
+                  title={isAiMode && searchQuery.trim() ? 'ارسال' : 'جستجو'}
                 >
-                  <i className="fa-solid fa-magnifying-glass"></i>
+                  {isAiMode && searchQuery.trim() ? (
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      width="20"
+                      height="20"
+                      className="articles-send-svg-icon"
+                      aria-hidden="true"
+                    >
+                      <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
+                    </svg>
+                  ) : (
+                    <i className="fa-solid fa-magnifying-glass"></i>
+                  )}
                 </button>
 
                 {/* Center: Search Text Input */}
@@ -474,9 +487,6 @@ export default function ArticlesPage() {
                         setIsAiMode(nextMode);
                         if (!nextMode) {
                           setActiveIndex(defaultMiddleIndex);
-                        }
-                        if (nextMode && searchQuery.trim() && chatHistory.length === 0) {
-                          handleSendChatMessage(searchQuery.trim());
                         }
                       }}
                       title={isAiMode ? 'خاموش کردن حالت هوشمند' : 'روشن کردن حالت هوشمند'}

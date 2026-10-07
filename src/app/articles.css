@@ -299,13 +299,28 @@
   align-items: center;
   justify-content: center;
   transform: rotate(-10deg);
-  transition: transform 0.3s ease, color 0.3s ease;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.25s ease, background-color 0.25s ease;
   z-index: 10;
 }
 
 .articles-search-icon:hover {
   color: #1c83aa;
   transform: rotate(0deg) scale(1.15);
+}
+
+.articles-search-icon.is-send-active {
+  color: #0284c7;
+  transform: rotate(0deg) scale(1);
+}
+
+.articles-search-icon.is-send-active:hover {
+  color: #0369a1;
+  transform: scale(1.18);
+}
+
+.articles-send-svg-icon {
+  display: block;
+  transition: transform 0.2s ease;
 }
 
 /* Search Text Input: Pill Shape matching Google bar (Right padding for magnifier, Left padding for narrower AI Mode button) */

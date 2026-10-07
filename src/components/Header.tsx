@@ -75,9 +75,9 @@ export default function Header({
               </a>
               <ul className="dropdown-menu">
                 <li>
-                  <a href={`${prefix}#services`} onClick={closeMobileMenu}>
+                  <Link href="/services/implant" onClick={closeMobileMenu}>
                     ایمپلنت دندان
-                  </a>
+                  </Link>
                 </li>
                 <li>
                   <a href={`${prefix}#services`} onClick={closeMobileMenu}>

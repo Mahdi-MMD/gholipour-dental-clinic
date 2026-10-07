@@ -1,5 +1,6 @@
 import { MetadataRoute } from 'next';
 import { ARTICLES_DATA } from '@/data/articlesData';
+import { SERVICES_DATA } from '@/data/servicesData';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://gholipourdental.com';
@@ -9,6 +10,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     lastModified: new Date(),
     changeFrequency: 'weekly',
     priority: 0.8,
+  }));
+
+  const serviceEntries: MetadataRoute.Sitemap = Object.keys(SERVICES_DATA).map((slug) => ({
+    url: `${siteUrl}/services/${slug}`,
+    lastModified: new Date(),
+    changeFrequency: 'weekly',
+    priority: 0.9,
   }));
 
   return [
@@ -36,6 +44,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'monthly',
       priority: 0.7,
     },
+    ...serviceEntries,
     ...articleEntries,
   ];
 }

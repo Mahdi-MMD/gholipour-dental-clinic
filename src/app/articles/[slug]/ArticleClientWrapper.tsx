@@ -5,6 +5,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import BookingDrawer from '@/components/BookingDrawer';
 import FloatingBubble from '@/components/FloatingBubble';
+import ScrollIndicator from '@/components/ScrollIndicator';
 import { ArticleFAQ } from '@/data/articlesData';
 
 interface BookingContextType {
@@ -191,6 +192,7 @@ export default function ArticleClientWrapper({
 
       <Footer onOpenBooking={handleOpenBooking} />
       <FloatingBubble isMobileMenuOpen={mobileMenuOpen} />
+      <ScrollIndicator />
       <BookingDrawer isOpen={isBookingOpen} onClose={handleCloseBooking} />
     </BookingContext.Provider>
   );

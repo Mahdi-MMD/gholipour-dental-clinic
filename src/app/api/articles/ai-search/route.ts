@@ -30,8 +30,63 @@ const searchableDocs: SearchableArticleDoc[] = ARTICLES_DATA.map((art) => ({
 
 const articleSearchIndex = createArticlesSearchIndex(searchableDocs);
 
+// Rate Limiting: 10 queries per hour, 25 queries per day per user/IP
+interface RateLimitRecord {
+  timestamps: number[];
+}
+const rateLimitMap = new Map<string, RateLimitRecord>();
+
+const ONE_HOUR_MS = 60 * 60 * 1000;
+const ONE_DAY_MS = 24 * 60 * 60 * 1000;
+const MAX_HOURLY_QUERIES = 10;
+const MAX_DAILY_QUERIES = 25;
+
+function checkRateLimit(identifier: string): { allowed: boolean; message?: string } {
+  const now = Date.now();
+  let record = rateLimitMap.get(identifier);
+
+  if (!record) {
+    record = { timestamps: [] };
+    rateLimitMap.set(identifier, record);
+  }
+
+  // Filter timestamps within the last 24 hours
+  record.timestamps = record.timestamps.filter((ts) => now - ts < ONE_DAY_MS);
+
+  // Hourly count
+  const hourlyCount = record.timestamps.filter((ts) => now - ts < ONE_HOUR_MS).length;
+  if (hourlyCount >= MAX_HOURLY_QUERIES) {
+    return {
+      allowed: false,
+      message: 'سقف پرسش‌های این ساعت شما تکمیل شده است (حداکثر ۱۰ سوال در ساعت). لطفاً ساعتی دیگر مراجعه فرمایید یا با ربات تلگرام ارتباط بگیرید.',
+    };
+  }
+
+  // Daily count
+  if (record.timestamps.length >= MAX_DAILY_QUERIES) {
+    return {
+      allowed: false,
+      message: 'سقف پرسش‌های روزانه شما تکمیل شده است (حداکثر ۲۵ سوال در روز). لطفاً فردا مراجعه فرمایید یا با ربات تلگرام @Qolipur-bot در ارتباط باشید.',
+    };
+  }
+
+  // Record this query
+  record.timestamps.push(now);
+  return { allowed: true };
+}
+
 export async function POST(req: NextRequest) {
   try {
+    // Determine client identifier for rate limiting
+    const forwardedFor = req.headers.get('x-forwarded-for');
+    const realIp = req.headers.get('x-real-ip');
+    const clientIp = (forwardedFor ? forwardedFor.split(',')[0].trim() : realIp) || 'unknown-client';
+
+    const rateLimit = checkRateLimit(clientIp);
+    if (!rateLimit.allowed) {
+      return NextResponse.json({ error: rateLimit.message }, { status: 429 });
+    }
+
     const body: RequestPayload = await req.json();
     const { query, history = [], mode = 'overview' } = body;
 
@@ -40,6 +95,14 @@ export async function POST(req: NextRequest) {
     }
 
     const cleanQuery = query.trim();
+    const wordCount = cleanQuery.split(/\s+/).filter(Boolean).length;
+    if (wordCount > 50 || cleanQuery.length > 350) {
+      return NextResponse.json(
+        { error: 'طول پرسش بیش از حد مجاز است (حداکثر ۵۰ کلمه). لطفاً سوال خود را خلاصه‌تر بفرمایید.' },
+        { status: 400 }
+      );
+    }
+
     const normQuery = normalizePersian(cleanQuery);
     const rawTokens = normQuery.split(/\s+/).filter((t) => t.length > 1);
 

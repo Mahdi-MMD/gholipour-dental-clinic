@@ -270,6 +270,22 @@ export default function ArticlesPage() {
     const q = (queryText !== undefined ? queryText : searchQuery).trim();
     if (!q) return;
 
+    const words = q.split(/\s+/).filter(Boolean);
+    if (words.length > 50 || q.length > 350) {
+      if (isAiMode) {
+        setChatHistory((prev) => [
+          ...prev,
+          { role: 'user', text: q },
+          {
+            role: 'model',
+            text: 'طول پرسش شما بیش از حد مجاز است (حداکثر ۵۰ کلمه). لطفاً سوال خود را خلاصه‌تر بفرمایید.',
+          },
+        ]);
+        setSearchQuery('');
+        return;
+      }
+    }
+
     if (isAiMode) {
       // In AI mode: send message and clear the top search box
       setSearchQuery('');
@@ -284,7 +300,24 @@ export default function ArticlesPage() {
   const handleSendChatMessage = async (msgText: string) => {
     if (!msgText.trim()) return;
 
-    const userMsg: ChatMessage = { role: 'user', text: msgText.trim() };
+    const cleanMsg = msgText.trim();
+    const words = cleanMsg.split(/\s+/).filter(Boolean);
+    if (words.length > 50 || cleanMsg.length > 350) {
+      setChatHistory((prev) => [
+        ...prev,
+        { role: 'user', text: cleanMsg },
+        {
+          role: 'model',
+          text: 'طول پرسش شما بیش از حد مجاز است (حداکثر ۵۰ کلمه). لطفاً سوال خود را خلاصه‌تر بفرمایید.',
+        },
+      ]);
+      setSearchQuery('');
+      setFollowUpInput('');
+      return;
+    }
+
+    const userMsg: ChatMessage = { role: 'user', text: cleanMsg };
+
     const newHistory = [...chatHistory, userMsg];
     setChatHistory(newHistory);
     setSearchQuery('');
@@ -317,9 +350,11 @@ export default function ArticlesPage() {
         };
         setChatHistory([...newHistory, aiMsg]);
       } else {
+        const errData = await res.json().catch(() => null);
+        const serverErrorMessage = errData?.error || 'متأسفانه در برقراری ارتباط با دستیار هوشمند مشکلی رخ داد. لطفاً مجدداً تلاش کنید یا سوال خود را در ربات تلگرام @Qolipur-bot مطرح نمایید.';
         const aiMsg: ChatMessage = {
           role: 'model',
-          text: 'متأسفانه در برقراری ارتباط با دستیار هوشمند مشکلی رخ داد. لطفاً مجدداً تلاش کنید یا سوال خود را در ربات تلگرام @Qolipur-bot مطرح نمایید.',
+          text: serverErrorMessage,
         };
         setChatHistory([...newHistory, aiMsg]);
       }
@@ -440,6 +475,7 @@ export default function ArticlesPage() {
                 <input
                   type="text"
                   className="articles-search-input"
+                  maxLength={350}
                   placeholder={
                     isAiMode
                       ? 'سوال دندانپزشکی خود را بپرسید...'

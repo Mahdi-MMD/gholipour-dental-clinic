@@ -17,7 +17,7 @@ export default function GalleryClient() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Gallery view controls
-  const [galleryMode, setGalleryMode] = useState<'before-after' | 'stages'>('before-after');
+  const [galleryMode, setGalleryMode] = useState<'before-after' | 'stages'>('stages');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [visibleCount, setVisibleCount] = useState<number>(6);
   const [activeModalItem, setActiveModalItem] = useState<GalleryItem | null>(null);
@@ -304,29 +304,31 @@ export default function GalleryClient() {
               )}
             </div>
 
-            {/* LOAD MORE BUTTON - Modern Minimalist Clinic Design (adds 4 on mobile = 2 rows) */}
+            {/* LOAD MORE BUTTON - Circular Down Chevron */}
             {hasMore && (
               <div className="gallery-load-more-wrap">
                 <button
                   type="button"
                   className="gallery-load-more-btn"
-                  onClick={() => setVisibleCount((prev) => prev + (isMobile ? 4 : 3))}
-                  aria-label="مشاهده نمونه کارهای بیشتر"
+                  onClick={(e) => {
+                    setVisibleCount((prev) => prev + (isMobile ? 4 : 3));
+                    e.currentTarget.blur();
+                  }}
+                  aria-label="نمایش نمونه کارهای بیشتر"
+                  title="نمایش بیشتر"
                 >
-                  <span className="gallery-load-more-text">نمایش موارد بیشتر</span>
-                  <span className="gallery-load-more-icon-circle" aria-hidden="true">
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="gallery-load-more-chevron-svg"
-                    >
-                      <polyline points="6 9 12 15 18 9" />
-                    </svg>
-                  </span>
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="3"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="gallery-load-more-chevron-svg"
+                    aria-hidden="true"
+                  >
+                    <polyline points="7 10 12 15 17 10" />
+                  </svg>
                 </button>
               </div>
             )}

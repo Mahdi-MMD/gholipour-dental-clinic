@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import Header from '@/components/Header';
@@ -20,7 +20,32 @@ export default function ServiceDetailClientView({
 }: ServiceDetailClientViewProps) {
   const [isBookingOpen, setIsBookingOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
+  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(
+    service.slug === 'implant' ? null : 0,
+  );
+
+  useEffect(() => {
+    if (service.slug !== 'implant') return;
+
+    const frame = window.requestAnimationFrame(() => {
+      document
+        .querySelectorAll<HTMLElement>('.service-page-implant .mobile-card-rail')
+        .forEach((rail) => {
+          const middleCard = rail.children[
+            Math.floor(rail.children.length / 2)
+          ] as HTMLElement | undefined;
+          if (!middleCard) return;
+
+          const railRect = rail.getBoundingClientRect();
+          const cardRect = middleCard.getBoundingClientRect();
+          const offset =
+            cardRect.left + cardRect.width / 2 - (railRect.left + railRect.width / 2);
+          rail.scrollLeft += offset;
+        });
+    });
+
+    return () => window.cancelAnimationFrame(frame);
+  }, [service.slug]);
 
   const handleOpenBooking = () => {
     setMobileMenuOpen(false);
@@ -43,7 +68,7 @@ export default function ServiceDetailClientView({
         setMobileMenuOpen={setMobileMenuOpen}
       />
 
-      <main className="service-page-main">
+      <main className={`service-page-main service-page-${service.slug}`}>
         {/* ====================================================
             1. HERO SECTION
             ==================================================== */}
@@ -62,58 +87,55 @@ export default function ServiceDetailClientView({
             <div className="service-hero-grid">
               <div className="service-hero-text">
                 <span className="service-badge-pill">
-                  <i className="fa-solid fa-certificate"></i>
+                  <i className="fa-solid fa-cube" aria-hidden="true"></i>
                   {service.heroBadge}
                 </span>
-                <h1 className="service-hero-title">{service.heroHeadline}</h1>
+                <h1 className="service-hero-title">
+                  <span>{service.heroHeadline}</span>
+                  {service.heroHeadlineAccent && (
+                    <span className="service-hero-title-accent">
+                      {service.heroHeadlineAccent}
+                    </span>
+                  )}
+                </h1>
                 <p className="service-hero-desc">{service.heroSubheadline}</p>
 
                 <div className="service-hero-actions">
                   <button
+                    type="button"
                     className="btn-primary open-booking-btn"
                     onClick={handleOpenBooking}
                   >
-                    <i className="fa-regular fa-calendar-check"></i>
-                    <span>رزرو نوبت مشاوره و معاینه</span>
+                    <i className="fa-regular fa-calendar-check" aria-hidden="true"></i>
+                    <span>رزرو جلسه مشاوره</span>
                   </button>
-                  <a href="tel:01333512753" className="btn-secondary-outline">
-                    <i className="fa-solid fa-phone-volume"></i>
+                  <a
+                    href="tel:01333512753"
+                    className="service-hero-call-link"
+                    aria-label="تماس با کلینیک قلی‌پور با شماره ۰۱۳-۳۳۵۱۲۷۵۳"
+                  >
+                    <i className="fa-solid fa-phone-volume" aria-hidden="true"></i>
                     <span>تماس مستقیم کلینیک</span>
                   </a>
                 </div>
-
-                <div className="service-trust-features">
-                  <div className="trust-item">
-                    <i className="fa-solid fa-circle-check"></i>
-                    <span>بی‌حسی مدرن و بدون درد</span>
-                  </div>
-                  <div className="trust-item">
-                    <i className="fa-solid fa-circle-check"></i>
-                    <span>اسکن سه‌بعدی و هدایت دیجیتال</span>
-                  </div>
-                  <div className="trust-item">
-                    <i className="fa-solid fa-circle-check"></i>
-                    <span>پشتیبانی شبانه‌روزی پس از درمان</span>
-                  </div>
-                </div>
               </div>
 
-              {/* Graphic Card */}
-              <div className="service-hero-graphic-card">
-                <div className="graphic-glow"></div>
+              <div className="service-hero-graphic-card" aria-hidden="true">
+                <div className="implant-hero-dot-pattern"></div>
+                <div className="implant-hero-orbit implant-hero-orbit-outer"></div>
+                <div className="implant-hero-orbit implant-hero-orbit-inner"></div>
+                <div className="implant-hero-orbit implant-hero-orbit-accent"></div>
+                <span className="implant-hero-node implant-hero-node-top"></span>
+                <span className="implant-hero-node implant-hero-node-bottom"></span>
                 <div className="graphic-image-wrapper">
                   <Image
                     src={service.heroIllustration}
-                    alt={service.title}
-                    width={260}
-                    height={260}
-                    className="graphic-image"
+                    alt="نمای سه‌بعدی ایمپلنت دندان در استخوان فک"
+                    width={700}
+                    height={600}
+                    className="graphic-image modern-implant-img"
                     priority
                   />
-                </div>
-                <div className="floating-experience-pill">
-                  <i className="fa-solid fa-shield-heart"></i>
-                  <span>تمرکز بر تجربه آرام و بدون استرس بیمار</span>
                 </div>
               </div>
             </div>
@@ -127,17 +149,37 @@ export default function ServiceDetailClientView({
           <div className="container">
             <div className="section-head-center">
               <span className="section-kicker">PAIN & ANXIETY CONTROL</span>
-              <h2 className="section-head-title">{service.painManagementHeadline}</h2>
-              <p className="section-head-lead">{service.painManagementLead}</p>
+              <h2 className="section-head-title">
+                <span className="desktop-copy">{service.painManagementHeadline}</span>
+                <span className="mobile-copy">
+                  {service.mobilePainManagementHeadline ?? service.painManagementHeadline}
+                </span>
+              </h2>
+              <p className="section-head-lead">
+                <span className="lead-desktop">{service.painManagementLead}</span>
+                <span className="lead-mobile">
+                  {service.mobilePainManagementLead ?? service.painManagementLead}
+                </span>
+              </p>
             </div>
 
-            <div className="pain-pillars-grid">
+            <div
+              className="pain-pillars-grid mobile-card-rail"
+              role="region"
+              aria-label="روش‌های کنترل درد و اضطراب"
+              tabIndex={0}
+            >
               {service.painManagementPillars.map((pillar, idx) => (
                 <div className="pain-pillar-card" key={idx}>
                   <div className="pillar-icon-box">
                     <i className={pillar.icon}></i>
                   </div>
-                  <h3 className="pillar-card-title">{pillar.title}</h3>
+                  <h3 className="pillar-card-title">
+                    <span className="desktop-copy">{pillar.title}</span>
+                    <span className="mobile-copy">
+                      {pillar.mobileTitle ?? pillar.title}
+                    </span>
+                  </h3>
                   <p className="pillar-card-desc">{pillar.description}</p>
                 </div>
               ))}
@@ -152,15 +194,37 @@ export default function ServiceDetailClientView({
           <div className="container">
             <div className="section-head-center">
               <span className="section-kicker">PRECISION DIAGNOSIS</span>
-              <h2 className="section-head-title">{service.diagnosisHeadline}</h2>
-              <p className="section-head-lead">{service.diagnosisLead}</p>
+              <h2 className="section-head-title">
+                <span className="desktop-copy">{service.diagnosisHeadline}</span>
+                <span className="mobile-copy">
+                  {service.mobileDiagnosisHeadline ?? service.diagnosisHeadline}
+                </span>
+              </h2>
+              <p className="section-head-lead">
+                <span className="lead-desktop">{service.diagnosisLead}</span>
+                <span className="lead-mobile">
+                  {service.mobileDiagnosisLead ?? service.diagnosisLead}
+                </span>
+              </p>
             </div>
 
-            <div className="diagnosis-grid">
+            <div
+              className="diagnosis-grid mobile-card-rail"
+              role="region"
+              aria-label="روش‌های تشخیص و برنامه‌ریزی دیجیتال"
+              tabIndex={0}
+            >
               {service.diagnosisFeatures.map((feat, idx) => (
                 <div className="diagnosis-card" key={idx}>
-                  <span className="diag-badge">{feat.badge}</span>
-                  <h3 className="diag-title">{feat.title}</h3>
+                  <div className="pillar-icon-box" aria-hidden="true">
+                    <i className={feat.icon}></i>
+                  </div>
+                  <h3 className="diag-title">
+                    <span className="desktop-copy">{feat.title}</span>
+                    <span className="mobile-copy">
+                      {feat.mobileTitle ?? feat.title}
+                    </span>
+                  </h3>
                   <p className="diag-desc">{feat.description}</p>
                 </div>
               ))}
@@ -175,8 +239,18 @@ export default function ServiceDetailClientView({
           <div className="container">
             <div className="section-head-center">
               <span className="section-kicker">PATIENT JOURNEY</span>
-              <h2 className="section-head-title">{service.journeyHeadline}</h2>
-              <p className="section-head-lead">{service.journeyLead}</p>
+              <h2 className="section-head-title">
+                <span className="desktop-copy">{service.journeyHeadline}</span>
+                <span className="mobile-copy">
+                  {service.mobileJourneyHeadline ?? service.journeyHeadline}
+                </span>
+              </h2>
+              <p className="section-head-lead">
+                <span className="lead-desktop">{service.journeyLead}</span>
+                <span className="lead-mobile">
+                  {service.mobileJourneyLead ?? service.journeyLead}
+                </span>
+              </p>
             </div>
 
             <div className="timeline-track">
@@ -185,22 +259,44 @@ export default function ServiceDetailClientView({
                   <div className="timeline-step-marker">{step.stepNumber}</div>
                   <div className="timeline-step-card">
                     <div className="step-card-header">
-                      <h3 className="step-card-title">{step.title}</h3>
+                      <h3 className="step-card-title">
+                        <span className="desktop-copy">{step.title}</span>
+                        <span className="mobile-copy">
+                          {step.mobileTitle ?? step.title}
+                        </span>
+                      </h3>
                       <span className="step-card-duration">{step.duration}</span>
                     </div>
                     <p className="step-card-summary">{step.summary}</p>
-                    <ul className="step-card-list">
-                      {step.details.map((detail, dIdx) => (
-                        <li key={dIdx}>
-                          <i className="fa-solid fa-angle-left"></i>
-                          <span>{detail}</span>
-                        </li>
-                      ))}
-                    </ul>
-                    <div className="step-comfort-box">
-                      <i className="fa-regular fa-smile"></i>
-                      <span>{step.patientComfortTip}</span>
+                    <div className="timeline-desktop-details">
+                      <ul className="step-card-list">
+                        {step.details.map((detail, dIdx) => (
+                          <li key={dIdx}>
+                            <i className="fa-solid fa-angle-left"></i>
+                            <span>{detail}</span>
+                          </li>
+                        ))}
+                      </ul>
+                      <div className="step-comfort-box">
+                        <i className="fa-regular fa-smile"></i>
+                        <span>{step.patientComfortTip}</span>
+                      </div>
                     </div>
+                    <details className="timeline-mobile-details">
+                      <summary>جزئیات و نکته مراقبتی</summary>
+                      <ul className="step-card-list">
+                        {step.details.map((detail, dIdx) => (
+                          <li key={dIdx}>
+                            <i className="fa-solid fa-angle-left" aria-hidden="true"></i>
+                            <span>{detail}</span>
+                          </li>
+                        ))}
+                      </ul>
+                      <div className="step-comfort-box">
+                        <i className="fa-regular fa-smile" aria-hidden="true"></i>
+                        <span>{step.patientComfortTip}</span>
+                      </div>
+                    </details>
                   </div>
                 </div>
               ))}
@@ -215,17 +311,37 @@ export default function ServiceDetailClientView({
           <div className="container">
             <div className="section-head-center">
               <span className="section-kicker">POST-OP SUPPORT & CARE</span>
-              <h2 className="section-head-title">{service.supportHeadline}</h2>
-              <p className="section-head-lead">{service.supportLead}</p>
+              <h2 className="section-head-title">
+                <span className="desktop-copy">{service.supportHeadline}</span>
+                <span className="mobile-copy">
+                  {service.mobileSupportHeadline ?? service.supportHeadline}
+                </span>
+              </h2>
+              <p className="section-head-lead">
+                <span className="lead-desktop">{service.supportLead}</span>
+                <span className="lead-mobile">
+                  {service.mobileSupportLead ?? service.supportLead}
+                </span>
+              </p>
             </div>
 
-            <div className="support-cards-grid">
+            <div
+              className="support-cards-grid mobile-card-rail"
+              role="region"
+              aria-label="پشتیبانی و مراقبت پس از درمان"
+              tabIndex={0}
+            >
               {service.supportCommitments.map((item, idx) => (
                 <div className="support-card" key={idx}>
                   <div className="support-icon-wrap">
                     <i className={item.icon}></i>
                   </div>
-                  <h3 className="support-card-title">{item.title}</h3>
+                  <h3 className="support-card-title">
+                    <span className="desktop-copy">{item.title}</span>
+                    <span className="mobile-copy">
+                      {item.mobileTitle ?? item.title}
+                    </span>
+                  </h3>
                   <p className="support-card-desc">{item.description}</p>
                 </div>
               ))}
@@ -234,7 +350,12 @@ export default function ServiceDetailClientView({
             {/* Quality Standards Banner */}
             <div className="quality-standard-banner">
               <div className="quality-text-col">
-                <h3>{service.qualityStandardTitle}</h3>
+                <h3>
+                  <span className="desktop-copy">{service.qualityStandardTitle}</span>
+                  <span className="mobile-copy">
+                    {service.mobileQualityStandardTitle ?? service.qualityStandardTitle}
+                  </span>
+                </h3>
                 <p>{service.qualityStandardDesc}</p>
               </div>
               <div className="quality-list-col">
@@ -256,9 +377,17 @@ export default function ServiceDetailClientView({
           <div className="container">
             <div className="section-head-center">
               <span className="section-kicker">FAQ & ANSWERS</span>
-              <h2 className="section-head-title">پاسخ به سوالات و نگرانی‌های متداول شما</h2>
+              <h2 className="section-head-title">
+                <span className="desktop-copy">پاسخ به سوالات و نگرانی‌های متداول شما</span>
+                <span className="mobile-copy">پرسش‌های رایج ایمپلنت</span>
+              </h2>
               <p className="section-head-lead">
-                شفافیت بالینی اصل اول ماست. در اینجا به رایج‌ترین پرسش‌های مراجعین پیش از درمان پاسخ داده‌ایم:
+                <span className="lead-desktop">
+                  شفافیت بالینی اصل اول ماست. در اینجا به رایج‌ترین پرسش‌های مراجعین پیش از درمان پاسخ داده‌ایم:
+                </span>
+                <span className="lead-mobile">
+                  پاسخ پرسش‌های رایج درباره درد، نقاهت، هزینه و ماندگاری ایمپلنت.
+                </span>
               </p>
             </div>
 
@@ -296,10 +425,15 @@ export default function ServiceDetailClientView({
             ==================================================== */}
         <section className="container">
           <div className="service-cta-banner">
-            <h3>آماده بازگرداندن لبخند کامل و لذت جویدن بدون درد هستید؟</h3>
+            <h3>
+              <span className="desktop-copy">آماده بازگرداندن لبخند کامل و جویدن بدون درد هستید؟</span>
+              <span className="mobile-copy">برای شروع ایمپلنت آماده‌اید؟</span>
+            </h3>
             <p>
-              برای بررسی وضعیت فک و دریافت مشاوره تخصصی از دکتر قلی‌پور، همین حالا نوبت خود را آنلاین ثبت کنید یا با شماره کلینیک تماس بگیرید.
+              برای بررسی وضعیت فک و دریافت مشاوره تخصصی در کلینیک دندانپزشکی قلی‌پور، همین حالا نوبت خود را آنلاین ثبت کنید یا با شماره کلینیک تماس بگیرید.
             </p>
+
+
             <div className="service-cta-buttons">
               <button
                 type="button"
@@ -311,7 +445,7 @@ export default function ServiceDetailClientView({
               </button>
               <a href="tel:01333512753" className="btn-cta-phone">
                 <i className="fa-solid fa-phone-volume"></i>
-                <span>تماس مستقیم: ۰۱۳-۳۳۵۱۲۷۵۳</span>
+                <span>تماس مستقیم: ۰۱۳۳۳۵۱۲۷۵۳</span>
               </a>
             </div>
           </div>

@@ -722,80 +722,82 @@
   transform: translateX(-3px);
 }
 
-/* ---------------- LOAD MORE BUTTON (MODERN MINIMALIST CLINIC AESTHETIC) ---------------- */
+/* ---------------- LOAD MORE BUTTON (CIRCULAR DOWN CHEVRON) ---------------- */
 .gallery-load-more-wrap {
   text-align: center;
   margin-top: 48px;
   position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .gallery-load-more-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
   background: #ffffff;
-  color: #122f3b;
-  border: 1px solid #d4e4eb;
-  padding: 10px 14px 10px 24px;
-  border-radius: var(--radius-pill);
-  font-family: 'PeydaWeb', 'Vazirmatn', sans-serif;
-  font-size: 14.5px;
-  font-weight: 700;
+  color: #1c83aa;
+  border: 2.5px solid #1c83aa;
+  padding: 0;
   cursor: pointer;
   transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 2px 10px rgba(18, 47, 59, 0.04), 0 1px 2px rgba(18, 47, 59, 0.02);
+  box-shadow: 0 4px 14px rgba(28, 67, 79, 0.12), 0 1px 3px rgba(28, 67, 79, 0.06);
   user-select: none;
   -webkit-tap-highlight-color: transparent;
-}
-
-.gallery-load-more-text {
-  letter-spacing: -0.2px;
-  transition: color 0.25s ease;
-}
-
-.gallery-load-more-icon-circle {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
-  border: 1.5px solid #1c83aa;
-  background: transparent;
-  color: #1c83aa;
-  transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
-  flex-shrink: 0;
+  outline: none;
 }
 
 .gallery-load-more-chevron-svg {
-  width: 13px;
-  height: 13px;
+  width: 22px;
+  height: 22px;
   display: block;
-  transition: transform 0.28s ease;
+  stroke: #1c83aa;
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), stroke 0.25s ease;
 }
 
+/* Hover & Active / Click States: turns blue with white arrow */
 .gallery-load-more-btn:hover {
-  background: #ffffff;
-  color: #1c83aa;
-  border-color: #1c83aa;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(28, 131, 170, 0.12);
-}
-
-.gallery-load-more-btn:hover .gallery-load-more-icon-circle {
   background: #1c83aa;
   border-color: #1c83aa;
   color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(28, 131, 170, 0.32);
 }
 
 .gallery-load-more-btn:hover .gallery-load-more-chevron-svg {
-  transform: translateY(1.5px);
+  stroke: #ffffff;
+  transform: translateY(2px);
 }
 
 .gallery-load-more-btn:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 8px rgba(28, 131, 170, 0.1);
+  background: #156b8c;
+  border-color: #156b8c;
+  color: #ffffff;
+  transform: translateY(1px) scale(0.95);
+  box-shadow: 0 3px 10px rgba(28, 131, 170, 0.22);
+}
+
+.gallery-load-more-btn:active .gallery-load-more-chevron-svg {
+  stroke: #ffffff;
+  transform: translateY(2.5px);
+}
+
+/* Ensure focus alone does not keep sticky blue background after click */
+.gallery-load-more-btn:focus:not(:hover):not(:active) {
+  background: #ffffff;
+  border-color: #1c83aa;
+  color: #1c83aa;
+  box-shadow: 0 4px 14px rgba(28, 67, 79, 0.12), 0 1px 3px rgba(28, 67, 79, 0.06);
+  transform: none;
+}
+
+.gallery-load-more-btn:focus:not(:hover):not(:active) .gallery-load-more-chevron-svg {
+  stroke: #1c83aa;
+  transform: none;
 }
 
 /* ---------------- MODAL / DETAIL DIALOG ---------------- */
@@ -1114,9 +1116,8 @@
   }
 
   .gallery-load-more-btn {
-    width: auto;
-    padding: 9px 16px 9px 20px;
-    gap: 10px;
+    width: 48px;
+    height: 48px;
   }
 }
 
@@ -1210,22 +1211,13 @@
   }
 
   .gallery-load-more-btn {
-    width: auto;
-    max-width: none;
-    padding: 8px 14px 8px 18px;
-    gap: 8px;
-    font-size: 13px;
-  }
-
-  .gallery-load-more-icon-circle {
-    width: 22px;
-    height: 22px;
-    border-width: 1.25px;
+    width: 46px;
+    height: 46px;
   }
 
   .gallery-load-more-chevron-svg {
-    width: 10px;
-    height: 10px;
+    width: 20px;
+    height: 20px;
   }
 }
 

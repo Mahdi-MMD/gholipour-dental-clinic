@@ -158,48 +158,55 @@
 
 .gallery-carousel-wrap {
   position: relative;
-  margin-top: 25px;
-  margin-left: auto;
-  margin-right: auto;
-  padding: 10px 0 25px;
-  max-width: 100%;
+  max-width: 1200px;
+  margin: 25px auto 0;
+  padding: 0 48px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .clinic-gallery-swiper {
-  padding: 30px 6px !important;
+  padding: 30px 0 !important;
   overflow: hidden !important;
   width: 100%;
   margin: 0 auto;
 }
 
-.gallery-slide {
-  transition: transform 0.6s cubic-bezier(0.25, 0.1, 0.25, 1),
-              opacity 0.6s ease,
-              filter 0.6s ease;
-  transform: scale(0.85);
-  opacity: 0.6;
-  filter: saturate(0.25) brightness(0.98);
-  cursor: pointer;
-  transform-origin: center center;
+@media (min-width: 1024px) {
+  .clinic-gallery-swiper {
+    padding-right: 0 !important;
+    padding-left: 0 !important;
+  }
 }
 
-.gallery-slide:not(.swiper-slide-active):not(.swiper-slide-duplicate-active):hover {
-  opacity: 0.85;
-  filter: saturate(0.65);
-  transform: scale(0.89);
+.gallery-slide {
+  position: relative;
+  transition: transform 0.4s ease, opacity 0.5s ease, filter 0.5s ease;
+  opacity: 0.65;
+  filter: saturate(0.3) brightness(0.98);
+  cursor: pointer;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+@media (hover: hover) and (min-width: 1024px) {
+  .gallery-slide:hover {
+    opacity: 0.88;
+    filter: saturate(0.65);
+    z-index: 12;
+  }
 }
 
 .gallery-slide.swiper-slide-active,
 .gallery-slide.swiper-slide-duplicate-active {
-  transform: scale(1.05);
-  opacity: 1;
-  filter: saturate(1) brightness(1);
-  z-index: 10;
-  cursor: default;
+  z-index: 1;
 }
 
 .gallery-card {
   position: relative;
+  width: 100%;
+  height: auto;
+  transition: transform 0.4s ease;
   border-radius: 24px;
   overflow: hidden;
   box-shadow: 0 10px 30px rgba(28, 67, 79, 0.08);
@@ -224,12 +231,46 @@
 }
 
 .gallery-slide.swiper-slide-active .gallery-card {
-  box-shadow: 0 22px 55px rgba(28, 131, 170, 0.22), 0 8px 24px rgba(0, 0, 0, 0.06);
-  border-color: rgba(28, 131, 170, 0.35);
+  box-shadow: 0 10px 30px rgba(28, 67, 79, 0.08);
+  border-color: var(--color-border);
 }
 
-.gallery-slide.swiper-slide-active .gallery-card-img-wrap img {
-  transform: scale(1.03);
+/* In RTL on desktop, Swiper's next slide is the middle card in the visible row. */
+@media (min-width: 1024px) {
+  .gallery-slide.swiper-slide-next {
+    z-index: 11;
+    opacity: 1;
+    filter: saturate(1) brightness(1);
+    cursor: default;
+  }
+
+  .gallery-slide.swiper-slide-next .gallery-card {
+    transform: scale(1.06);
+    box-shadow: 0 22px 55px rgba(28, 131, 170, 0.18), 0 8px 24px rgba(0, 0, 0, 0.06);
+    border-color: rgba(28, 131, 170, 0.35);
+  }
+
+  .gallery-slide.swiper-slide-next .gallery-card-img-wrap img {
+    transform: scale(1.03);
+  }
+}
+
+@media (max-width: 1023px) {
+  .gallery-slide.swiper-slide-active {
+    opacity: 1;
+    filter: saturate(1) brightness(1);
+    z-index: 10;
+    cursor: default;
+  }
+
+  .gallery-slide.swiper-slide-active .gallery-card {
+    box-shadow: 0 22px 55px rgba(28, 131, 170, 0.18), 0 8px 24px rgba(0, 0, 0, 0.06);
+    border-color: rgba(28, 131, 170, 0.35);
+  }
+
+  .gallery-slide.swiper-slide-active .gallery-card-img-wrap img {
+    transform: scale(1.03);
+  }
 }
 
 .gallery-card-overlay {
@@ -286,10 +327,18 @@
   z-index: 12;
 }
 
-.gallery-slide.swiper-slide-active::after,
-.gallery-slide.swiper-slide-duplicate-active::after {
+@media (min-width: 1024px) {
+  .gallery-slide.swiper-slide-next::after {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+}
+
+@media (max-width: 1023px) {
+  .gallery-slide.swiper-slide-active::after {
   opacity: 1;
   transform: scaleX(1);
+  }
 }
 
 /* Gallery Minimal Semi-Transparent Navigation Arrows (No Circle, Just Clean Chevrons) */
@@ -315,11 +364,11 @@
 }
 
 .gallery-arrow-right {
-  right: 14px;
+  right: 0px;
 }
 
 .gallery-arrow-left {
-  left: 14px;
+  left: 0px;
 }
 
 .gallery-arrow-btn:hover {
@@ -515,12 +564,16 @@
 }
 
 /* Responsive adjustments */
-@media (max-width: 1024px) {
+@media (max-width: 768px) {
+  .gallery-carousel-wrap {
+    padding: 0 32px;
+  }
+}
+
+@media (max-width: 1060px) {
   .about-highlights-grid {
     grid-template-columns: repeat(2, 1fr);
   }
-  .gallery-prev { left: 4px; }
-  .gallery-next { right: 4px; }
 }
 
 @media (max-width: 768px) {
@@ -580,9 +633,8 @@
   .about-highlight-desc {
     display: none;
   }
-  .gallery-prev, .gallery-next {
-    width: 38px;
-    height: 38px;
+  .gallery-arrow-btn {
+    font-size: 26px;
   }
   .gallery-slide {
     display: flex;
@@ -609,4 +661,3 @@
     font-size: 17px;
   }
 }
-

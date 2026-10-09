@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import Image from 'next/image';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -9,12 +9,13 @@ import FloatingBubble from '@/components/FloatingBubble';
 import ScrollIndicator from '@/components/ScrollIndicator';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Autoplay } from 'swiper/modules';
+import type { Swiper as SwiperInstance } from 'swiper';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
 import '@/app/about.css';
 
-const clinicGalleryImages = [
+const clinicGalleryImagesRaw = [
   {
     src: '/assets/clinic-waiting-room.webp',
     title: 'سالن انتظار و پذیرش مراجعین',
@@ -47,9 +48,12 @@ const clinicGalleryImages = [
   },
 ];
 
+const clinicGalleryImages = [...clinicGalleryImagesRaw, ...clinicGalleryImagesRaw];
+
 export default function AboutPage() {
   const [isBookingOpen, setIsBookingOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const clinicGallerySwiperRef = useRef<SwiperInstance | null>(null);
 
   const handleOpenBooking = () => {
     setMobileMenuOpen(false);
@@ -147,12 +151,15 @@ export default function AboutPage() {
             <div className="gallery-carousel-wrap">
               <Swiper
                 modules={[Navigation, Autoplay]}
+                onSwiper={(swiper) => {
+                  clinicGallerySwiperRef.current = swiper;
+                }}
                 slidesPerView={1}
                 centeredSlides={true}
                 spaceBetween={16}
                 loop={true}
-                speed={700}
-                slideToClickedSlide={true}
+                speed={600}
+                slideToClickedSlide={false}
                 grabCursor={true}
                 autoplay={{
                   delay: 4500,
@@ -164,21 +171,36 @@ export default function AboutPage() {
                   prevEl: '.gallery-arrow-right',
                 }}
                 breakpoints={{
-                  640: {
-                    slidesPerView: 1.8,
-                    spaceBetween: 20,
-                    centeredSlides: true,
-                  },
                   1024: {
                     slidesPerView: 3,
-                    spaceBetween: 24,
-                    centeredSlides: true,
+                    spaceBetween: 32,
+                    centeredSlides: false,
                   },
                 }}
-                className="clinic-gallery-swiper"
+                className="clinic-gallery-swiper center-carousel"
               >
                 {clinicGalleryImages.map((item, idx) => (
-                  <SwiperSlide key={idx} className="gallery-slide">
+                  <SwiperSlide
+                    key={idx}
+                    className="gallery-slide"
+                    onClick={(event) => {
+                      const swiper = clinicGallerySwiperRef.current;
+                      if (!swiper || window.innerWidth < 1024) return;
+
+                      const carouselRect = swiper.el.getBoundingClientRect();
+                      const slideRect = event.currentTarget.getBoundingClientRect();
+                      const distanceFromCenter =
+                        slideRect.left + slideRect.width / 2 -
+                        (carouselRect.left + carouselRect.width / 2);
+                      const sideThreshold = slideRect.width * 0.6;
+
+                      if (distanceFromCenter < -sideThreshold) {
+                        swiper.slideNext();
+                      } else if (distanceFromCenter > sideThreshold) {
+                        swiper.slidePrev();
+                      }
+                    }}
+                  >
                     <div className="gallery-card">
                       <div className="gallery-card-img-wrap">
                         <Image

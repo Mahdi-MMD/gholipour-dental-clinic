@@ -2749,7 +2749,7 @@ body.booking-drawer-open .site-header {
     margin: 2px 6px 6px 6px;
   }
   .drawer-submenu.open {
-    max-height: 220px;
+    max-height: 500px;
     opacity: 1;
     padding: 6px 0;
   }

@@ -4,13 +4,9 @@
    ========================================================== */
 
 .service-page-main {
-  padding-top: 90px;
+  padding-top: 28px;
   background-color: var(--color-white);
   overflow-x: clip;
-}
-
-.service-page-main.service-page-implant {
-  padding-top: 28px;
 }
 
 /* ----------------------------------------------------------
@@ -204,7 +200,7 @@
 }
 
 /* Implant hero: typographic layout with a curved image and abstract accents */
-.service-page-implant .service-hero-section {
+.service-page-main .service-hero-section {
   display: flex;
   align-items: center;
   min-height: clamp(650px, calc(100svh - 104px), 820px);
@@ -214,27 +210,27 @@
     linear-gradient(110deg, #f5fcff 0%, #ffffff 58%, #f9fdff 100%);
 }
 
-.service-page-implant .service-hero-section > .container {
+.service-page-main .service-hero-section > .container {
   width: 100%;
 }
 
-.service-page-implant .service-breadcrumbs {
+.service-page-main .service-breadcrumbs {
   margin-bottom: clamp(22px, 4vh, 42px);
 }
 
-.service-page-implant .service-hero-grid {
+.service-page-main .service-hero-grid {
   grid-template-columns: 0.86fr 1.14fr;
   align-items: center;
   gap: clamp(24px, 4vw, 64px);
 }
 
-.service-page-implant .service-hero-text {
+.service-page-main .service-hero-text {
   position: relative;
   z-index: 2;
   max-width: 610px;
 }
 
-.service-page-implant .service-badge-pill {
+.service-page-main .service-badge-pill {
   padding: 0;
   margin-bottom: 22px;
   background: transparent;
@@ -246,12 +242,12 @@
   font-weight: 700;
 }
 
-.service-page-implant .service-badge-pill i {
+.service-page-main .service-badge-pill i {
   color: var(--color-primary);
   font-size: 0.88rem;
 }
 
-.service-page-implant .service-hero-title {
+.service-page-main .service-hero-title {
   display: flex;
   flex-direction: column;
   gap: 2px;
@@ -262,58 +258,61 @@
   letter-spacing: -1.2px;
 }
 
-.service-page-implant .service-hero-title-accent {
+.service-page-main .service-hero-title-accent {
   color: var(--color-primary);
 }
 
-.service-page-implant .service-hero-desc {
+.service-page-main .service-hero-desc {
   max-width: 540px;
   margin-bottom: 30px;
   font-size: clamp(1.04rem, 1.3vw, 1.2rem);
   line-height: 1.95;
 }
 
-.service-page-implant .service-hero-actions {
+.service-page-main .service-hero-actions {
   gap: 14px 18px;
   margin-bottom: 0;
 }
 
-.service-page-implant .service-hero-actions .open-booking-btn {
+.service-page-main .service-hero-actions .open-booking-btn {
   min-height: 62px;
   padding: 16px 30px;
   font-size: 1rem;
   box-shadow: 0 14px 32px rgba(28, 131, 170, 0.24);
 }
 
-.service-page-implant .service-hero-call-link {
+.service-page-main .service-hero-call-link {
   min-height: 56px;
   padding: 12px 23px;
   border: 1.5px solid rgba(28, 131, 170, 0.72);
   border-radius: var(--radius-pill);
   background: rgba(255, 255, 255, 0.72);
   color: var(--color-primary);
+  transition: var(--transition);
 }
 
-.service-page-implant .service-hero-call-link:hover {
+.service-page-main .service-hero-call-link:hover {
   background: #ffffff;
   border-color: var(--color-primary-hover);
   color: var(--color-primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(28, 131, 170, 0.2);
 }
 
-.service-page-implant .service-hero-graphic-card {
+.service-page-main .service-hero-graphic-card {
   min-height: 500px;
   overflow: visible;
 }
 
-.service-page-implant .service-hero-graphic-card::before,
-.service-page-implant .service-hero-graphic-card::after {
+.service-page-main .service-hero-graphic-card::before,
+.service-page-main .service-hero-graphic-card::after {
   position: absolute;
   content: '';
   border-radius: 50%;
   pointer-events: none;
 }
 
-.service-page-implant .service-hero-graphic-card::before {
+.service-page-main .service-hero-graphic-card::before {
   z-index: -1;
   top: 1%;
   left: 3%;
@@ -322,7 +321,7 @@
   background: radial-gradient(circle at 47% 46%, rgba(197, 237, 250, 0.76), rgba(226, 246, 252, 0.22) 65%, transparent 70%);
 }
 
-.service-page-implant .service-hero-graphic-card::after {
+.service-page-main .service-hero-graphic-card::after {
   z-index: -1;
   top: -2%;
   left: -3%;
@@ -331,7 +330,7 @@
   border: 1px solid rgba(28, 131, 170, 0.17);
 }
 
-.service-page-implant .implant-hero-dot-pattern {
+.service-page-main .implant-hero-dot-pattern {
   position: absolute;
   z-index: -1;
   inset: 12% 8%;
@@ -341,34 +340,34 @@
   opacity: 0.42;
 }
 
-.service-page-implant .implant-hero-orbit {
+.service-page-main .implant-hero-orbit {
   position: absolute;
   border: 1px solid rgba(28, 131, 170, 0.18);
   border-radius: 50%;
   pointer-events: none;
 }
 
-.service-page-implant .implant-hero-orbit-outer {
+.service-page-main .implant-hero-orbit-outer {
   width: 88%;
   aspect-ratio: 1;
   transform: rotate(-24deg) scaleY(0.82);
 }
 
-.service-page-implant .implant-hero-orbit-inner {
+.service-page-main .implant-hero-orbit-inner {
   width: 70%;
   aspect-ratio: 1;
   border-color: rgba(28, 131, 170, 0.12);
   transform: rotate(24deg) scaleY(0.82);
 }
 
-.service-page-implant .implant-hero-orbit-accent {
+.service-page-main .implant-hero-orbit-accent {
   width: 96%;
   aspect-ratio: 1;
   border-color: rgba(28, 131, 170, 0.1);
   transform: rotate(12deg) scaleY(0.7);
 }
 
-.service-page-implant .graphic-image-wrapper {
+.service-page-main .graphic-image-wrapper {
   position: relative;
   z-index: 1;
   display: flex;
@@ -383,22 +382,67 @@
   box-shadow: none;
 }
 
-.service-page-implant .graphic-image {
+.service-page-main .graphic-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.service-page-implant .modern-implant-img {
+.service-page-main .modern-implant-img {
   max-width: none;
   transform: scale(0.92);
   border-radius: 46% 22% 38% 18%;
   object-position: center;
-  mix-blend-mode: multiply;
   filter: drop-shadow(0 20px 30px rgba(28, 67, 79, 0.14));
 }
 
-.service-page-implant .implant-hero-node {
+.service-page-implant .modern-implant-img {
+  mix-blend-mode: multiply;
+}
+
+/* Give the desktop service heroes room to breathe */
+@media (min-width: 992px) {
+  .service-page-main .container {
+    max-width: 1380px;
+  }
+
+  .service-page-main .service-hero-grid {
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: clamp(24px, 3.2vw, 48px);
+  }
+
+  .service-page-main .service-hero-text {
+    max-width: 700px;
+  }
+
+  .service-page-main .service-hero-title {
+    max-width: 700px;
+    font-size: clamp(2.8rem, 3.55vw, 3.9rem);
+  }
+
+  .service-page-main .graphic-image-wrapper {
+    width: 80%;
+    height: clamp(410px, 37vw, 500px);
+  }
+
+  .service-page-main .service-hero-graphic-card {
+    transform: translateX(14%);
+  }
+
+  .service-page-main .implant-hero-orbit-outer {
+    transform: translateY(-5%) rotate(-24deg) scaleY(0.82);
+  }
+
+  .service-page-main .implant-hero-orbit-inner {
+    transform: translateY(-2%) rotate(24deg) scaleY(0.82);
+  }
+
+  .service-page-main .implant-hero-orbit-accent {
+    transform: translateY(-2.5%) rotate(12deg) scaleY(0.7);
+  }
+}
+
+.service-page-main .implant-hero-node {
   position: absolute;
   z-index: 2;
   width: 12px;
@@ -409,12 +453,12 @@
   box-shadow: 0 0 0 5px rgba(28, 131, 170, 0.13);
 }
 
-.service-page-implant .implant-hero-node-top {
+.service-page-main .implant-hero-node-top {
   top: 15%;
   right: 23%;
 }
 
-.service-page-implant .implant-hero-node-bottom {
+.service-page-main .implant-hero-node-bottom {
   bottom: 18%;
   left: 18%;
   width: 9px;
@@ -422,7 +466,7 @@
   background: #8bc8da;
 }
 
-.service-page-implant .timeline-mobile-details {
+.service-page-main .timeline-mobile-details {
   display: none;
 }
 
@@ -1018,6 +1062,8 @@
   background: rgba(255, 255, 255, 0.22);
   border-color: #ffffff;
   color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.18);
 }
 
 /* ----------------------------------------------------------
@@ -1160,79 +1206,79 @@
 }
 
 @media (max-width: 991px) {
-  .service-page-implant .service-hero-section {
+  .service-page-main .service-hero-section {
     display: block;
     min-height: 0;
     padding: 28px 0 42px;
   }
 
-  .service-page-implant .service-hero-grid {
+  .service-page-main .service-hero-grid {
     grid-template-columns: 1fr;
     gap: 18px;
   }
 
-  .service-page-implant .service-hero-text {
+  .service-page-main .service-hero-text {
     max-width: 760px;
     margin: 0 auto;
     text-align: center;
   }
 
-  .service-page-implant .service-badge-pill {
+  .service-page-main .service-badge-pill {
     justify-content: center;
     margin-bottom: 16px;
   }
 
-  .service-page-implant .service-hero-title {
+  .service-page-main .service-hero-title {
     align-items: center;
     margin: 0 auto 16px;
     font-size: clamp(2.7rem, 6.5vw, 3.8rem);
   }
 
-  .service-page-implant .service-hero-desc {
+  .service-page-main .service-hero-desc {
     margin: 0 auto 24px;
   }
 
-  .service-page-implant .service-hero-actions {
+  .service-page-main .service-hero-actions {
     justify-content: center;
   }
 
-  .service-page-implant .service-hero-graphic-card {
+  .service-page-main .service-hero-graphic-card {
     min-height: 0;
     width: min(100%, 620px);
     height: clamp(360px, 52vw, 480px);
     margin: 0 auto;
   }
 
-  .service-page-implant .graphic-image-wrapper {
+  .service-page-main .graphic-image-wrapper {
     width: 82%;
     height: clamp(350px, 62vw, 500px);
   }
 }
 
 @media (max-width: 768px) {
-  .service-page-main.service-page-implant {
+  .service-page-main {
     padding-top: 20px;
   }
 
-  .service-page-implant .service-hero-section {
+  .service-page-main .service-hero-section {
     padding: 24px 0 34px;
   }
 
-  .service-page-implant .service-breadcrumbs {
+  .service-page-main .service-breadcrumbs {
     margin-bottom: 28px;
   }
 
-  .service-page-implant .service-hero-title {
+  .service-page-main .service-hero-title {
     font-size: clamp(2.3rem, 9.5vw, 3rem);
     line-height: 1.3;
   }
 
-  .service-page-implant .service-hero-desc {
+  .service-page-main .service-hero-desc {
     font-size: 1rem;
     line-height: 1.85;
   }
 
-  .service-page-implant .service-hero-actions {
+  .service-page-main .service-hero-actions {
     display: grid;
     grid-template-columns: 1fr;
     width: 100%;
@@ -1241,20 +1287,20 @@
     gap: 10px;
   }
 
-  .service-page-implant .service-hero-actions .open-booking-btn,
-  .service-page-implant .service-hero-call-link {
+  .service-page-main .service-hero-actions .open-booking-btn,
+  .service-page-main .service-hero-call-link {
     width: 100%;
     min-height: 54px;
     justify-content: center;
   }
 
-  .service-page-implant .service-hero-graphic-card {
+  .service-page-main .service-hero-graphic-card {
     width: 100%;
     height: clamp(310px, 82vw, 380px);
     margin-top: 12px;
   }
 
-  .service-page-implant .graphic-image-wrapper {
+  .service-page-main .graphic-image-wrapper {
     width: 82%;
     height: clamp(280px, 82vw, 360px);
   }
@@ -1262,16 +1308,16 @@
 
 /* Implant page: compact, touch-friendly phone layout */
 @media (max-width: 768px) {
-  .service-page-main.service-page-implant {
+  .service-page-main {
     padding-top: 12px;
   }
 
-  .service-page-implant .service-hero-section {
+  .service-page-main .service-hero-section {
     min-height: 0;
     padding: 16px 0 24px;
   }
 
-  .service-page-implant .service-breadcrumbs {
+  .service-page-main .service-breadcrumbs {
     flex-wrap: wrap;
     justify-content: center;
     gap: 4px 7px;
@@ -1279,16 +1325,16 @@
     font-size: 0.76rem;
   }
 
-  .service-page-implant .service-hero-grid {
+  .service-page-main .service-hero-grid {
     gap: 8px;
   }
 
-  .service-page-implant .service-badge-pill {
+  .service-page-main .service-badge-pill {
     margin-bottom: 8px;
     font-size: 0.82rem;
   }
 
-  .service-page-implant .service-hero-title {
+  .service-page-main .service-hero-title {
     gap: 0;
     max-width: 100%;
     margin-bottom: 10px;
@@ -1298,7 +1344,7 @@
     text-wrap: balance;
   }
 
-  .service-page-implant .service-hero-desc {
+  .service-page-main .service-hero-desc {
     max-width: 34rem;
     margin-bottom: 14px;
     font-size: 0.92rem;
@@ -1306,57 +1352,57 @@
     text-wrap: pretty;
   }
 
-  .service-page-implant .service-hero-actions {
+  .service-page-main .service-hero-actions {
     max-width: 340px;
     gap: 8px;
   }
 
-  .service-page-implant .service-hero-actions .open-booking-btn,
-  .service-page-implant .service-hero-call-link {
+  .service-page-main .service-hero-actions .open-booking-btn,
+  .service-page-main .service-hero-call-link {
     min-height: 46px;
     padding: 10px 16px;
     font-size: 0.9rem;
   }
 
-  .service-page-implant .service-hero-graphic-card {
+  .service-page-main .service-hero-graphic-card {
     height: clamp(200px, 58vw, 260px);
     margin-top: 4px;
   }
 
-  .service-page-implant .graphic-image-wrapper {
+  .service-page-main .graphic-image-wrapper {
     width: 76%;
     height: 100%;
   }
 
-  .service-page-implant .service-section-wrap {
+  .service-page-main .service-section-wrap {
     padding: 30px 0;
   }
 
-  .service-page-implant .section-head-center {
+  .service-page-main .section-head-center {
     margin-bottom: 18px;
   }
 
-  .service-page-implant .section-kicker {
+  .service-page-main .section-kicker {
     margin-bottom: 5px;
     font-size: 0.7rem;
   }
 
-  .service-page-implant .section-head-title {
+  .service-page-main .section-head-title {
     margin: 0 auto 8px;
     font-size: clamp(0.9rem, 4.8vw, 1.16rem);
     line-height: 1.5;
     white-space: nowrap;
   }
 
-  .service-page-implant .desktop-copy {
+  .service-page-main .desktop-copy {
     display: none;
   }
 
-  .service-page-implant .mobile-copy {
+  .service-page-main .mobile-copy {
     display: inline;
   }
 
-  .service-page-implant .section-head-lead {
+  .service-page-main .section-head-lead {
     max-width: 38rem;
     margin: 0 auto;
     font-size: 0.86rem;
@@ -1364,15 +1410,15 @@
     text-wrap: pretty;
   }
 
-  .service-page-implant .section-head-lead .lead-desktop {
+  .service-page-main .section-head-lead .lead-desktop {
     display: none;
   }
 
-  .service-page-implant .section-head-lead .lead-mobile {
+  .service-page-main .section-head-lead .lead-mobile {
     display: inline;
   }
 
-  .service-page-implant .mobile-card-rail {
+  .service-page-main .mobile-card-rail {
     display: flex;
     gap: 14px;
     overflow-x: auto;
@@ -1386,143 +1432,143 @@
     -webkit-overflow-scrolling: touch;
   }
 
-  .service-page-implant .mobile-card-rail:focus-visible {
+  .service-page-main .mobile-card-rail:focus-visible {
     outline: 2px solid var(--color-primary);
     outline-offset: 3px;
   }
 
-  .service-page-implant .mobile-card-rail > * {
+  .service-page-main .mobile-card-rail > * {
     flex: 0 0 calc(100vw - 44px);
     max-width: 420px;
     min-width: 0;
     scroll-snap-align: start;
   }
 
-  .service-page-implant .pain-pillar-card,
-  .service-page-implant .diagnosis-card,
-  .service-page-implant .support-card {
+  .service-page-main .pain-pillar-card,
+  .service-page-main .diagnosis-card,
+  .service-page-main .support-card {
     padding: 20px 18px;
   }
 
-  .service-page-implant .pillar-icon-box,
-  .service-page-implant .support-icon-wrap {
+  .service-page-main .pillar-icon-box,
+  .service-page-main .support-icon-wrap {
     width: 44px;
     height: 44px;
     margin-bottom: 12px;
     font-size: 1.1rem;
   }
 
-  .service-page-implant .pillar-card-title,
-  .service-page-implant .diag-title,
-  .service-page-implant .support-card-title {
+  .service-page-main .pillar-card-title,
+  .service-page-main .diag-title,
+  .service-page-main .support-card-title {
     margin-bottom: 8px;
     font-size: 1rem;
     line-height: 1.55;
     text-wrap: pretty;
   }
 
-  .service-page-implant .pillar-card-desc,
-  .service-page-implant .diag-desc,
-  .service-page-implant .support-card-desc {
+  .service-page-main .pillar-card-desc,
+  .service-page-main .diag-desc,
+  .service-page-main .support-card-desc {
     font-size: 0.88rem;
     line-height: 1.7;
   }
 
-  .service-page-implant .diag-badge {
+  .service-page-main .diag-badge {
     margin-bottom: 10px;
     font-size: 0.68rem;
   }
 
-  .service-page-implant .timeline-track::after {
+  .service-page-main .timeline-track::after {
     right: 15px;
   }
 
-  .service-page-implant .timeline-step-row {
+  .service-page-main .timeline-step-row {
     gap: 8px;
     margin-bottom: 14px;
   }
 
-  .service-page-implant .timeline-step-marker {
+  .service-page-main .timeline-step-marker {
     width: 32px;
     height: 32px;
     border-width: 3px;
     font-size: 0.75rem;
   }
 
-  .service-page-implant .timeline-step-card {
+  .service-page-main .timeline-step-card {
     min-width: 0;
     padding: 14px;
   }
 
-  .service-page-implant .step-card-header {
+  .service-page-main .step-card-header {
     align-items: flex-start;
     gap: 6px;
     margin-bottom: 7px;
   }
 
-  .service-page-implant .step-card-title {
+  .service-page-main .step-card-title {
     min-width: 0;
     font-size: 0.98rem;
     line-height: 1.5;
     text-wrap: balance;
   }
 
-  .service-page-implant .step-card-duration {
+  .service-page-main .step-card-duration {
     flex: 0 0 auto;
     font-size: 0.7rem;
     white-space: normal;
   }
 
-  .service-page-implant .step-card-summary {
+  .service-page-main .step-card-summary {
     margin-bottom: 8px;
     font-size: 0.86rem;
     line-height: 1.65;
   }
 
-  .service-page-implant .timeline-desktop-details {
+  .service-page-main .timeline-desktop-details {
     display: none;
   }
 
-  .service-page-implant .timeline-mobile-details {
+  .service-page-main .timeline-mobile-details {
     display: block;
     border-top: 1px solid rgba(28, 131, 170, 0.14);
     padding-top: 9px;
   }
 
-  .service-page-implant .timeline-mobile-details summary {
+  .service-page-main .timeline-mobile-details summary {
     color: var(--color-primary);
     cursor: pointer;
     font-size: 0.84rem;
     font-weight: 700;
   }
 
-  .service-page-implant .timeline-mobile-details[open] summary {
+  .service-page-main .timeline-mobile-details[open] summary {
     margin-bottom: 10px;
   }
 
-  .service-page-implant .timeline-mobile-details .step-card-list {
+  .service-page-main .timeline-mobile-details .step-card-list {
     gap: 7px;
     margin-bottom: 10px;
   }
 
-  .service-page-implant .timeline-mobile-details .step-card-list li {
+  .service-page-main .timeline-mobile-details .step-card-list li {
     gap: 7px;
     font-size: 0.82rem;
     line-height: 1.6;
   }
 
-  .service-page-implant .timeline-mobile-details .step-comfort-box {
+  .service-page-main .timeline-mobile-details .step-comfort-box {
     align-items: flex-start;
     padding: 9px 10px;
     font-size: 0.8rem;
     line-height: 1.6;
   }
 
-  .service-page-implant .support-cards-grid {
+  .service-page-main .support-cards-grid {
     margin-bottom: 20px;
   }
 
-  .service-page-implant .quality-standard-banner {
+  .service-page-main .quality-standard-banner {
     border: 1px solid rgba(28, 131, 170, 0.16);
     background: linear-gradient(135deg, #f2fbff 0%, #dff3fa 100%);
     color: var(--color-primary-dark);
@@ -1532,25 +1578,25 @@
     box-shadow: 0 10px 28px rgba(28, 131, 170, 0.12);
   }
 
-  .service-page-implant .quality-text-col h3 {
+  .service-page-main .quality-text-col h3 {
     margin-bottom: 8px;
     font-size: 1.08rem;
     line-height: 1.55;
     color: var(--color-primary-dark);
   }
 
-  .service-page-implant .quality-text-col p {
+  .service-page-main .quality-text-col p {
     font-size: 0.84rem;
     line-height: 1.65;
     color: #45616d;
   }
 
-  .service-page-implant .quality-list-col {
+  .service-page-main .quality-list-col {
     align-items: stretch;
     gap: 8px;
   }
 
-  .service-page-implant .quality-check-item {
+  .service-page-main .quality-check-item {
     align-items: flex-start;
     gap: 8px;
     font-size: 0.82rem;
@@ -1558,56 +1604,56 @@
     color: var(--color-primary-dark);
   }
 
-  .service-page-implant .quality-check-item i {
+  .service-page-main .quality-check-item i {
     color: var(--color-primary);
   }
 
-  .service-page-implant .service-faq-item {
+  .service-page-main .service-faq-item {
     margin-bottom: 9px;
   }
 
-  .service-page-implant .service-faq-question {
+  .service-page-main .service-faq-question {
     padding: 13px 14px;
     gap: 10px;
     font-size: 0.9rem;
     line-height: 1.55;
   }
 
-  .service-page-implant .service-faq-icon {
+  .service-page-main .service-faq-icon {
     width: 28px;
     height: 28px;
   }
 
-  .service-page-implant .service-faq-answer {
+  .service-page-main .service-faq-answer {
     padding: 10px 14px 14px;
     font-size: 0.86rem;
     line-height: 1.7;
   }
 
-  .service-page-implant .service-cta-banner {
+  .service-page-main .service-cta-banner {
     margin: 12px 0 28px;
     padding: 24px 16px;
   }
 
-  .service-page-implant .service-cta-banner h3 {
+  .service-page-main .service-cta-banner h3 {
     margin-bottom: 8px;
     font-size: 1.25rem;
     line-height: 1.5;
     text-wrap: balance;
   }
 
-  .service-page-implant .service-cta-banner p {
+  .service-page-main .service-cta-banner p {
     margin-bottom: 16px;
     font-size: 0.86rem;
     line-height: 1.7;
   }
 
-  .service-page-implant .service-cta-buttons {
+  .service-page-main .service-cta-buttons {
     gap: 8px;
   }
 
-  .service-page-implant .btn-cta-white,
-  .service-page-implant .btn-cta-phone {
+  .service-page-main .btn-cta-white,
+  .service-page-main .btn-cta-phone {
     min-height: 46px;
     padding: 10px 14px;
     font-size: 0.86rem;
@@ -1617,16 +1663,16 @@
 }
 
 @media (max-width: 380px) {
-  .service-page-main.service-page-implant .container {
+  .service-page-main .container {
     padding-right: 8px;
     padding-left: 8px;
   }
 
-  .service-page-implant .service-hero-title {
+  .service-page-main .service-hero-title {
     font-size: clamp(1.55rem, 7.4vw, 1.8rem);
   }
 
-  .service-page-implant .mobile-card-rail > * {
+  .service-page-main .mobile-card-rail > * {
     flex-basis: calc(100vw - 34px);
   }
 }
@@ -1737,8 +1783,281 @@
   }
 }
 
+/* ==========================================================
+   RELATED ARTICLES & RELATED SERVICES SECTIONS
+   ========================================================== */
+.related-articles-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  margin-bottom: 28px;
+}
 
+.related-article-card {
+  background: #ffffff;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s ease;
+  text-decoration: none;
+  color: inherit;
+}
 
+.related-article-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(28, 131, 170, 0.12);
+  border-color: var(--color-primary);
+}
 
+.related-article-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  font-size: 0.82rem;
+}
 
+.related-article-tag {
+  background: var(--color-sky-tint);
+  color: var(--color-primary-dark);
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-weight: 700;
+}
 
+.related-article-time {
+  color: var(--color-text-muted);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.related-article-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--color-primary-dark);
+  margin-bottom: 10px;
+  line-height: 1.5;
+  transition: color 0.2s ease;
+}
+
+.related-article-card:hover .related-article-title {
+  color: var(--color-primary);
+}
+
+.related-article-summary {
+  font-size: 0.92rem;
+  color: var(--color-text-body);
+  line-height: 1.7;
+  margin-bottom: 18px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-align: justify;
+}
+
+.related-article-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin-top: auto;
+}
+
+.related-articles-action {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.btn-more-articles {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 28px;
+  background: #ffffff;
+  color: var(--color-primary-dark);
+  border: 1.5px solid var(--color-primary);
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition: all 0.25s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-more-articles:hover {
+  background: var(--color-primary);
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(28, 131, 170, 0.25);
+}
+
+/* Related Services Grid */
+.related-services-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.related-service-card {
+  background: #ffffff;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+}
+
+.related-service-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(28, 131, 170, 0.12);
+  border-color: var(--color-primary);
+}
+
+.related-service-main {
+  display: flex;
+  flex-direction: column;
+}
+
+.related-service-icon-box {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: var(--color-sky-tint);
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  margin-bottom: 16px;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.related-service-card:hover .related-service-icon-box {
+  background: var(--color-primary);
+  color: #ffffff;
+}
+
+.related-service-card-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--color-primary-dark);
+  margin-bottom: 10px;
+  transition: color 0.2s ease;
+}
+
+.related-service-card:hover .related-service-card-title {
+  color: var(--color-primary);
+}
+
+.related-service-card-desc {
+  font-size: 0.92rem;
+  color: var(--color-text-body);
+  line-height: 1.7;
+  margin-bottom: 16px;
+  flex-grow: 1;
+  text-align: justify;
+}
+
+.related-service-card-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin-top: auto;
+}
+
+.related-service-arrow {
+  transition: transform 0.25s ease;
+}
+
+.related-service-card:hover .related-service-arrow {
+  transform: translateX(-4px);
+}
+
+@media (max-width: 991px) {
+  .related-articles-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Compact narrow vertical bar cards for mobile */
+  .related-services-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .related-service-card {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 13px 16px;
+    border-radius: 14px;
+    min-height: 56px;
+    background: #ffffff;
+    border: 1.5px solid var(--color-border);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  }
+
+  .related-service-card:hover,
+  .related-service-card:active {
+    transform: translateX(-4px);
+    background: #f8fdff;
+    border-color: var(--color-primary);
+    box-shadow: 0 6px 16px rgba(28, 131, 170, 0.14);
+  }
+
+  .related-service-main {
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .related-service-icon-box {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    font-size: 1.05rem;
+    margin-bottom: 0;
+  }
+
+  .related-service-card-title {
+    font-size: 0.98rem;
+    font-weight: 700;
+    margin-bottom: 0;
+  }
+
+  /* Hide long descriptive paragraph on mobile */
+  .related-service-card-desc {
+    display: none;
+  }
+
+  .related-service-card-link {
+    margin-top: 0;
+  }
+
+  /* Remove "مشاهده جزئیات خدمت" text on mobile, only retain arrow */
+  .related-service-link-text {
+    display: none;
+  }
+
+  .related-service-arrow {
+    font-size: 1.05rem;
+    color: var(--color-primary);
+  }
+}

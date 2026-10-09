@@ -12,12 +12,26 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.8,
   }));
 
-  const serviceEntries: MetadataRoute.Sitemap = Object.keys(SERVICES_DATA).map((slug) => ({
-    url: `${siteUrl}/services/${slug}`,
-    lastModified: new Date(),
-    changeFrequency: 'weekly',
-    priority: 0.9,
-  }));
+  // Only list canonical service URLs in sitemap, strictly excluding non-canonical alias URLs
+  const CANONICAL_SERVICE_SLUGS = [
+    'implant',
+    'veneers',
+    'root-canal',
+    'restorations',
+    'crowns',
+    'dentures',
+    'surgery',
+    'pediatric',
+  ];
+
+  const serviceEntries: MetadataRoute.Sitemap = CANONICAL_SERVICE_SLUGS
+    .filter((slug) => Boolean(SERVICES_DATA[slug]))
+    .map((slug) => ({
+      url: `${siteUrl}/services/${slug}`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.9,
+    }));
 
   return [
     {

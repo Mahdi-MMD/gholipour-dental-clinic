@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { SERVICES_DATA } from '@/data/servicesData';
 import ServiceDetailClientView from '@/components/service-detail/ServiceDetailClientView';
+import { getServiceRelations } from '@/data/serviceRelations';
 
 interface ServicePageProps {
   params: Promise<{
@@ -88,7 +89,7 @@ export default async function ServiceDetailPage({ params }: ServicePageProps) {
         about: {
           '@type': 'MedicalProcedure',
           name: service.title,
-          procedureType: 'https://schema.org/SurgicalProcedure',
+          procedureType: service.procedureType ?? 'https://schema.org/SurgicalProcedure',
           description: service.seoDescription,
           howPerformed: service.journeySteps
             .map((s) => `${s.stepNumber}. ${s.title}: ${s.summary}`)
@@ -132,8 +133,34 @@ export default async function ServiceDetailPage({ params }: ServicePageProps) {
           },
         })),
       },
+      {
+        '@type': 'BreadcrumbList',
+        '@id': `${pageUrl}#breadcrumb`,
+        itemListElement: [
+          {
+            '@type': 'ListItem',
+            position: 1,
+            name: 'صفحه اصلی',
+            item: siteUrl,
+          },
+          {
+            '@type': 'ListItem',
+            position: 2,
+            name: 'خدمات تخصصی',
+            item: `${siteUrl}/#services`,
+          },
+          {
+            '@type': 'ListItem',
+            position: 3,
+            name: service.title,
+            item: pageUrl,
+          },
+        ],
+      },
     ],
   };
+
+  const relations = getServiceRelations(slug);
 
   return (
     <>
@@ -141,7 +168,11 @@ export default async function ServiceDetailPage({ params }: ServicePageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaMarkup) }}
       />
-      <ServiceDetailClientView service={service} />
+      <ServiceDetailClientView
+        service={service}
+        relatedServices={relations.relatedServices}
+        relatedArticles={relations.relatedArticles}
+      />
     </>
   );
 }

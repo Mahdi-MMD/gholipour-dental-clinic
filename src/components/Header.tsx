@@ -80,29 +80,39 @@ export default function Header({
                   </Link>
                 </li>
                 <li>
-                  <a href={`${prefix}#services`} onClick={closeMobileMenu}>
-                    کامپوزیت و لیمنت
-                  </a>
+                  <Link href="/services/veneers" onClick={closeMobileMenu}>
+                    کامپوزیت و لمینت
+                  </Link>
                 </li>
                 <li>
-                  <a href={`${prefix}#services`} onClick={closeMobileMenu}>
+                  <Link href="/services/root-canal" onClick={closeMobileMenu}>
                     عصب کشی دندان
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href={`${prefix}#services`} onClick={closeMobileMenu}>
+                  <Link href="/services/restorations" onClick={closeMobileMenu}>
                     ترمیم دندان
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href={`${prefix}#services`} onClick={closeMobileMenu}>
+                  <Link href="/services/crowns" onClick={closeMobileMenu}>
                     روکش دندان
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href={`${prefix}#services`} onClick={closeMobileMenu}>
+                  <Link href="/services/dentures" onClick={closeMobileMenu}>
                     دندان مصنوعی
-                  </a>
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/services/surgery" onClick={closeMobileMenu}>
+                    جراحی و کشیدن دندان
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/services/pediatric" onClick={closeMobileMenu}>
+                    دندانپزشکی کودکان
+                  </Link>
                 </li>
               </ul>
             </li>

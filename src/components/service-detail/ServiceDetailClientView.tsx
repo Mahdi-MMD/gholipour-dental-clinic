@@ -9,43 +9,25 @@ import BookingDrawer from '@/components/BookingDrawer';
 import FloatingBubble from '@/components/FloatingBubble';
 import ScrollIndicator from '@/components/ScrollIndicator';
 import { ServiceDetailData } from '@/data/servicesData';
+import { RelatedServiceItem } from '@/data/serviceRelations';
+import { ArticleItem } from '@/data/articlesData';
 import '@/app/services/services.css';
 
 interface ServiceDetailClientViewProps {
   service: ServiceDetailData;
+  relatedServices?: RelatedServiceItem[];
+  relatedArticles?: ArticleItem[];
 }
 
 export default function ServiceDetailClientView({
   service,
+  relatedServices = [],
+  relatedArticles = [],
 }: ServiceDetailClientViewProps) {
   const [isBookingOpen, setIsBookingOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(
-    service.slug === 'implant' ? null : 0,
-  );
+  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
 
-  useEffect(() => {
-    if (service.slug !== 'implant') return;
-
-    const frame = window.requestAnimationFrame(() => {
-      document
-        .querySelectorAll<HTMLElement>('.service-page-implant .mobile-card-rail')
-        .forEach((rail) => {
-          const middleCard = rail.children[
-            Math.floor(rail.children.length / 2)
-          ] as HTMLElement | undefined;
-          if (!middleCard) return;
-
-          const railRect = rail.getBoundingClientRect();
-          const cardRect = middleCard.getBoundingClientRect();
-          const offset =
-            cardRect.left + cardRect.width / 2 - (railRect.left + railRect.width / 2);
-          rail.scrollLeft += offset;
-        });
-    });
-
-    return () => window.cancelAnimationFrame(frame);
-  }, [service.slug]);
 
   const handleOpenBooking = () => {
     setMobileMenuOpen(false);
@@ -130,7 +112,7 @@ export default function ServiceDetailClientView({
                 <div className="graphic-image-wrapper">
                   <Image
                     src={service.heroIllustration}
-                    alt="نمای سه‌بعدی ایمپلنت دندان در استخوان فک"
+                    alt={service.heroIllustrationAlt ?? service.title}
                     width={700}
                     height={600}
                     className="graphic-image modern-implant-img"
@@ -148,7 +130,9 @@ export default function ServiceDetailClientView({
         <section className="service-section-wrap" id="pain-control">
           <div className="container">
             <div className="section-head-center">
-              <span className="section-kicker">PAIN & ANXIETY CONTROL</span>
+              <span className="section-kicker">
+                {service.painManagementKicker ?? 'PAIN & ANXIETY CONTROL'}
+              </span>
               <h2 className="section-head-title">
                 <span className="desktop-copy">{service.painManagementHeadline}</span>
                 <span className="mobile-copy">
@@ -193,7 +177,9 @@ export default function ServiceDetailClientView({
         <section className="service-section-wrap alt-bg" id="diagnosis">
           <div className="container">
             <div className="section-head-center">
-              <span className="section-kicker">PRECISION DIAGNOSIS</span>
+              <span className="section-kicker">
+                {service.diagnosisKicker ?? 'PRECISION DIAGNOSIS'}
+              </span>
               <h2 className="section-head-title">
                 <span className="desktop-copy">{service.diagnosisHeadline}</span>
                 <span className="mobile-copy">
@@ -238,7 +224,9 @@ export default function ServiceDetailClientView({
         <section className="service-section-wrap" id="journey">
           <div className="container">
             <div className="section-head-center">
-              <span className="section-kicker">PATIENT JOURNEY</span>
+              <span className="section-kicker">
+                {service.journeyKicker ?? 'PATIENT JOURNEY'}
+              </span>
               <h2 className="section-head-title">
                 <span className="desktop-copy">{service.journeyHeadline}</span>
                 <span className="mobile-copy">
@@ -310,7 +298,9 @@ export default function ServiceDetailClientView({
         <section className="service-section-wrap alt-bg" id="aftercare">
           <div className="container">
             <div className="section-head-center">
-              <span className="section-kicker">POST-OP SUPPORT & CARE</span>
+              <span className="section-kicker">
+                {service.supportKicker ?? 'POST-OP SUPPORT & CARE'}
+              </span>
               <h2 className="section-head-title">
                 <span className="desktop-copy">{service.supportHeadline}</span>
                 <span className="mobile-copy">
@@ -376,17 +366,25 @@ export default function ServiceDetailClientView({
         <section className="service-section-wrap" id="faq">
           <div className="container">
             <div className="section-head-center">
-              <span className="section-kicker">FAQ & ANSWERS</span>
+              <span className="section-kicker">
+                {service.faqKicker ?? 'FAQ & ANSWERS'}
+              </span>
               <h2 className="section-head-title">
-                <span className="desktop-copy">پاسخ به سوالات و نگرانی‌های متداول شما</span>
-                <span className="mobile-copy">پرسش‌های رایج ایمپلنت</span>
+                <span className="desktop-copy">
+                  {service.faqHeadline ?? 'پاسخ به سوالات و نگرانی‌های متداول شما'}
+                </span>
+                <span className="mobile-copy">
+                  {service.mobileFaqHeadline ?? 'پرسش‌های رایج ایمپلنت'}
+                </span>
               </h2>
               <p className="section-head-lead">
                 <span className="lead-desktop">
-                  شفافیت بالینی اصل اول ماست. در اینجا به رایج‌ترین پرسش‌های مراجعین پیش از درمان پاسخ داده‌ایم:
+                  {service.faqLead ??
+                    'شفافیت بالینی اصل اول ماست. در اینجا به رایج‌ترین پرسش‌های مراجعین پیش از درمان پاسخ داده‌ایم:'}
                 </span>
                 <span className="lead-mobile">
-                  پاسخ پرسش‌های رایج درباره درد، نقاهت، هزینه و ماندگاری ایمپلنت.
+                  {service.mobileFaqLead ??
+                    'پاسخ پرسش‌های رایج درباره درد، نقاهت، هزینه و ماندگاری ایمپلنت.'}
                 </span>
               </p>
             </div>
@@ -421,16 +419,126 @@ export default function ServiceDetailClientView({
         </section>
 
         {/* ====================================================
-            7. CONVERSION CTA BANNER
+            7. RELATED ARTICLES (CLINICAL GUIDES)
+            ==================================================== */}
+        {relatedArticles.length > 0 && (
+          <section className="service-section-wrap alt-bg" id="related-articles">
+            <div className="container">
+              <div className="section-head-center">
+                <span className="section-kicker">CLINICAL KNOWLEDGE & GUIDES</span>
+                <h2 className="section-head-title">
+                  <span className="desktop-copy">مقالات و راهنماهای علمی مرتبط</span>
+                  <span className="mobile-copy">راهنماهای علمی مرتبط</span>
+                </h2>
+                <p className="section-head-lead">
+                  <span className="lead-desktop">
+                    برای افزایش آگاهی و تصمیم‌گیری دقیق‌تر پیش از درمان، مقالات تخصصی زیر را مطالعه نمایید:
+                  </span>
+                  <span className="lead-mobile">
+                    آشنایی با نکات علمی و توصیه‌های مراقبتی پیش و پس از درمان:
+                  </span>
+                </p>
+              </div>
+
+              <div className="related-articles-grid">
+                {relatedArticles.map((article) => (
+                  <Link
+                    key={article.slug}
+                    href={`/articles/${article.slug}`}
+                    className="related-article-card"
+                  >
+                    <div>
+                      <div className="related-article-meta">
+                        <span className="related-article-tag">{article.category}</span>
+                        <span className="related-article-time">
+                          <i className="fa-regular fa-clock"></i>
+                          <span>{article.readTime}</span>
+                        </span>
+                      </div>
+                      <h3 className="related-article-title">{article.title}</h3>
+                      <p className="related-article-summary">{article.summary}</p>
+                    </div>
+                    <div className="related-article-link">
+                      <span>مطالعه مقاله کامل</span>
+                      <i className="fa-solid fa-arrow-left"></i>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+
+              <div className="related-articles-action">
+                <Link href="/articles" className="btn-more-articles">
+                  <i className="fa-solid fa-book-open"></i>
+                  <span>مشاهده سایر مقالات و راهنماهای آموزشی</span>
+                </Link>
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* ====================================================
+            8. RELATED CLINICAL SERVICES
+            ==================================================== */}
+        {relatedServices.length > 0 && (
+          <section className="service-section-wrap" id="related-services">
+            <div className="container">
+              <div className="section-head-center">
+                <span className="section-kicker">COMPREHENSIVE CARE & SPECIALTIES</span>
+                <h2 className="section-head-title">
+                  <span className="desktop-copy">سایر خدمات تخصصی مرتبط در کلینیک</span>
+                  <span className="mobile-copy">خدمات مرتبط کلینیک</span>
+                </h2>
+                <p className="section-head-lead">
+                  <span className="lead-desktop">
+                    مراقبت‌های تکمیلی و درمان‌های همپوشان که ممکن است متناسب با شرایط دندانی خود به آن‌ها نیاز داشته باشید:
+                  </span>
+                  <span className="lead-mobile">
+                    خدمات دندانپزشکی مکمل برای سلامت و زیبایی کامل لبخند شما:
+                  </span>
+                </p>
+              </div>
+
+              <div className="related-services-grid">
+                {relatedServices.map((relService) => (
+                  <Link
+                    key={relService.slug}
+                    href={`/services/${relService.slug}`}
+                    className="related-service-card"
+                  >
+                    <div className="related-service-main">
+                      <div className="related-service-icon-box">
+                        <i className={relService.icon}></i>
+                      </div>
+                      <h3 className="related-service-card-title">{relService.title}</h3>
+                    </div>
+                    <p className="related-service-card-desc">{relService.summary}</p>
+                    <div className="related-service-card-link">
+                      <span className="related-service-link-text">مشاهده جزئیات خدمت</span>
+                      <i className="fa-solid fa-angle-left related-service-arrow"></i>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* ====================================================
+            9. CONVERSION CTA BANNER
             ==================================================== */}
         <section className="container">
           <div className="service-cta-banner">
             <h3>
-              <span className="desktop-copy">آماده بازگرداندن لبخند کامل و جویدن بدون درد هستید؟</span>
-              <span className="mobile-copy">برای شروع ایمپلنت آماده‌اید؟</span>
+              <span className="desktop-copy">
+                {service.ctaHeadline ?? 'آماده بازگرداندن لبخند کامل و جویدن بدون درد هستید؟'}
+              </span>
+              <span className="mobile-copy">
+                {service.mobileCtaHeadline ?? 'برای شروع ایمپلنت آماده‌اید؟'}
+              </span>
             </h3>
             <p>
-              برای بررسی وضعیت فک و دریافت مشاوره تخصصی در کلینیک دندانپزشکی قلی‌پور، همین حالا نوبت خود را آنلاین ثبت کنید یا با شماره کلینیک تماس بگیرید.
+              {service.ctaDescription ??
+                'برای بررسی وضعیت فک و دریافت مشاوره تخصصی در کلینیک دندانپزشکی قلی‌پور، همین حالا نوبت خود را آنلاین ثبت کنید یا با شماره کلینیک تماس بگیرید.'}
             </p>
 
 

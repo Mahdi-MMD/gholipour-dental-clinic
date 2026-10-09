@@ -228,34 +228,46 @@ export default function MobileMenu({
                       </Link>
                     </li>
                     <li>
-                      <a href={`${prefix}#services`} onClick={handleLinkClick}>
+                      <Link href="/services/veneers" onClick={handleLinkClick}>
                         <i className="fa-solid fa-chevron-left sub-dot"></i>
-                        <span>کامپوزیت و لیمنت</span>
-                      </a>
+                        <span>کامپوزیت و لمینت</span>
+                      </Link>
                     </li>
                     <li>
-                      <a href={`${prefix}#services`} onClick={handleLinkClick}>
+                      <Link href="/services/root-canal" onClick={handleLinkClick}>
                         <i className="fa-solid fa-chevron-left sub-dot"></i>
                         <span>عصب کشی دندان</span>
-                      </a>
+                      </Link>
                     </li>
                     <li>
-                      <a href={`${prefix}#services`} onClick={handleLinkClick}>
+                      <Link href="/services/restorations" onClick={handleLinkClick}>
                         <i className="fa-solid fa-chevron-left sub-dot"></i>
                         <span>ترمیم دندان</span>
-                      </a>
+                      </Link>
                     </li>
                     <li>
-                      <a href={`${prefix}#services`} onClick={handleLinkClick}>
+                      <Link href="/services/crowns" onClick={handleLinkClick}>
                         <i className="fa-solid fa-chevron-left sub-dot"></i>
                         <span>روکش دندان</span>
-                      </a>
+                      </Link>
                     </li>
                     <li>
-                      <a href={`${prefix}#services`} onClick={handleLinkClick}>
+                      <Link href="/services/dentures" onClick={handleLinkClick}>
                         <i className="fa-solid fa-chevron-left sub-dot"></i>
                         <span>دندان مصنوعی</span>
-                      </a>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link href="/services/surgery" onClick={handleLinkClick}>
+                        <i className="fa-solid fa-chevron-left sub-dot"></i>
+                        <span>جراحی و کشیدن دندان</span>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link href="/services/pediatric" onClick={handleLinkClick}>
+                        <i className="fa-solid fa-chevron-left sub-dot"></i>
+                        <span>دندانپزشکی کودکان</span>
+                      </Link>
                     </li>
                   </ul>
                 </div>

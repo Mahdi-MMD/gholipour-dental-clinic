@@ -455,7 +455,10 @@ export default function ServiceDetailClientView({
                           <span>{article.readTime}</span>
                         </span>
                       </div>
-                      <h3 className="related-article-title">{article.title}</h3>
+                      <h3 className="related-article-title">
+                        <span className="desktop-copy">{article.title}</span>
+                        <span className="mobile-copy">{article.seoTitle || article.title}</span>
+                      </h3>
                       <p className="related-article-summary">{article.summary}</p>
                     </div>
                     <div className="related-article-link">

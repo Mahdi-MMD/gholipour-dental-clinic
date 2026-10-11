@@ -426,8 +426,6 @@ input {
   grid-template-columns: 1.15fr 0.85fr;
   align-items: center;
   gap: 40px;
-  animation: heroEntranceBounce 1.25s cubic-bezier(0.215, 0.61, 0.355, 1) both;
-  will-change: transform, opacity;
 }
 
 @keyframes heroEntranceBounce {

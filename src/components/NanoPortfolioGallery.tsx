@@ -169,7 +169,21 @@ export default function NanoPortfolioGallery() {
       }
     };
 
-    initializeGallery();
+    const observer = new IntersectionObserver(
+      entries => {
+        if (entries[0]?.isIntersecting) {
+          observer.disconnect();
+          initializeGallery();
+        }
+      },
+      { rootMargin: '300px' }
+    );
+
+    if (galleryRef.current) {
+      observer.observe(galleryRef.current);
+    } else {
+      initializeGallery();
+    }
 
     return () => {
       isMounted = false;

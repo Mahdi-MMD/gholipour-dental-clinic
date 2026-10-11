@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import dynamic from 'next/dynamic';
 import Header from '@/components/Header';
 import Hero from '@/components/Hero';
 import Services from '@/components/Services';
@@ -9,9 +10,10 @@ import Testimonials from '@/components/Testimonials';
 import Doctors from '@/components/Doctors';
 import Articles from '@/components/Articles';
 import Footer from '@/components/Footer';
-import BookingDrawer from '@/components/BookingDrawer';
-import FloatingBubble from '@/components/FloatingBubble';
-import ScrollIndicator from '@/components/ScrollIndicator';
+
+const BookingDrawer = dynamic(() => import('@/components/BookingDrawer'), { ssr: false });
+const FloatingBubble = dynamic(() => import('@/components/FloatingBubble'), { ssr: false });
+const ScrollIndicator = dynamic(() => import('@/components/ScrollIndicator'), { ssr: false });
 
 export default function HomeClientView() {
   const [isBookingOpen, setIsBookingOpen] = useState(false);

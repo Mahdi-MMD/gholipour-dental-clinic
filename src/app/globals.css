@@ -282,6 +282,7 @@ input {
 .logo-img {
   height: 52px;
   width: auto;
+  aspect-ratio: 160 / 52;
   object-fit: contain;
   display: block;
   transition: transform 0.3s ease;
@@ -487,6 +488,8 @@ input {
 
 .hero-img {
   max-width: 95%;
+  height: auto;
+  aspect-ratio: 600 / 660;
   margin: 0 auto;
   border-radius: 0;
   filter: drop-shadow(0 20px 40px rgba(28, 67, 79, 0.16));

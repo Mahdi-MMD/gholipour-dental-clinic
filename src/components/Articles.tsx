@@ -98,9 +98,11 @@ export default function Articles({ onOpenBooking }: ArticlesProps) {
                         <Image
                           src={imageSrc}
                           alt={art.imageAlt || displayTitle}
-                          width={600}
-                          height={420}
-                          loading="eager"
+                          width={400}
+                          height={280}
+                          loading="lazy"
+                          sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 380px"
+                          quality={75}
                         />
                       </Link>
                     </div>

@@ -75,9 +75,11 @@ export default function Doctors() {
                   <Image
                     src={doc.img}
                     alt={`${doc.name} - ${doc.title}`}
-                    width={469}
-                    height={512}
-                    priority={idx === 0}
+                    width={400}
+                    height={440}
+                    loading="lazy"
+                    sizes="(max-width: 768px) 85vw, 380px"
+                    quality={75}
                   />
                   <div className="doctor-card-bottom-spacer" aria-hidden="true" />
                 </div>
@@ -138,9 +140,11 @@ export default function Doctors() {
                   <Image
                     src={doc.img}
                     alt={`${doc.name} - ${doc.title}`}
-                    width={469}
-                    height={512}
-                    loading="eager"
+                    width={400}
+                    height={440}
+                    loading="lazy"
+                    sizes="(max-width: 1024px) 50vw, 360px"
+                    quality={75}
                   />
                 </div>
               </SwiperSlide>

@@ -143,7 +143,7 @@ export default function Testimonials() {
                           alt="مراجع کلینیک دندانپزشکی قلی‌پور"
                           width={48}
                           height={48}
-                          loading="eager"
+                          loading="lazy"
                         />
                       </div>
                       <div className="v-card-meta">

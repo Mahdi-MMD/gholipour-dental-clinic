@@ -132,6 +132,7 @@ export default function Testimonials() {
                   key={idx}
                   className={`vertical-carousel-item ${posClass}`}
                   data-index={idx}
+                  aria-hidden={posClass !== 'active'}
                   onClick={() => setCurrentIndex(idx)}
                 >
                   <div className="v-card-inner">

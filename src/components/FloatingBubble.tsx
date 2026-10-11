@@ -105,10 +105,11 @@ export default function FloatingBubble({ isMobileMenuOpen = false }: FloatingBub
 
       {/* Main Floating Trigger Button */}
       <div className="social-btn-icon3" id="socialBtnIcon3">
-        <label className="hamburger3" htmlFor="socialBubbleInput" aria-label="ارتباط سریع">
+        <label className="hamburger3" htmlFor="socialBubbleInput">
           <input
             type="checkbox"
             id="socialBubbleInput"
+            aria-label="ارتباط سریع با کلینیک"
             checked={isOpen}
             onChange={e => setIsOpen(e.target.checked)}
           />

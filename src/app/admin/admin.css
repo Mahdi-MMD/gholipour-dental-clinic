@@ -281,3 +281,71 @@
   padding: 18px;
   margin-bottom: 16px;
 }
+
+/* Split-View & Live Preview Layout */
+.admin-editor-layout-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+@media (max-width: 1024px) {
+  .admin-editor-layout-split {
+    grid-template-columns: 1fr;
+  }
+}
+
+.admin-preview-sticky-container {
+  position: sticky;
+  top: 90px;
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+  border-radius: 16px;
+}
+
+.admin-mode-pill {
+  display: inline-flex;
+  background: #eef6f9;
+  border-radius: 10px;
+  padding: 4px;
+  gap: 4px;
+}
+
+.admin-mode-btn {
+  padding: 6px 14px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: #5a7d8c;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.admin-mode-btn.active {
+  background: #ffffff;
+  color: #1c83aa;
+  box-shadow: 0 2px 8px rgba(28, 67, 79, 0.08);
+}
+
+.admin-file-upload-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: #e3f9ff;
+  color: #1c83aa;
+  border: 1px solid #bce1f5;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.admin-file-upload-btn:hover {
+  background: #d4f3fd;
+}

@@ -1,0 +1,13 @@
+.next
+node_modules
+dist
+build
+coverage
+*.tsbuildinfo
+package-lock.json
+.env*.local
+public/assets
+admin-verification-screenshots
+.chrome-admin-test
+.chrome-debug
+.husky

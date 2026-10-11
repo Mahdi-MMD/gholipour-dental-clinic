@@ -9,7 +9,12 @@ import FloatingBubble from '@/components/FloatingBubble';
 import ScrollIndicator from '@/components/ScrollIndicator';
 import MeridiqSlider from '@/components/gallery/MeridiqSlider';
 import StagesCard from '@/components/gallery/StagesCard';
-import { GALLERY_ITEMS, GALLERY_CATEGORIES, GalleryItem, GALLERY_TITLE_MAX_CHARS } from '@/data/galleryData';
+import {
+  GALLERY_ITEMS,
+  GALLERY_CATEGORIES,
+  GalleryItem,
+  GALLERY_TITLE_MAX_CHARS,
+} from '@/data/galleryData';
 import '@/app/gallery.css';
 
 export default function GalleryClient() {
@@ -29,7 +34,7 @@ export default function GalleryClient() {
     const checkMobile = () => {
       const mobile = window.innerWidth <= 768;
       setIsMobile(mobile);
-      setVisibleCount((prev) => (mobile ? Math.min(prev, 4) : Math.max(prev, 6)));
+      setVisibleCount(prev => (mobile ? Math.min(prev, 4) : Math.max(prev, 6)));
     };
 
     checkMobile();
@@ -61,16 +66,16 @@ export default function GalleryClient() {
 
   // Filter items according to category
   const filteredItems = useMemo(() => {
-    const activeCatObj = GALLERY_CATEGORIES.find((c) => c.id === selectedCategory);
+    const activeCatObj = GALLERY_CATEGORIES.find(c => c.id === selectedCategory);
 
-    return GALLERY_ITEMS.filter((item) => {
+    return GALLERY_ITEMS.filter(item => {
       if (selectedCategory === 'all') return true;
       if (!activeCatObj?.match) return true;
       return activeCatObj.match.some(
-        (m) =>
+        m =>
           item.categoryLabel.includes(m) ||
           item.subCategoryLabel.includes(m) ||
-          item.tags.some((t) => t.includes(m))
+          item.tags.some(t => t.includes(m))
       );
     });
   }, [selectedCategory]);
@@ -94,7 +99,7 @@ export default function GalleryClient() {
           <div className="gallery-hero-bg-wrap">
             <Image
               src="/assets/gallery/hero-smile-banner-hd.webp"
-              alt="طراحی لبخند کلینیک دندانپزشکی دکتر قلی‌پور"
+              alt="طراحی لبخند کلینیک دندانپزشکی قلی‌پور"
               fill
               className="gallery-hero-bg-img"
               priority
@@ -131,15 +136,13 @@ export default function GalleryClient() {
           <div className="container gallery-controls-container">
             {/* Right side: Desktop Category Chips */}
             <div className="gallery-categories gallery-categories-desktop" role="tablist">
-              {GALLERY_CATEGORIES.map((cat) => (
+              {GALLERY_CATEGORIES.map(cat => (
                 <button
                   key={cat.id}
                   type="button"
                   role="tab"
                   aria-selected={selectedCategory === cat.id}
-                  className={`gallery-cat-pill ${
-                    selectedCategory === cat.id ? 'active' : ''
-                  }`}
+                  className={`gallery-cat-pill ${selectedCategory === cat.id ? 'active' : ''}`}
                   onClick={() => {
                     setSelectedCategory(cat.id);
                     setVisibleCount(isMobile ? 4 : 6);
@@ -155,7 +158,7 @@ export default function GalleryClient() {
               <button
                 type="button"
                 className={`gallery-cat-mobile-btn ${categoryDropdownOpen ? 'active' : ''}`}
-                onClick={() => setCategoryDropdownOpen((prev) => !prev)}
+                onClick={() => setCategoryDropdownOpen(prev => !prev)}
                 aria-expanded={categoryDropdownOpen}
                 aria-label="انتخاب دسته‌بندی"
               >
@@ -170,14 +173,14 @@ export default function GalleryClient() {
                 <span className="gallery-cat-mobile-btn-text">
                   {selectedCategory === 'all'
                     ? 'دسته‌بندی'
-                    : GALLERY_CATEGORIES.find((c) => c.id === selectedCategory)?.label || 'دسته‌بندی'}
+                    : GALLERY_CATEGORIES.find(c => c.id === selectedCategory)?.label || 'دسته‌بندی'}
                 </span>
               </button>
 
               {/* Mobile Category Dropdown Menu */}
               {categoryDropdownOpen && (
                 <div className="gallery-cat-mobile-dropdown-menu" role="menu">
-                  {GALLERY_CATEGORIES.map((cat) => (
+                  {GALLERY_CATEGORIES.map(cat => (
                     <button
                       key={cat.id}
                       type="button"
@@ -202,7 +205,11 @@ export default function GalleryClient() {
             </div>
 
             {/* Left side: Dual Mode Pill Button (مراحل کار / قبل و بعد) */}
-            <div className="gallery-mode-pill-toggle" role="group" aria-label="انتخاب نوع نمایش گالری">
+            <div
+              className="gallery-mode-pill-toggle"
+              role="group"
+              aria-label="انتخاب نوع نمایش گالری"
+            >
               {/* Left half: مراحل کار */}
               <button
                 type="button"
@@ -232,7 +239,7 @@ export default function GalleryClient() {
         <section className="gallery-grid-section">
           <div className="container">
             <div className="gallery-cards-grid">
-              {displayedList.map((item) => (
+              {displayedList.map(item => (
                 <article key={item.id} className="gallery-item-card">
                   {/* Mode 1: Before & After Split Screen Slider | Mode 2: Treatment Stages with Fancybox */}
                   {galleryMode === 'before-after' ? (
@@ -251,7 +258,7 @@ export default function GalleryClient() {
                     onClick={() => setActiveModalItem(item)}
                     role="button"
                     tabIndex={0}
-                    onKeyDown={(e) => {
+                    onKeyDown={e => {
                       if (e.key === 'Enter' || e.key === ' ') {
                         e.preventDefault();
                         setActiveModalItem(item);
@@ -260,10 +267,7 @@ export default function GalleryClient() {
                     aria-label={`مشاهده جزئیات ${item.title}`}
                   >
                     <div className="gallery-card-text">
-                      <h3
-                        className="gallery-card-title"
-                        title={item.title}
-                      >
+                      <h3 className="gallery-card-title" title={item.title}>
                         {item.title.length > GALLERY_TITLE_MAX_CHARS
                           ? `${item.title.slice(0, GALLERY_TITLE_MAX_CHARS)}...`
                           : item.title}
@@ -282,7 +286,7 @@ export default function GalleryClient() {
                     <button
                       type="button"
                       className="gallery-card-cta-btn"
-                      onClick={(e) => {
+                      onClick={e => {
                         e.stopPropagation();
                         setActiveModalItem(item);
                       }}
@@ -310,8 +314,8 @@ export default function GalleryClient() {
                 <button
                   type="button"
                   className="gallery-load-more-btn"
-                  onClick={(e) => {
-                    setVisibleCount((prev) => prev + (isMobile ? 4 : 3));
+                  onClick={e => {
+                    setVisibleCount(prev => prev + (isMobile ? 4 : 3));
                     e.currentTarget.blur();
                   }}
                   aria-label="نمایش نمونه کارهای بیشتر"
@@ -344,11 +348,7 @@ export default function GalleryClient() {
           role="dialog"
           aria-modal="true"
         >
-          <div
-            className="gallery-modal-dialog"
-            onClick={(e) => e.stopPropagation()}
-            dir="rtl"
-          >
+          <div className="gallery-modal-dialog" onClick={e => e.stopPropagation()} dir="rtl">
             <button
               type="button"
               className="gallery-modal-close"

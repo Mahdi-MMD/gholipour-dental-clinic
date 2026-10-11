@@ -10,8 +10,11 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "clean": "node -e \"require('fs').rmSync('.next', { recursive: true, force: true })\"",
-    "dev:clean": "npm run clean && npm run dev"
+    "dev:clean": "npm run clean && npm run dev",
+    "prepare": "husky"
   },
   "dependencies": {
     "@fancyapps/ui": "^6.1.15",
@@ -26,6 +29,17 @@
     "@types/node": "^22.0.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.6.0",
+    "prettier": "^3.9.10",
     "typescript": "^5.7.0"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx}": [
+      "prettier --write"
+    ],
+    "*.{css,json,md}": [
+      "prettier --write"
+    ]
   }
 }

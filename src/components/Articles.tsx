@@ -84,7 +84,7 @@ export default function Articles({ onOpenBooking }: ArticlesProps) {
               },
             }}
           >
-            {latestArticles.map((art) => {
+            {latestArticles.map(art => {
               const articleHref = `/articles/${art.slug}`;
               const imageSrc = art.image || '/assets/article-implant-care.webp';
               const displayTitle = art.seoTitle || art.title;
@@ -94,10 +94,7 @@ export default function Articles({ onOpenBooking }: ArticlesProps) {
                 <SwiperSlide key={art.id || art.slug} className="article-slide">
                   <article className="article-interactive-card">
                     <div className="article-photo-wrap">
-                      <Link
-                        href={articleHref}
-                        className="article-photo-link"
-                      >
+                      <Link href={articleHref} className="article-photo-link">
                         <Image
                           src={imageSrc}
                           alt={art.imageAlt || displayTitle}
@@ -118,10 +115,7 @@ export default function Articles({ onOpenBooking }: ArticlesProps) {
                       </div>
                       <p className="article-box-excerpt">{excerptText}</p>
                       <div className="article-card-footer">
-                        <Link
-                          href={articleHref}
-                          className="article-read-more"
-                        >
+                        <Link href={articleHref} className="article-read-more">
                           <span>مشاهده جزئیات</span>
                           <i className="fa-solid fa-arrow-left"></i>
                         </Link>

@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- Scaled group for prominent, recognizable root canal / endodontics display -->
+  <g transform="translate(50, 50) scale(0.96) translate(-50, -50)">
+    
+    <!-- Anatomical Molar Crown Outline and Dual Roots -->
+    <path 
+      d="M 28 43
+         C 26 31 29 20 40 19
+         C 45 18.5 48 21.5 50 22.5
+         C 52 21.5 55 18.5 60 19
+         C 71 20 74 31 72 43
+         C 70 54 68 70 65 83
+         C 63 88 58 88 56 83
+         C 53 73 51 62 50 56
+         C 49 62 47 73 44 83
+         C 42 88 37 88 35 83
+         C 32 70 30 54 28 43 Z" 
+      stroke="#1c2d37" 
+      stroke-width="2.7" 
+      stroke-linecap="round" 
+      stroke-linejoin="round"
+    />
+
+    <!-- Crown Occlusal Cusps Groove -->
+    <path 
+      d="M 38 24 C 43 29 47 30 50 30 C 53 30 57 29 62 24" 
+      stroke="#1c2d37" 
+      stroke-width="2.1" 
+      stroke-linecap="round"
+    />
+
+    <!-- Internal Pulp Chamber -->
+    <path 
+      d="M 40 37
+         C 42 33 46 32 50 32
+         C 54 32 58 33 60 37
+         C 61 41 58 45 50 45
+         C 42 45 39 41 40 37 Z" 
+      stroke="#1c2d37" 
+      stroke-width="2.2" 
+      stroke-linecap="round" 
+      stroke-linejoin="round"
+    />
+
+    <!-- Left Root Canal Pathway -->
+    <path 
+      d="M 44 45 
+         C 45 55 44 68 40 80" 
+      stroke="#1c2d37" 
+      stroke-width="2.3" 
+      stroke-linecap="round"
+      stroke-dasharray="2 3"
+    />
+
+    <!-- Right Root Canal Pathway (treated with obturation file) -->
+    <path 
+      d="M 56 45 
+         C 55 55 56 68 60 80" 
+      stroke="#1c2d37" 
+      stroke-width="2.3" 
+      stroke-linecap="round"
+      stroke-dasharray="2 3"
+    />
+
+    <!-- Endodontic Treatment Instrument / File entering the tooth -->
+    <!-- Handle / Stopper at top -->
+    <path 
+      d="M 48 8 L 52 8 L 52 16 L 48 16 Z" 
+      stroke="#1c2d37" 
+      stroke-width="2" 
+      fill="#1c2d37"
+    />
+    <!-- File Shaft entering right canal -->
+    <path 
+      d="M 50 16 
+         C 50 25 51 35 53 45
+         C 55 57 57 68 59 78" 
+      stroke="#1c2d37" 
+      stroke-width="2.3" 
+      stroke-linecap="round"
+    />
+
+    <!-- Endo file calibration rings / depth marks -->
+    <path d="M 48 24 L 53 23" stroke="#1c2d37" stroke-width="1.8" stroke-linecap="round" />
+    <path d="M 49 28 L 54 27" stroke="#1c2d37" stroke-width="1.8" stroke-linecap="round" />
+  </g>
+</svg>

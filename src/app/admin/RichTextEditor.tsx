@@ -25,9 +25,7 @@ export default function RichTextEditor({
     const replacement = `${before}${selectedText}${after}`;
 
     const newValue =
-      textarea.value.substring(0, start) +
-      replacement +
-      textarea.value.substring(end);
+      textarea.value.substring(0, start) + replacement + textarea.value.substring(end);
 
     onChange(newValue);
 
@@ -149,7 +147,7 @@ export default function RichTextEditor({
         ref={textareaRef}
         className="rich-editor-textarea"
         value={value}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={e => onChange(e.target.value)}
         placeholder={placeholder}
         rows={10}
       />

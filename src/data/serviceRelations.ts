@@ -118,10 +118,7 @@ const SERVICE_RELATIONS_MAP: Record<
         icon: 'fa-solid fa-wand-magic-sparkles',
       },
     ],
-    relatedArticleSlugs: [
-      'traditional-toothache-remedies-risks',
-      'dental-scaling-myths-and-facts',
-    ],
+    relatedArticleSlugs: ['traditional-toothache-remedies-risks', 'dental-scaling-myths-and-facts'],
   },
   restorations: {
     relatedServices: [
@@ -170,10 +167,7 @@ const SERVICE_RELATIONS_MAP: Record<
         icon: 'fa-solid fa-tooth',
       },
     ],
-    relatedArticleSlugs: [
-      'traditional-toothache-remedies-risks',
-      'dental-implant-post-op-care',
-    ],
+    relatedArticleSlugs: ['traditional-toothache-remedies-risks', 'dental-implant-post-op-care'],
   },
   surgery: {
     relatedServices: [
@@ -196,10 +190,7 @@ const SERVICE_RELATIONS_MAP: Record<
         icon: 'fa-solid fa-teeth-open',
       },
     ],
-    relatedArticleSlugs: [
-      'dental-implant-post-op-care',
-      'traditional-toothache-remedies-risks',
-    ],
+    relatedArticleSlugs: ['dental-implant-post-op-care', 'traditional-toothache-remedies-risks'],
   },
   pediatric: {
     relatedServices: [
@@ -253,11 +244,12 @@ export function getServiceRelations(slug: string): ServiceRelations {
 
   // Resolve exactly 2 articles
   const matchedArticles = config.relatedArticleSlugs
-    .map((artSlug) => ARTICLES_DATA.find((a) => a.slug === artSlug))
+    .map(artSlug => ARTICLES_DATA.find(a => a.slug === artSlug))
     .filter((a): a is ArticleItem => Boolean(a));
 
   // Fallback to first 2 articles if needed
-  const finalArticles = matchedArticles.length >= 2 ? matchedArticles.slice(0, 2) : ARTICLES_DATA.slice(0, 2);
+  const finalArticles =
+    matchedArticles.length >= 2 ? matchedArticles.slice(0, 2) : ARTICLES_DATA.slice(0, 2);
 
   return {
     relatedServices: config.relatedServices,

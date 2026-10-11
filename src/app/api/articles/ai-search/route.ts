@@ -17,7 +17,7 @@ const GEMINI_API_KEY = process.env.GEMINI_API_KEY || '';
 const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-flash-latest';
 
 // Initialize MiniSearch indexing once at module level
-const searchableDocs: SearchableArticleDoc[] = ARTICLES_DATA.map((art) => ({
+const searchableDocs: SearchableArticleDoc[] = ARTICLES_DATA.map(art => ({
   id: art.id,
   slug: art.slug,
   title: art.title,
@@ -51,14 +51,15 @@ function checkRateLimit(identifier: string): { allowed: boolean; message?: strin
   }
 
   // Filter timestamps within the last 24 hours
-  record.timestamps = record.timestamps.filter((ts) => now - ts < ONE_DAY_MS);
+  record.timestamps = record.timestamps.filter(ts => now - ts < ONE_DAY_MS);
 
   // Hourly count
-  const hourlyCount = record.timestamps.filter((ts) => now - ts < ONE_HOUR_MS).length;
+  const hourlyCount = record.timestamps.filter(ts => now - ts < ONE_HOUR_MS).length;
   if (hourlyCount >= MAX_HOURLY_QUERIES) {
     return {
       allowed: false,
-      message: 'سقف پرسش‌های این ساعت شما تکمیل شده است (حداکثر ۱۰ سوال در ساعت). لطفاً ساعتی دیگر مراجعه فرمایید یا با ربات تلگرام ارتباط بگیرید.',
+      message:
+        'سقف پرسش‌های این ساعت شما تکمیل شده است (حداکثر ۱۰ سوال در ساعت). لطفاً ساعتی دیگر مراجعه فرمایید یا با ربات تلگرام ارتباط بگیرید.',
     };
   }
 
@@ -66,7 +67,8 @@ function checkRateLimit(identifier: string): { allowed: boolean; message?: strin
   if (record.timestamps.length >= MAX_DAILY_QUERIES) {
     return {
       allowed: false,
-      message: 'سقف پرسش‌های روزانه شما تکمیل شده است (حداکثر ۲۵ سوال در روز). لطفاً فردا مراجعه فرمایید یا با ربات تلگرام @Qolipur-bot در ارتباط باشید.',
+      message:
+        'سقف پرسش‌های روزانه شما تکمیل شده است (حداکثر ۲۵ سوال در روز). لطفاً فردا مراجعه فرمایید یا با ربات تلگرام @Qolipur-bot در ارتباط باشید.',
     };
   }
 
@@ -80,7 +82,8 @@ export async function POST(req: NextRequest) {
     // Determine client identifier for rate limiting
     const forwardedFor = req.headers.get('x-forwarded-for');
     const realIp = req.headers.get('x-real-ip');
-    const clientIp = (forwardedFor ? forwardedFor.split(',')[0].trim() : realIp) || 'unknown-client';
+    const clientIp =
+      (forwardedFor ? forwardedFor.split(',')[0].trim() : realIp) || 'unknown-client';
 
     const rateLimit = checkRateLimit(clientIp);
     if (!rateLimit.allowed) {
@@ -98,22 +101,65 @@ export async function POST(req: NextRequest) {
     const wordCount = cleanQuery.split(/\s+/).filter(Boolean).length;
     if (wordCount > 50 || cleanQuery.length > 350) {
       return NextResponse.json(
-        { error: 'طول پرسش بیش از حد مجاز است (حداکثر ۵۰ کلمه). لطفاً سوال خود را خلاصه‌تر بفرمایید.' },
+        {
+          error:
+            'طول پرسش بیش از حد مجاز است (حداکثر ۵۰ کلمه). لطفاً سوال خود را خلاصه‌تر بفرمایید.',
+        },
         { status: 400 }
       );
     }
 
     const normQuery = normalizePersian(cleanQuery);
-    const rawTokens = normQuery.split(/\s+/).filter((t) => t.length > 1);
+    const rawTokens = normQuery.split(/\s+/).filter(t => t.length > 1);
 
     // Stop words to prevent irrelevant keyword matching
     const stopWords = new Set([
-      'است', 'چیست', 'چه', 'چگونه', 'برای', 'در', 'با', 'به', 'از', 'که', 'این', 'آن',
-      'یا', 'تا', 'بر', 'روی', 'چند', 'آیا', 'کدام', 'چرا', 'باید', 'نباید', 'درباره',
-      'مورد', 'شدن', 'کردن', 'می', 'نمی', 'ها', 'های', 'هایش', 'دارد', 'کند', 'کنیم',
-      'هست', 'نیست', 'باشیم', 'باشید', 'شوند', 'شود', 'سلام', 'روز', 'بخیر', 'خسته'
+      'است',
+      'چیست',
+      'چه',
+      'چگونه',
+      'برای',
+      'در',
+      'با',
+      'به',
+      'از',
+      'که',
+      'این',
+      'آن',
+      'یا',
+      'تا',
+      'بر',
+      'روی',
+      'چند',
+      'آیا',
+      'کدام',
+      'چرا',
+      'باید',
+      'نباید',
+      'درباره',
+      'مورد',
+      'شدن',
+      'کردن',
+      'می',
+      'نمی',
+      'ها',
+      'های',
+      'هایش',
+      'دارد',
+      'کند',
+      'کنیم',
+      'هست',
+      'نیست',
+      'باشیم',
+      'باشید',
+      'شوند',
+      'شود',
+      'سلام',
+      'روز',
+      'بخیر',
+      'خسته',
     ]);
-    const meaningfulTokens = rawTokens.filter((t) => !stopWords.has(t) && t.length > 1);
+    const meaningfulTokens = rawTokens.filter(t => !stopWords.has(t) && t.length > 1);
     const searchQueryStr = meaningfulTokens.length > 0 ? meaningfulTokens.join(' ') : normQuery;
 
     // Search via MiniSearch with TF-IDF and field boosts
@@ -123,12 +169,12 @@ export async function POST(req: NextRequest) {
     }
 
     // Filter hits by meaningful relevance score threshold (minimum 8 in MiniSearch with boost)
-    const validHits = searchHits.filter((hit) => hit.score >= 8).slice(0, 3);
+    const validHits = searchHits.filter(hit => hit.score >= 8).slice(0, 3);
 
     // 1. Retrieve most relevant articles and sections from ARTICLES_DATA (0 to 3 max)
     const scoredArticles = validHits
-      .map((hit) => {
-        const art = ARTICLES_DATA.find((a) => a.id === hit.id);
+      .map(hit => {
+        const art = ARTICLES_DATA.find(a => a.id === hit.id);
         if (!art) return null;
 
         // Find best matching section for context
@@ -139,7 +185,7 @@ export async function POST(req: NextRequest) {
           for (const sec of art.sections) {
             let secScore = 0;
             const normSec = normalizePersian(`${sec.title} ${sec.body}`);
-            for (const token of (meaningfulTokens.length > 0 ? meaningfulTokens : rawTokens)) {
+            for (const token of meaningfulTokens.length > 0 ? meaningfulTokens : rawTokens) {
               if (normSec.includes(token)) secScore += 1;
             }
             if (secScore > maxSecScore) {
@@ -156,10 +202,10 @@ export async function POST(req: NextRequest) {
         };
       })
       .filter(Boolean) as Array<{
-        article: (typeof ARTICLES_DATA)[0];
-        score: number;
-        bestSection: { id: string; title: string; body: string } | null;
-      }>;
+      article: (typeof ARTICLES_DATA)[0];
+      score: number;
+      bestSection: { id: string; title: string; body: string } | null;
+    }>;
 
     // Build context block from top matched articles & sections
     const hasArticleMatches = scoredArticles.length > 0;
@@ -253,11 +299,7 @@ Execution Guidelines:
     // 1. Primary: gemini-3.5-flash (full capability)
     // 2. Secondary: gemini-3.5-flash-lite (fast lightweight)
     // 3. Fallback: gemini-3.1-flash-lite (peak hour stability)
-    const candidateModels = [
-      'gemini-3.5-flash',
-      'gemini-3.5-flash-lite',
-      'gemini-3.1-flash-lite',
-    ];
+    const candidateModels = ['gemini-3.5-flash', 'gemini-3.5-flash-lite', 'gemini-3.1-flash-lite'];
 
     let candidateText = '';
     let lastErrorDetails = '';
@@ -286,7 +328,9 @@ Execution Guidelines:
           }
         } else {
           lastErrorDetails = await geminiRes.text();
-          console.warn(`Model ${modelName} returned status ${geminiRes.status}, trying fallback...`);
+          console.warn(
+            `Model ${modelName} returned status ${geminiRes.status}, trying fallback...`
+          );
         }
       } catch (err: any) {
         lastErrorDetails = err?.message || 'Network error';
@@ -305,7 +349,7 @@ Execution Guidelines:
     }
 
     // Extract sources metadata for rich UI chips
-    const sources = scoredArticles.map((s) => ({
+    const sources = scoredArticles.map(s => ({
       title: s.article.title,
       category: s.article.category,
       slug: s.article.slug,

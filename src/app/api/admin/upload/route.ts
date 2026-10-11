@@ -8,7 +8,10 @@ export async function POST(request: Request) {
     const file = formData.get('file') as File | null;
 
     if (!file) {
-      return NextResponse.json({ success: false, message: 'فایلی انتخاب نشده است.' }, { status: 400 });
+      return NextResponse.json(
+        { success: false, message: 'فایلی انتخاب نشده است.' },
+        { status: 400 }
+      );
     }
 
     const bytes = await file.arrayBuffer();
@@ -34,6 +37,9 @@ export async function POST(request: Request) {
     });
   } catch (error) {
     console.error('Upload error:', error);
-    return NextResponse.json({ success: false, message: 'خطا در بارگذاری تصویر.' }, { status: 500 });
+    return NextResponse.json(
+      { success: false, message: 'خطا در بارگذاری تصویر.' },
+      { status: 500 }
+    );
   }
 }

@@ -34,7 +34,7 @@ export default function Header({
   }, []);
 
   const toggleMobileMenu = () => {
-    setMobileMenuOpen((prev) => !prev);
+    setMobileMenuOpen(prev => !prev);
   };
 
   const closeMobileMenu = () => {
@@ -162,11 +162,7 @@ export default function Header({
             <span className="phone-num">۰۱۳-۳۳۵۱۲۷۵۳</span>
             <i className="fa-solid fa-phone-volume phone-icon"></i>
           </a>
-          <button
-            className="btn-primary open-booking-btn"
-            type="button"
-            onClick={onOpenBooking}
-          >
+          <button className="btn-primary open-booking-btn" type="button" onClick={onOpenBooking}>
             <span>رزرو نوبت</span>
           </button>
           {/* Mobile Menu Toggle Button */}

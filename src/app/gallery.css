@@ -80,7 +80,7 @@
 }
 
 .gallery-hero-title {
-  font-family: 'PeydaWeb', 'Vazirmatn', sans-serif;
+  font-family: "PeydaWeb", "Vazirmatn", sans-serif;
   font-size: 42px;
   font-weight: 900;
   color: #122f3b;
@@ -91,7 +91,7 @@
 }
 
 .gallery-hero-subtitle {
-  font-family: 'PeydaWeb', 'Vazirmatn', sans-serif;
+  font-family: "PeydaWeb", "Vazirmatn", sans-serif;
   font-size: 16px;
   font-weight: 400;
   color: #607b8b;
@@ -119,19 +119,20 @@
 .gallery-hero-mobile-gradient-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    to bottom,
-    rgba(255, 255, 255, 0.15) 0%,
-    rgba(255, 255, 255, 0.6) 45%,
-    rgba(255, 255, 255, 0.96) 85%,
-    #ffffff 100%
-  ),
-  linear-gradient(
-    to right,
-    rgba(255, 255, 255, 0.95) 0%,
-    rgba(255, 255, 255, 0.75) 45%,
-    rgba(255, 255, 255, 0.1) 100%
-  );
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.15) 0%,
+      rgba(255, 255, 255, 0.6) 45%,
+      rgba(255, 255, 255, 0.96) 85%,
+      #ffffff 100%
+    ),
+    linear-gradient(
+      to right,
+      rgba(255, 255, 255, 0.95) 0%,
+      rgba(255, 255, 255, 0.75) 45%,
+      rgba(255, 255, 255, 0.1) 100%
+    );
 }
 
 /* ---------------- CONTROLS: CATEGORIES (RIGHT) & DUAL MODE BUTTON (LEFT) ---------------- */
@@ -366,9 +367,10 @@
   border: 1px solid var(--color-border);
   overflow: hidden;
   box-shadow: 0 8px 24px -6px rgba(28, 67, 79, 0.08);
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-              box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-              border-color 0.3s ease;
+  transition:
+    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.3s ease;
   display: flex;
   flex-direction: column;
 }
@@ -441,7 +443,10 @@
   gap: 8px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
   transform: translateY(10px);
-  transition: transform 0.3s ease, background 0.2s ease, color 0.2s ease;
+  transition:
+    transform 0.3s ease,
+    background 0.2s ease,
+    color 0.2s ease;
   white-space: nowrap;
 }
 
@@ -558,7 +563,9 @@
   justify-content: center;
   color: var(--color-primary);
   font-size: 13px;
-  transition: transform 0.15s ease, background-color 0.2s ease;
+  transition:
+    transform 0.15s ease,
+    background-color 0.2s ease;
 }
 
 .gallery-item-card:hover .meridiq-handle-button {
@@ -745,7 +752,9 @@
   padding: 0;
   cursor: pointer;
   transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 4px 14px rgba(28, 67, 79, 0.12), 0 1px 3px rgba(28, 67, 79, 0.06);
+  box-shadow:
+    0 4px 14px rgba(28, 67, 79, 0.12),
+    0 1px 3px rgba(28, 67, 79, 0.06);
   user-select: none;
   -webkit-tap-highlight-color: transparent;
   outline: none;
@@ -756,7 +765,9 @@
   height: 22px;
   display: block;
   stroke: #1c83aa;
-  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), stroke 0.25s ease;
+  transition:
+    transform 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+    stroke 0.25s ease;
 }
 
 /* Hover & Active / Click States: turns blue with white arrow */
@@ -791,7 +802,9 @@
   background: #ffffff;
   border-color: #1c83aa;
   color: #1c83aa;
-  box-shadow: 0 4px 14px rgba(28, 67, 79, 0.12), 0 1px 3px rgba(28, 67, 79, 0.06);
+  box-shadow:
+    0 4px 14px rgba(28, 67, 79, 0.12),
+    0 1px 3px rgba(28, 67, 79, 0.06);
   transform: none;
 }
 
@@ -909,7 +922,7 @@
   .gallery-cards-grid {
     grid-template-columns: repeat(2, 1fr);
   }
-  
+
   .gallery-hero-visual {
     width: 320px;
     height: 160px;
@@ -1222,6 +1235,10 @@
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }

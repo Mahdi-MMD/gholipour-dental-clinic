@@ -28,7 +28,6 @@ export default function ServiceDetailClientView({
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
 
-
   const handleOpenBooking = () => {
     setMobileMenuOpen(false);
     setIsBookingOpen(true);
@@ -39,7 +38,7 @@ export default function ServiceDetailClientView({
   };
 
   const toggleFaq = (index: number) => {
-    setOpenFaqIndex((prev) => (prev === index ? null : index));
+    setOpenFaqIndex(prev => (prev === index ? null : index));
   };
 
   return (
@@ -75,9 +74,7 @@ export default function ServiceDetailClientView({
                 <h1 className="service-hero-title">
                   <span>{service.heroHeadline}</span>
                   {service.heroHeadlineAccent && (
-                    <span className="service-hero-title-accent">
-                      {service.heroHeadlineAccent}
-                    </span>
+                    <span className="service-hero-title-accent">{service.heroHeadlineAccent}</span>
                   )}
                 </h1>
                 <p className="service-hero-desc">{service.heroSubheadline}</p>
@@ -160,9 +157,7 @@ export default function ServiceDetailClientView({
                   </div>
                   <h3 className="pillar-card-title">
                     <span className="desktop-copy">{pillar.title}</span>
-                    <span className="mobile-copy">
-                      {pillar.mobileTitle ?? pillar.title}
-                    </span>
+                    <span className="mobile-copy">{pillar.mobileTitle ?? pillar.title}</span>
                   </h3>
                   <p className="pillar-card-desc">{pillar.description}</p>
                 </div>
@@ -207,9 +202,7 @@ export default function ServiceDetailClientView({
                   </div>
                   <h3 className="diag-title">
                     <span className="desktop-copy">{feat.title}</span>
-                    <span className="mobile-copy">
-                      {feat.mobileTitle ?? feat.title}
-                    </span>
+                    <span className="mobile-copy">{feat.mobileTitle ?? feat.title}</span>
                   </h3>
                   <p className="diag-desc">{feat.description}</p>
                 </div>
@@ -224,9 +217,7 @@ export default function ServiceDetailClientView({
         <section className="service-section-wrap" id="journey">
           <div className="container">
             <div className="section-head-center">
-              <span className="section-kicker">
-                {service.journeyKicker ?? 'PATIENT JOURNEY'}
-              </span>
+              <span className="section-kicker">{service.journeyKicker ?? 'PATIENT JOURNEY'}</span>
               <h2 className="section-head-title">
                 <span className="desktop-copy">{service.journeyHeadline}</span>
                 <span className="mobile-copy">
@@ -249,9 +240,7 @@ export default function ServiceDetailClientView({
                     <div className="step-card-header">
                       <h3 className="step-card-title">
                         <span className="desktop-copy">{step.title}</span>
-                        <span className="mobile-copy">
-                          {step.mobileTitle ?? step.title}
-                        </span>
+                        <span className="mobile-copy">{step.mobileTitle ?? step.title}</span>
                       </h3>
                       <span className="step-card-duration">{step.duration}</span>
                     </div>
@@ -328,9 +317,7 @@ export default function ServiceDetailClientView({
                   </div>
                   <h3 className="support-card-title">
                     <span className="desktop-copy">{item.title}</span>
-                    <span className="mobile-copy">
-                      {item.mobileTitle ?? item.title}
-                    </span>
+                    <span className="mobile-copy">{item.mobileTitle ?? item.title}</span>
                   </h3>
                   <p className="support-card-desc">{item.description}</p>
                 </div>
@@ -366,9 +353,7 @@ export default function ServiceDetailClientView({
         <section className="service-section-wrap" id="faq">
           <div className="container">
             <div className="section-head-center">
-              <span className="section-kicker">
-                {service.faqKicker ?? 'FAQ & ANSWERS'}
-              </span>
+              <span className="section-kicker">{service.faqKicker ?? 'FAQ & ANSWERS'}</span>
               <h2 className="section-head-title">
                 <span className="desktop-copy">
                   {service.faqHeadline ?? 'پاسخ به سوالات و نگرانی‌های متداول شما'}
@@ -399,11 +384,7 @@ export default function ServiceDetailClientView({
                     aria-expanded={openFaqIndex === idx}
                   >
                     <span>{faq.question}</span>
-                    <span
-                      className={`service-faq-icon ${
-                        openFaqIndex === idx ? 'open' : ''
-                      }`}
-                    >
+                    <span className={`service-faq-icon ${openFaqIndex === idx ? 'open' : ''}`}>
                       <i className="fa-solid fa-angle-down"></i>
                     </span>
                   </button>
@@ -432,7 +413,8 @@ export default function ServiceDetailClientView({
                 </h2>
                 <p className="section-head-lead">
                   <span className="lead-desktop">
-                    برای افزایش آگاهی و تصمیم‌گیری دقیق‌تر پیش از درمان، مقالات تخصصی زیر را مطالعه نمایید:
+                    برای افزایش آگاهی و تصمیم‌گیری دقیق‌تر پیش از درمان، مقالات تخصصی زیر را مطالعه
+                    نمایید:
                   </span>
                   <span className="lead-mobile">
                     آشنایی با نکات علمی و توصیه‌های مراقبتی پیش و پس از درمان:
@@ -441,7 +423,7 @@ export default function ServiceDetailClientView({
               </div>
 
               <div className="related-articles-grid">
-                {relatedArticles.map((article) => (
+                {relatedArticles.map(article => (
                   <Link
                     key={article.slug}
                     href={`/articles/${article.slug}`}
@@ -493,7 +475,8 @@ export default function ServiceDetailClientView({
                 </h2>
                 <p className="section-head-lead">
                   <span className="lead-desktop">
-                    مراقبت‌های تکمیلی و درمان‌های همپوشان که ممکن است متناسب با شرایط دندانی خود به آن‌ها نیاز داشته باشید:
+                    مراقبت‌های تکمیلی و درمان‌های همپوشان که ممکن است متناسب با شرایط دندانی خود به
+                    آن‌ها نیاز داشته باشید:
                   </span>
                   <span className="lead-mobile">
                     خدمات دندانپزشکی مکمل برای سلامت و زیبایی کامل لبخند شما:
@@ -502,7 +485,7 @@ export default function ServiceDetailClientView({
               </div>
 
               <div className="related-services-grid">
-                {relatedServices.map((relService) => (
+                {relatedServices.map(relService => (
                   <Link
                     key={relService.slug}
                     href={`/services/${relService.slug}`}
@@ -544,13 +527,8 @@ export default function ServiceDetailClientView({
                 'برای بررسی وضعیت فک و دریافت مشاوره تخصصی در کلینیک دندانپزشکی قلی‌پور، همین حالا نوبت خود را آنلاین ثبت کنید یا با شماره کلینیک تماس بگیرید.'}
             </p>
 
-
             <div className="service-cta-buttons">
-              <button
-                type="button"
-                className="btn-cta-white"
-                onClick={handleOpenBooking}
-              >
+              <button type="button" className="btn-cta-white" onClick={handleOpenBooking}>
                 <i className="fa-regular fa-calendar-check"></i>
                 <span>رزرو نوبت مشاوره حضوری</span>
               </button>

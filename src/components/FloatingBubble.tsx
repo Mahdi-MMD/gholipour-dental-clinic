@@ -12,10 +12,7 @@ export default function FloatingBubble({ isMobileMenuOpen = false }: FloatingBub
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if (
-        containerRef.current &&
-        !containerRef.current.contains(e.target as Node)
-      ) {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
         setIsOpen(false);
       }
     };
@@ -108,16 +105,12 @@ export default function FloatingBubble({ isMobileMenuOpen = false }: FloatingBub
 
       {/* Main Floating Trigger Button */}
       <div className="social-btn-icon3" id="socialBtnIcon3">
-        <label
-          className="hamburger3"
-          htmlFor="socialBubbleInput"
-          aria-label="ارتباط سریع"
-        >
+        <label className="hamburger3" htmlFor="socialBubbleInput" aria-label="ارتباط سریع">
           <input
             type="checkbox"
             id="socialBubbleInput"
             checked={isOpen}
-            onChange={(e) => setIsOpen(e.target.checked)}
+            onChange={e => setIsOpen(e.target.checked)}
           />
           <svg viewBox="0 0 32 32">
             <path

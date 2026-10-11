@@ -56,7 +56,7 @@ export default function ScrollIndicator({ threshold = 350 }: ScrollIndicatorProp
       tabIndex={0}
       aria-label="بازگشت به بالای صفحه"
       title="بازگشت به بالایی صفحه"
-      onKeyDown={(e) => {
+      onKeyDown={e => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
           scrollToTop();
@@ -71,12 +71,7 @@ export default function ScrollIndicator({ threshold = 350 }: ScrollIndicatorProp
         aria-hidden="true"
       >
         {/* Background track circle */}
-        <circle
-          className="progress-circle-bg"
-          cx="24"
-          cy="24"
-          r={radius}
-        />
+        <circle className="progress-circle-bg" cx="24" cy="24" r={radius} />
         {/* Active animated progress fill circle */}
         <circle
           className="progress-circle-fill"

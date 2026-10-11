@@ -39,19 +39,35 @@ export default function BookingDrawer({ isOpen, onClose, initialService }: Booki
   // Convert English and Arabic-Indic digits to Persian digits
   const toPersianDigits = (str: string): string => {
     const persianMap: Record<string, string> = {
-      '0': '۰', '1': '۱', '2': '۲', '3': '۳', '4': '۴',
-      '5': '۵', '6': '۶', '7': '۷', '8': '۸', '9': '۹',
-      '٠': '۰', '١': '۱', '٢': '۲', '٣': '۳', '٤': '۴',
-      '٥': '۵', '٦': '۶', '٧': '۷', '٨': '۸', '٩': '۹'
+      '0': '۰',
+      '1': '۱',
+      '2': '۲',
+      '3': '۳',
+      '4': '۴',
+      '5': '۵',
+      '6': '۶',
+      '7': '۷',
+      '8': '۸',
+      '9': '۹',
+      '٠': '۰',
+      '١': '۱',
+      '٢': '۲',
+      '٣': '۳',
+      '٤': '۴',
+      '٥': '۵',
+      '٦': '۶',
+      '٧': '۷',
+      '٨': '۸',
+      '٩': '۹',
     };
-    return str.replace(/[0-9\u0660-\u0669]/g, (char) => persianMap[char] || char);
+    return str.replace(/[0-9\u0660-\u0669]/g, char => persianMap[char] || char);
   };
 
   // Convert Persian/Arabic digits to English digits for standard validation/processing
   const toEnglishDigits = (str: string): string => {
     return str
-      .replace(/[۰-۹]/g, (d) => String(d.charCodeAt(0) - 1776))
-      .replace(/[٠-٩]/g, (d) => String(d.charCodeAt(0) - 1632));
+      .replace(/[۰-۹]/g, d => String(d.charCodeAt(0) - 1776))
+      .replace(/[٠-٩]/g, d => String(d.charCodeAt(0) - 1632));
   };
 
   // Check if string contains only Persian letters, spaces, half-spaces (and standard punctuation if needed)
@@ -179,6 +195,7 @@ export default function BookingDrawer({ isOpen, onClose, initialService }: Booki
         className={`booking-drawer ${isOpen ? 'active' : ''}`}
         id="bookingDrawer"
         aria-hidden={!isOpen}
+        inert={!isOpen ? true : undefined}
       >
         <div className="drawer-header">
           <div className="drawer-brand">
@@ -202,8 +219,8 @@ export default function BookingDrawer({ isOpen, onClose, initialService }: Booki
         </div>
         <div className="drawer-body">
           <p className="drawer-desc">
-            لطفاً مشخصات و خدمت درخواستی خود را ثبت نمایید تا همکاران ما در کوتاه‌ترین
-            زمان جهت هماهنگی نوبت درمان با شما تماس بگیرند.
+            لطفاً مشخصات و خدمت درخواستی خود را ثبت نمایید تا همکاران ما در کوتاه‌ترین زمان جهت
+            هماهنگی نوبت درمان با شما تماس بگیرند.
           </p>
 
           {!submitted ? (
@@ -217,15 +234,15 @@ export default function BookingDrawer({ isOpen, onClose, initialService }: Booki
                   id="patientName"
                   name="name"
                   value={name}
-                  onChange={(e) => {
+                  onChange={e => {
                     setName(e.target.value);
                     if (touched.name) {
-                      setErrors((prev) => ({ ...prev, name: validateName(e.target.value) }));
+                      setErrors(prev => ({ ...prev, name: validateName(e.target.value) }));
                     }
                   }}
                   onBlur={() => {
-                    setTouched((prev) => ({ ...prev, name: true }));
-                    setErrors((prev) => ({ ...prev, name: validateName(name) }));
+                    setTouched(prev => ({ ...prev, name: true }));
+                    setErrors(prev => ({ ...prev, name: validateName(name) }));
                   }}
                   className="form-input"
                   placeholder="مثال: مهدی قلی‌پور"
@@ -249,11 +266,11 @@ export default function BookingDrawer({ isOpen, onClose, initialService }: Booki
                   id="patientPhone"
                   name="phone"
                   value={phone}
-                  onChange={(e) => handlePhoneChange(e.target.value)}
+                  onChange={e => handlePhoneChange(e.target.value)}
                   onBlur={() => {
-                    setTouched((prev) => ({ ...prev, phone: true }));
+                    setTouched(prev => ({ ...prev, phone: true }));
                     const rawDigits = toEnglishDigits(phone);
-                    setErrors((prev) => ({ ...prev, phone: validatePhone(rawDigits) }));
+                    setErrors(prev => ({ ...prev, phone: validatePhone(rawDigits) }));
                   }}
                   className="form-input"
                   placeholder="۰۹۱۲۳۴۵۶۷۸۹"
@@ -277,21 +294,23 @@ export default function BookingDrawer({ isOpen, onClose, initialService }: Booki
                   id="serviceType"
                   name="service"
                   value={service}
-                  onChange={(e) => {
+                  onChange={e => {
                     setService(e.target.value);
                     if (touched.service) {
-                      setErrors((prev) => ({ ...prev, service: validateService(e.target.value) }));
+                      setErrors(prev => ({ ...prev, service: validateService(e.target.value) }));
                     }
                   }}
                   onBlur={() => {
-                    setTouched((prev) => ({ ...prev, service: true }));
-                    setErrors((prev) => ({ ...prev, service: validateService(service) }));
+                    setTouched(prev => ({ ...prev, service: true }));
+                    setErrors(prev => ({ ...prev, service: validateService(service) }));
                   }}
                   className="form-input"
                   placeholder="مثال: روکش دندان"
                   dir="rtl"
                   aria-invalid={!!(touched.service && errors.service)}
-                  aria-describedby={touched.service && errors.service ? 'serviceTypeError' : undefined}
+                  aria-describedby={
+                    touched.service && errors.service ? 'serviceTypeError' : undefined
+                  }
                 />
                 {touched.service && errors.service && (
                   <span className="form-error-msg" id="serviceTypeError">
@@ -305,7 +324,11 @@ export default function BookingDrawer({ isOpen, onClose, initialService }: Booki
               </button>
             </form>
           ) : (
-            <div className="booking-success-msg" id="bookingSuccessMsg" style={{ display: 'block' }}>
+            <div
+              className="booking-success-msg"
+              id="bookingSuccessMsg"
+              style={{ display: 'block' }}
+            >
               <i className="fa-solid fa-circle-check"></i>
               <h4>درخواست شما با موفقیت ثبت شد</h4>
               <p>کارشناسان کلینیک دندانپزشکی قلی‌پور به زودی با شما تماس خواهند گرفت.</p>

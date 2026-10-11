@@ -27,7 +27,7 @@ export function normalizePersian(text: string): string {
 export function persianTokenizer(text: string): string[] {
   const normalized = normalizePersian(text);
   if (!normalized) return [];
-  return normalized.split(/\s+/).filter((token) => token.length > 1);
+  return normalized.split(/\s+/).filter(token => token.length > 1);
 }
 
 export interface SearchableArticleDoc {
@@ -48,18 +48,18 @@ export function createArticlesSearchIndex(docs: SearchableArticleDoc[]) {
   const miniSearch = new MiniSearch<SearchableArticleDoc>({
     fields: ['title', 'keywords', 'summary', 'content', 'category'],
     storeFields: ['id', 'slug', 'title', 'category', 'summary'],
-    processTerm: (term) => normalizePersian(term),
-    tokenize: (text) => persianTokenizer(text),
+    processTerm: term => normalizePersian(term),
+    tokenize: text => persianTokenizer(text),
     searchOptions: {
       boost: {
-        title: 4.0,     // Exact matches in title have highest relevance
-        keywords: 3.0,  // Symptoms & tags (e.g. میخک, دیابت, ورم)
-        summary: 2.0,   // Summary match
-        content: 1.0,   // Matches anywhere in article body
+        title: 4.0, // Exact matches in title have highest relevance
+        keywords: 3.0, // Symptoms & tags (e.g. میخک, دیابت, ورم)
+        summary: 2.0, // Summary match
+        content: 1.0, // Matches anywhere in article body
         category: 1.5,
       },
-      prefix: true,     // Matches prefixes while typing (e.g. ایمپ -> ایمپلنت)
-      fuzzy: 0.2,       // Allows small typo tolerance
+      prefix: true, // Matches prefixes while typing (e.g. ایمپ -> ایمپلنت)
+      fuzzy: 0.2, // Allows small typo tolerance
       combineWith: 'AND',
     },
   });

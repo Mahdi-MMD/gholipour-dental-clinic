@@ -92,7 +92,7 @@ export default function NanoPortfolioGallery() {
         const $gallery = $(galleryRef.current);
 
         // Prepare items array formatted for nanogallery2
-        const items = PORTFOLIO_WORK_SAMPLES.map((item) => ({
+        const items = PORTFOLIO_WORK_SAMPLES.map(item => ({
           src: item.src,
           srct: item.srct,
           title: '',

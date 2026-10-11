@@ -5,7 +5,7 @@ import { SERVICES_DATA } from '@/data/servicesData';
 export default function sitemap(): MetadataRoute.Sitemap {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://gholipourdental.com';
 
-  const articleEntries: MetadataRoute.Sitemap = ARTICLES_DATA.map((article) => ({
+  const articleEntries: MetadataRoute.Sitemap = ARTICLES_DATA.map(article => ({
     url: `${siteUrl}/articles/${article.slug}`,
     lastModified: new Date(),
     changeFrequency: 'weekly',
@@ -24,14 +24,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     'pediatric',
   ];
 
-  const serviceEntries: MetadataRoute.Sitemap = CANONICAL_SERVICE_SLUGS
-    .filter((slug) => Boolean(SERVICES_DATA[slug]))
-    .map((slug) => ({
-      url: `${siteUrl}/services/${slug}`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.9,
-    }));
+  const serviceEntries: MetadataRoute.Sitemap = CANONICAL_SERVICE_SLUGS.filter(slug =>
+    Boolean(SERVICES_DATA[slug])
+  ).map(slug => ({
+    url: `${siteUrl}/services/${slug}`,
+    lastModified: new Date(),
+    changeFrequency: 'weekly',
+    priority: 0.9,
+  }));
 
   return [
     {
@@ -45,6 +45,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: new Date(),
       changeFrequency: 'daily',
       priority: 0.9,
+    },
+    {
+      url: `${siteUrl}/gallery`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.8,
     },
     {
       url: `${siteUrl}/about`,

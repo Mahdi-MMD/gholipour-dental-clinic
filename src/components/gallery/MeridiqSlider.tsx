@@ -48,7 +48,7 @@ export default function MeridiqSlider({ beforeImg, afterImg, title }: MeridiqSli
         min="0"
         max="100"
         value={sliderPos}
-        onChange={(e) => setSliderPos(Number(e.target.value))}
+        onChange={e => setSliderPos(Number(e.target.value))}
         className="meridiq-range-input"
         aria-label={`اسلایدر مقایسه قبل و بعد ${title}`}
       />

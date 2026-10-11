@@ -34,17 +34,17 @@ export default function Testimonials() {
   // Auto slide interval
   useEffect(() => {
     const timer = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % total);
+      setCurrentIndex(prev => (prev + 1) % total);
     }, 3800);
     return () => clearInterval(timer);
   }, [total]);
 
   const handleNext = () => {
-    setCurrentIndex((prev) => (prev + 1) % total);
+    setCurrentIndex(prev => (prev + 1) % total);
   };
 
   const handlePrev = () => {
-    setCurrentIndex((prev) => (prev - 1 + total) % total);
+    setCurrentIndex(prev => (prev - 1 + total) % total);
   };
 
   const handleTouchStart = (e: React.TouchEvent) => {

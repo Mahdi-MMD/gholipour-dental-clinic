@@ -47,7 +47,7 @@
 }
 
 .about-desc-card::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   right: 0;
@@ -181,7 +181,10 @@
 
 .gallery-slide {
   position: relative;
-  transition: transform 0.4s ease, opacity 0.5s ease, filter 0.5s ease;
+  transition:
+    transform 0.4s ease,
+    opacity 0.5s ease,
+    filter 0.5s ease;
   opacity: 0.65;
   filter: saturate(0.3) brightness(0.98);
   cursor: pointer;
@@ -246,7 +249,9 @@
 
   .gallery-slide.swiper-slide-next .gallery-card {
     transform: scale(1.06);
-    box-shadow: 0 22px 55px rgba(28, 131, 170, 0.18), 0 8px 24px rgba(0, 0, 0, 0.06);
+    box-shadow:
+      0 22px 55px rgba(28, 131, 170, 0.18),
+      0 8px 24px rgba(0, 0, 0, 0.06);
     border-color: rgba(28, 131, 170, 0.35);
   }
 
@@ -264,7 +269,9 @@
   }
 
   .gallery-slide.swiper-slide-active .gallery-card {
-    box-shadow: 0 22px 55px rgba(28, 131, 170, 0.18), 0 8px 24px rgba(0, 0, 0, 0.06);
+    box-shadow:
+      0 22px 55px rgba(28, 131, 170, 0.18),
+      0 8px 24px rgba(0, 0, 0, 0.06);
     border-color: rgba(28, 131, 170, 0.35);
   }
 
@@ -312,7 +319,7 @@
 
 /* Gallery bottom accent bar */
 .gallery-slide::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: 0px;
   left: 20%;
@@ -323,7 +330,9 @@
   box-shadow: 0 4px 15px rgba(28, 131, 170, 0.45);
   opacity: 0;
   transform: scaleX(0.3);
-  transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
+  transition:
+    opacity 0.5s ease,
+    transform 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
   z-index: 12;
 }
 
@@ -336,8 +345,8 @@
 
 @media (max-width: 1023px) {
   .gallery-slide.swiper-slide-active::after {
-  opacity: 1;
-  transform: scaleX(1);
+    opacity: 1;
+    transform: scaleX(1);
   }
 }
 
@@ -442,7 +451,14 @@
 .doctor-hybrid-details {
   flex: 0 0 50%;
   max-width: 50%;
-  background: linear-gradient(to right, rgba(206, 237, 248, 0.45) 0%, rgba(225, 245, 252, 0.3) 20%, rgba(240, 250, 254, 0.15) 38%, #ffffff 58%, #ffffff 100%);
+  background: linear-gradient(
+    to right,
+    rgba(206, 237, 248, 0.45) 0%,
+    rgba(225, 245, 252, 0.3) 20%,
+    rgba(240, 250, 254, 0.15) 38%,
+    #ffffff 58%,
+    #ffffff 100%
+  );
   border-radius: 65px 0 0 65px;
   border: 1.5px solid #d9edf5;
   border-right: none; /* Seamless junction with portrait card */
@@ -527,7 +543,14 @@
     border: 1.5px solid #d9edf5;
     border-top: none; /* Seamless vertical junction with portrait card above */
     /* On mobile: Very light blue at bottom that fades completely to pure white at top where it meets the portrait */
-    background: linear-gradient(to top, rgba(206, 237, 248, 0.45) 0%, rgba(225, 245, 252, 0.3) 20%, rgba(240, 250, 254, 0.15) 40%, #ffffff 60%, #ffffff 100%);
+    background: linear-gradient(
+      to top,
+      rgba(206, 237, 248, 0.45) 0%,
+      rgba(225, 245, 252, 0.3) 20%,
+      rgba(240, 250, 254, 0.15) 40%,
+      #ffffff 60%,
+      #ffffff 100%
+    );
     box-shadow: 0 16px 45px rgba(28, 67, 79, 0.08);
     padding: 30px 14px 38px;
   }

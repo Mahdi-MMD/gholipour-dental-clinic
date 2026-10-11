@@ -16,16 +16,14 @@ interface ArticleDetailProps {
 }
 
 export async function generateStaticParams() {
-  return ARTICLES_DATA.map((article) => ({
+  return ARTICLES_DATA.map(article => ({
     slug: article.slug,
   }));
 }
 
-export async function generateMetadata({
-  params,
-}: ArticleDetailProps): Promise<Metadata> {
+export async function generateMetadata({ params }: ArticleDetailProps): Promise<Metadata> {
   const { slug } = await params;
-  const article = ARTICLES_DATA.find((a) => a.slug === slug);
+  const article = ARTICLES_DATA.find(a => a.slug === slug);
 
   if (!article) {
     return {
@@ -33,19 +31,22 @@ export async function generateMetadata({
     };
   }
 
-  const pageUrl = `/articles/${article.slug}`;
-  const ogImages = article.image
-    ? [
-        {
-          url: article.image.startsWith('http')
-            ? article.image
-            : `https://gholipourdental.com${article.image}`,
-          width: 1200,
-          height: 630,
-          alt: article.imageAlt || article.title,
-        },
-      ]
-    : undefined;
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://gholipourdental.com';
+  const pageUrl = `${siteUrl}/articles/${article.slug}`;
+  const ogImageUrl = article.image
+    ? article.image.startsWith('http')
+      ? article.image
+      : `${siteUrl}${article.image.startsWith('/') ? '' : '/'}${article.image}`
+    : `${siteUrl}/assets/clinic-dental-unit.webp`;
+
+  const ogImages = [
+    {
+      url: ogImageUrl,
+      width: 1200,
+      height: 630,
+      alt: article.imageAlt || article.title,
+    },
+  ];
 
   const effectiveTitle = article.seoTitle || article.title;
 
@@ -71,7 +72,7 @@ export async function generateMetadata({
       card: 'summary_large_image',
       title: effectiveTitle,
       description: article.summary,
-      images: article.image ? [article.image] : undefined,
+      images: [ogImageUrl],
     },
   };
 }
@@ -134,7 +135,10 @@ function parseBold(text: string): React.ReactNode[] {
       parts.push(text.slice(lastIndex, m.index));
     }
     parts.push(
-      <strong key={`bold-${m.index}`} style={{ fontWeight: 700, color: 'var(--color-primary-dark)' }}>
+      <strong
+        key={`bold-${m.index}`}
+        style={{ fontWeight: 700, color: 'var(--color-primary-dark)' }}
+      >
         {m[1]}
       </strong>
     );
@@ -151,12 +155,18 @@ function renderFormattedBody(text: string) {
   if (!text) return null;
 
   // Split by double line breaks into distinct block elements
-  const rawBlocks = text.split(/\n\s*\n/).map((b) => b.trim()).filter(Boolean);
+  const rawBlocks = text
+    .split(/\n\s*\n/)
+    .map(b => b.trim())
+    .filter(Boolean);
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', textAlign: 'justify' }}>
       {rawBlocks.map((block, blockIdx) => {
-        const lines = block.split('\n').map((l) => l.trim()).filter(Boolean);
+        const lines = block
+          .split('\n')
+          .map(l => l.trim())
+          .filter(Boolean);
 
         // Check if block is a sub-heading (### Heading)
         if (block.startsWith('###')) {
@@ -192,12 +202,12 @@ function renderFormattedBody(text: string) {
         const isTable =
           lines.length >= 2 &&
           lines[0].includes('|') &&
-          lines.some((l) => /^\|?\s*:?-+:?\s*\|/.test(l));
+          lines.some(l => /^\|?\s*:?-+:?\s*\|/.test(l));
 
         if (isTable) {
-          const tableLines = lines.filter((l) => l.includes('|'));
+          const tableLines = lines.filter(l => l.includes('|'));
           // Find separator row index (e.g. |---|---|)
-          const separatorIdx = tableLines.findIndex((l) => /^\|?\s*:?-+:?\s*\|/.test(l));
+          const separatorIdx = tableLines.findIndex(l => /^\|?\s*:?-+:?\s*\|/.test(l));
           const headerLine = separatorIdx > 0 ? tableLines[0] : null;
           const bodyLines = separatorIdx >= 0 ? tableLines.slice(separatorIdx + 1) : tableLines;
 
@@ -206,7 +216,7 @@ function renderFormattedBody(text: string) {
               .replace(/^\|/, '')
               .replace(/\|$/, '')
               .split('|')
-              .map((c) => c.trim());
+              .map(c => c.trim());
 
           const headers = headerLine ? parseRow(headerLine) : [];
 
@@ -237,7 +247,8 @@ function renderFormattedBody(text: string) {
                   <thead>
                     <tr
                       style={{
-                        backgroundColor: 'var(--color-primary-ultralight, rgba(14, 165, 233, 0.08))',
+                        backgroundColor:
+                          'var(--color-primary-ultralight, rgba(14, 165, 233, 0.08))',
                         borderBottom: '2px solid var(--color-primary)',
                       }}
                     >
@@ -296,7 +307,7 @@ function renderFormattedBody(text: string) {
         }
 
         // Check if all lines are numbered list items (e.g. "۱. ...", "1. ...")
-        const isOrderedList = lines.every((line) => /^[0-9۰-۹]+[\.\-]\s+/.test(line));
+        const isOrderedList = lines.every(line => /^[0-9۰-۹]+[\.\-]\s+/.test(line));
         if (isOrderedList && lines.length > 0) {
           return (
             <ol
@@ -313,7 +324,10 @@ function renderFormattedBody(text: string) {
               {lines.map((line, lineIdx) => {
                 const itemContent = line.replace(/^[0-9۰-۹]+[\.\-]\s+/, '');
                 return (
-                  <li key={`oli-${lineIdx}`} style={{ lineHeight: 1.9, color: 'var(--color-text-body)' }}>
+                  <li
+                    key={`oli-${lineIdx}`}
+                    style={{ lineHeight: 1.9, color: 'var(--color-text-body)' }}
+                  >
                     {renderInlineFormatting(itemContent)}
                   </li>
                 );
@@ -323,7 +337,7 @@ function renderFormattedBody(text: string) {
         }
 
         // Check if all lines are bullet list items (e.g. "- ...", "* ...")
-        const isBulletList = lines.every((line) => /^[\-\*•]\s+/.test(line));
+        const isBulletList = lines.every(line => /^[\-\*•]\s+/.test(line));
         if (isBulletList && lines.length > 0) {
           return (
             <ul
@@ -340,7 +354,10 @@ function renderFormattedBody(text: string) {
               {lines.map((line, lineIdx) => {
                 const itemContent = line.replace(/^[\-\*•]\s+/, '');
                 return (
-                  <li key={`uli-${lineIdx}`} style={{ lineHeight: 1.9, color: 'var(--color-text-body)' }}>
+                  <li
+                    key={`uli-${lineIdx}`}
+                    style={{ lineHeight: 1.9, color: 'var(--color-text-body)' }}
+                  >
                     {renderInlineFormatting(itemContent)}
                   </li>
                 );
@@ -350,13 +367,24 @@ function renderFormattedBody(text: string) {
         }
 
         // Mixed block: has lines starting with bullet/number or plain paragraph
-        if (lines.length > 1 && lines.some((l) => /^([0-9۰-۹]+[\.\-]|[\-\*•])\s+/.test(l))) {
+        if (lines.length > 1 && lines.some(l => /^([0-9۰-۹]+[\.\-]|[\-\*•])\s+/.test(l))) {
           return (
-            <div key={`mixed-${blockIdx}`} style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <div
+              key={`mixed-${blockIdx}`}
+              style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}
+            >
               {lines.map((line, lineIdx) => {
                 if (/^[0-9۰-۹]+[\.\-]\s+/.test(line)) {
                   return (
-                    <div key={`mline-${lineIdx}`} style={{ paddingRight: '12px', display: 'flex', gap: '8px', alignItems: 'baseline' }}>
+                    <div
+                      key={`mline-${lineIdx}`}
+                      style={{
+                        paddingRight: '12px',
+                        display: 'flex',
+                        gap: '8px',
+                        alignItems: 'baseline',
+                      }}
+                    >
                       <span style={{ color: 'var(--color-primary)', fontWeight: 700 }}>
                         {line.match(/^[0-9۰-۹]+[\.\-]/)?.[0]}
                       </span>
@@ -368,7 +396,15 @@ function renderFormattedBody(text: string) {
                 }
                 if (/^[\-\*•]\s+/.test(line)) {
                   return (
-                    <div key={`mline-${lineIdx}`} style={{ paddingRight: '12px', display: 'flex', gap: '8px', alignItems: 'baseline' }}>
+                    <div
+                      key={`mline-${lineIdx}`}
+                      style={{
+                        paddingRight: '12px',
+                        display: 'flex',
+                        gap: '8px',
+                        alignItems: 'baseline',
+                      }}
+                    >
                       <span style={{ color: 'var(--color-primary)', fontSize: '14px' }}>•</span>
                       <span style={{ lineHeight: 1.9 }}>
                         {renderInlineFormatting(line.replace(/^[\-\*•]\s+/, ''))}
@@ -399,7 +435,7 @@ function renderFormattedBody(text: string) {
 
 export default async function ArticleDetailPage({ params }: ArticleDetailProps) {
   const { slug } = await params;
-  const article = ARTICLES_DATA.find((a) => a.slug === slug);
+  const article = ARTICLES_DATA.find(a => a.slug === slug);
 
   if (!article) {
     notFound();
@@ -407,10 +443,9 @@ export default async function ArticleDetailPage({ params }: ArticleDetailProps) 
 
   // Related articles based on shared category or keywords
   const relatedArticles = ARTICLES_DATA.filter(
-    (a) =>
+    a =>
       a.id !== article.id &&
-      (a.category === article.category ||
-        a.keywords.some((k) => article.keywords.includes(k)))
+      (a.category === article.category || a.keywords.some(k => article.keywords.includes(k)))
   ).slice(0, 3);
 
   const articleSchema = {
@@ -457,7 +492,7 @@ export default async function ArticleDetailPage({ params }: ArticleDetailProps) 
     },
     ...(article.citations && article.citations.length > 0
       ? {
-          citation: article.citations.map((c) => ({
+          citation: article.citations.map(c => ({
             '@type': 'CreativeWork',
             name: c.title,
             publisher: c.source,
@@ -465,11 +500,11 @@ export default async function ArticleDetailPage({ params }: ArticleDetailProps) 
           })),
         }
       : {}),
-    ...(article.sections && article.sections.some((s) => s.doctorComment)
+    ...(article.sections && article.sections.some(s => s.doctorComment)
       ? {
           hasPart: article.sections
-            .filter((s) => s.doctorComment)
-            .map((s) => ({
+            .filter(s => s.doctorComment)
+            .map(s => ({
               '@type': 'Comment',
               name: `یادداشت بالینی: ${s.title}`,
               text: s.doctorComment,
@@ -513,7 +548,7 @@ export default async function ArticleDetailPage({ params }: ArticleDetailProps) 
       ? {
           '@context': 'https://schema.org',
           '@type': 'FAQPage',
-          mainEntity: article.faqs.map((faq) => ({
+          mainEntity: article.faqs.map(faq => ({
             '@type': 'Question',
             name: faq.question,
             acceptedAnswer: {
@@ -637,17 +672,11 @@ export default async function ArticleDetailPage({ params }: ArticleDetailProps) 
               }}
             >
               <span>
-                <i
-                  className="fa-regular fa-clock"
-                  style={{ marginLeft: '6px' }}
-                ></i>
+                <i className="fa-regular fa-clock" style={{ marginLeft: '6px' }}></i>
                 زمان مطالعه: {article.readTime}
               </span>
               <span>
-                <i
-                  className="fa-regular fa-calendar"
-                  style={{ marginLeft: '6px' }}
-                ></i>
+                <i className="fa-regular fa-calendar" style={{ marginLeft: '6px' }}></i>
                 {article.date}
               </span>
               <span>
@@ -816,9 +845,7 @@ export default async function ArticleDetailPage({ params }: ArticleDetailProps) 
                           transition: 'color 0.2s ease',
                         }}
                       >
-                        <span style={{ color: '#0284c7', fontSize: '12px' }}>
-                          {i + 1}.
-                        </span>
+                        <span style={{ color: '#0284c7', fontSize: '12px' }}>{i + 1}.</span>
                         <span>{sec.title}</span>
                       </a>
                     </li>
@@ -857,7 +884,7 @@ export default async function ArticleDetailPage({ params }: ArticleDetailProps) 
               }}
             >
               {article.sections && article.sections.length > 0
-                ? article.sections.map((section) => (
+                ? article.sections.map(section => (
                     <section
                       key={section.id}
                       id={section.id}
@@ -978,19 +1005,14 @@ export default async function ArticleDetailPage({ params }: ArticleDetailProps) 
                     </section>
                   ))
                 : article.content.map((paragraph, index) => (
-                    <div
-                      key={index}
-                      style={{ marginBottom: '22px', textAlign: 'justify' }}
-                    >
+                    <div key={index} style={{ marginBottom: '22px', textAlign: 'justify' }}>
                       {renderFormattedBody(paragraph)}
                     </div>
                   ))}
             </article>
 
             {/* FAQ Accordion Section */}
-            {article.faqs && article.faqs.length > 0 && (
-              <ArticleFaqAccordion faqs={article.faqs} />
-            )}
+            {article.faqs && article.faqs.length > 0 && <ArticleFaqAccordion faqs={article.faqs} />}
 
             {/* Author E-E-A-T Bio Box */}
             <aside
@@ -1027,7 +1049,15 @@ export default async function ArticleDetailPage({ params }: ArticleDetailProps) 
                 />
               </div>
               <div style={{ flex: '1 1 280px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', marginBottom: '4px' }}>
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    flexWrap: 'wrap',
+                    marginBottom: '4px',
+                  }}
+                >
                   <span
                     style={{
                       fontSize: '16px',
@@ -1058,7 +1088,10 @@ export default async function ArticleDetailPage({ params }: ArticleDetailProps) 
                     lineHeight: 1.6,
                   }}
                 >
-                  دکترای حرفه‌ای دندان‌پزشکی کلینیک دندانپزشکی قلی‌پور | <span style={{ fontWeight: 700, color: 'var(--color-primary-dark)' }}>کد نظام پزشکی: ۲۲۹۳۵۳</span>
+                  دکترای حرفه‌ای دندان‌پزشکی کلینیک دندانپزشکی قلی‌پور |{' '}
+                  <span style={{ fontWeight: 700, color: 'var(--color-primary-dark)' }}>
+                    کد نظام پزشکی: ۲۲۹۳۵۳
+                  </span>
                 </div>
                 <div
                   style={{
@@ -1069,7 +1102,9 @@ export default async function ArticleDetailPage({ params }: ArticleDetailProps) 
                     textAlign: 'justify',
                   }}
                 >
-                  این مقاله بر اساس آخرین شواهد و ژورنال‌های معتبر بین‌المللی دندانپزشکی نگارش یافته و با هدف ارتقای آگاهی بیماران، توسط دکتر مهدی محمدنژاد (کد نظام پزشکی ۲۲۹۳۵۳) بازبینی علمی و تایید شده است.
+                  این مقاله بر اساس آخرین شواهد و ژورنال‌های معتبر بین‌المللی دندانپزشکی نگارش یافته
+                  و با هدف ارتقای آگاهی بیماران، توسط دکتر مهدی محمدنژاد (کد نظام پزشکی ۲۲۹۳۵۳)
+                  بازبینی علمی و تایید شده است.
                 </div>
               </div>
             </aside>
@@ -1097,7 +1132,10 @@ export default async function ArticleDetailPage({ params }: ArticleDetailProps) 
                     marginBottom: '12px',
                   }}
                 >
-                  <i className="fa-solid fa-book-medical" style={{ color: 'var(--color-primary)' }}></i>
+                  <i
+                    className="fa-solid fa-book-medical"
+                    style={{ color: 'var(--color-primary)' }}
+                  ></i>
                   <span>منابع علمی و مقالات استناد شده (DOI / Medical Journals):</span>
                 </div>
                 <ol
@@ -1156,14 +1194,11 @@ export default async function ArticleDetailPage({ params }: ArticleDetailProps) 
                     marginBottom: '10px',
                   }}
                 >
-                  <i
-                    className="fa-solid fa-tags"
-                    style={{ marginLeft: '6px' }}
-                  ></i>
+                  <i className="fa-solid fa-tags" style={{ marginLeft: '6px' }}></i>
                   کلیدواژه‌ها و موضوعات مرتبط:
                 </div>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-                  {article.keywords.map((kw) => (
+                  {article.keywords.map(kw => (
                     <Link
                       key={kw}
                       href={`/articles?q=${encodeURIComponent(kw)}`}
@@ -1206,12 +1241,11 @@ export default async function ArticleDetailPage({ params }: ArticleDetailProps) 
                 <div
                   style={{
                     display: 'grid',
-                    gridTemplateColumns:
-                      'repeat(auto-fit, minmax(240px, 1fr))',
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
                     gap: '16px',
                   }}
                 >
-                  {relatedArticles.map((rel) => (
+                  {relatedArticles.map(rel => (
                     <Link
                       key={rel.id}
                       href={`/articles/${rel.slug}`}
@@ -1247,10 +1281,7 @@ export default async function ArticleDetailPage({ params }: ArticleDetailProps) 
                       </h4>
                       <span style={{ fontSize: '12px', color: '#68828d' }}>
                         مطالعه مقاله{' '}
-                        <i
-                          className="fa-solid fa-arrow-left"
-                          style={{ marginRight: '4px' }}
-                        ></i>
+                        <i className="fa-solid fa-arrow-left" style={{ marginRight: '4px' }}></i>
                       </span>
                     </Link>
                   ))}

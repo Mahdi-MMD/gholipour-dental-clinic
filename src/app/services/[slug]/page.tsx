@@ -12,14 +12,12 @@ interface ServicePageProps {
 }
 
 export async function generateStaticParams() {
-  return Object.keys(SERVICES_DATA).map((slug) => ({
+  return Object.keys(SERVICES_DATA).map(slug => ({
     slug,
   }));
 }
 
-export async function generateMetadata({
-  params,
-}: ServicePageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: ServicePageProps): Promise<Metadata> {
   const { slug } = await params;
   const service = SERVICES_DATA[slug];
 
@@ -48,7 +46,9 @@ export async function generateMetadata({
       type: 'website',
       images: [
         {
-          url: service.heroIllustration,
+          url: service.heroIllustration.startsWith('http')
+            ? service.heroIllustration
+            : `${siteUrl}${service.heroIllustration.startsWith('/') ? '' : '/'}${service.heroIllustration}`,
           width: 600,
           height: 600,
           alt: service.title,
@@ -59,7 +59,11 @@ export async function generateMetadata({
       card: 'summary_large_image',
       title: service.seoTitle,
       description: service.seoDescription,
-      images: [service.heroIllustration],
+      images: [
+        service.heroIllustration.startsWith('http')
+          ? service.heroIllustration
+          : `${siteUrl}${service.heroIllustration.startsWith('/') ? '' : '/'}${service.heroIllustration}`,
+      ],
     },
   };
 }
@@ -92,7 +96,7 @@ export default async function ServiceDetailPage({ params }: ServicePageProps) {
           procedureType: service.procedureType ?? 'https://schema.org/SurgicalProcedure',
           description: service.seoDescription,
           howPerformed: service.journeySteps
-            .map((s) => `${s.stepNumber}. ${s.title}: ${s.summary}`)
+            .map(s => `${s.stepNumber}. ${s.title}: ${s.summary}`)
             .join(' | '),
         },
       },
@@ -116,7 +120,7 @@ export default async function ServiceDetailPage({ params }: ServicePageProps) {
           latitude: '37.4368492',
           longitude: '49.8711579',
         },
-        areaServed: service.nearbyCitiesServed.map((cityName) => ({
+        areaServed: service.nearbyCitiesServed.map(cityName => ({
           '@type': 'AdministrativeArea',
           name: cityName,
         })),
@@ -124,7 +128,7 @@ export default async function ServiceDetailPage({ params }: ServicePageProps) {
       {
         '@type': 'FAQPage',
         '@id': `${pageUrl}#faq`,
-        mainEntity: service.faqs.map((faq) => ({
+        mainEntity: service.faqs.map(faq => ({
           '@type': 'Question',
           name: faq.question,
           acceptedAnswer: {

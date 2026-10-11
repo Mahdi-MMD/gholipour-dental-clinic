@@ -307,7 +307,7 @@
 .service-page-main .service-hero-graphic-card::before,
 .service-page-main .service-hero-graphic-card::after {
   position: absolute;
-  content: '';
+  content: "";
   border-radius: 50%;
   pointer-events: none;
 }
@@ -318,7 +318,12 @@
   left: 3%;
   width: 86%;
   aspect-ratio: 1;
-  background: radial-gradient(circle at 47% 46%, rgba(197, 237, 250, 0.76), rgba(226, 246, 252, 0.22) 65%, transparent 70%);
+  background: radial-gradient(
+    circle at 47% 46%,
+    rgba(197, 237, 250, 0.76),
+    rgba(226, 246, 252, 0.22) 65%,
+    transparent 70%
+  );
 }
 
 .service-page-main .service-hero-graphic-card::after {
@@ -546,7 +551,7 @@
 }
 
 .pain-pillar-card::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   right: 0;
@@ -616,7 +621,7 @@
 }
 
 .diagnosis-card::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   right: 0;
@@ -675,7 +680,7 @@
 }
 
 .timeline-track::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 30px;
   bottom: 30px;
@@ -823,7 +828,7 @@
 }
 
 .support-card::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   right: 0;
@@ -1693,7 +1698,7 @@
 }
 
 .quality-standard-banner::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   right: 0;

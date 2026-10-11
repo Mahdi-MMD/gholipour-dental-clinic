@@ -39,8 +39,8 @@ export function ArticleFaqAccordion({ faqs }: { faqs: ArticleFAQ[] }) {
   const [openIndexes, setOpenIndexes] = useState<number[]>([0]);
 
   const toggleIndex = (index: number) => {
-    setOpenIndexes((prev) =>
-      prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index]
+    setOpenIndexes(prev =>
+      prev.includes(index) ? prev.filter(i => i !== index) : [...prev, index]
     );
   };
 
@@ -162,11 +162,7 @@ export function ArticleFaqAccordion({ faqs }: { faqs: ArticleFAQ[] }) {
   );
 }
 
-export default function ArticleClientWrapper({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function ArticleClientWrapper({ children }: { children: React.ReactNode }) {
   const [isBookingOpen, setIsBookingOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 

@@ -4,51 +4,57 @@
    ========================================================== */
 
 @font-face {
-  font-family: 'PeydaWeb';
-  src: url('https://qafdentalclinic.com/wp-content/uploads/2025/08/PeydaWeb-Regular.woff2') format('woff2');
+  font-family: "Vazirmatn";
+  src: url("/fonts/Vazirmatn-Regular.woff2") format("woff2");
   font-weight: 400;
   font-display: swap;
 }
 @font-face {
-  font-family: 'PeydaWeb';
-  src: url('https://qafdentalclinic.com/wp-content/uploads/2025/08/PeydaWeb-SemiBold.woff2') format('woff2');
+  font-family: "Vazirmatn";
+  src: url("/fonts/Vazirmatn-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Vazirmatn";
+  src: url("/fonts/Vazirmatn-SemiBold.woff2") format("woff2");
   font-weight: 600;
   font-display: swap;
 }
 @font-face {
-  font-family: 'PeydaWeb';
-  src: url('https://qafdentalclinic.com/wp-content/uploads/2025/08/PeydaWeb-Bold.woff2') format('woff2');
+  font-family: "Vazirmatn";
+  src: url("/fonts/Vazirmatn-Bold.woff2") format("woff2");
   font-weight: 700;
   font-display: swap;
 }
 @font-face {
-  font-family: 'PeydaWeb';
-  src: url('https://qafdentalclinic.com/wp-content/uploads/2025/08/PeydaWeb-Black.woff2') format('woff2');
+  font-family: "Vazirmatn";
+  src: url("/fonts/Vazirmatn-Black.woff2") format("woff2");
   font-weight: 900;
   font-display: swap;
 }
 
 :root {
   /* Golden Ratio 60-30-10 Palette */
-  --color-primary-dark: #1c434f;   /* 30% Structural: Deep Navy Teal */
-  --color-primary: #1c83aa;        /* 10% Accent/Action: Vibrant Ocean Blue */
+  --color-primary-dark: #1c434f; /* 30% Structural: Deep Navy Teal */
+  --color-primary: #1c83aa; /* 10% Accent/Action: Vibrant Ocean Blue */
   --color-primary-hover: #156b8c;
-  --color-ice-blue: #c4eaf7;       /* Soft Ice Blue: Borders & Highlights */
-  --color-sky-tint: #e3f9ff;       /* Light Sky Tint: Surface & Badges */
-  --color-bg-light: #f8fdff;       /* Surface Tint */
-  --color-white: #ffffff;          /* 60% Dominant: Clean Pure White */
-  
+  --color-ice-blue: #c4eaf7; /* Soft Ice Blue: Borders & Highlights */
+  --color-sky-tint: #e3f9ff; /* Light Sky Tint: Surface & Badges */
+  --color-bg-light: #f8fdff; /* Surface Tint */
+  --color-white: #ffffff; /* 60% Dominant: Clean Pure White */
+
   --color-dark: #1c434f;
   --color-text-body: #2d4f5c;
-  --color-text-muted: #5a7d8c;
+  --color-text-muted: #4e707e;
   --color-border: #d8eef5;
-  
-  --font-base: 'PeydaWeb', 'Vazirmatn', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  --font-base: "Vazirmatn", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --radius-sm: 8px;
   --radius-md: 14px;
   --radius-lg: 22px;
   --radius-pill: 50px;
-  
+
   --shadow-sm: 0 4px 15px rgba(28, 67, 79, 0.05);
   --shadow-md: 0 10px 30px rgba(28, 67, 79, 0.09);
   --shadow-lg: 0 20px 45px rgba(28, 131, 170, 0.16);
@@ -70,7 +76,7 @@ html {
   scrollbar-color: var(--color-primary) #f1f5f8;
 }
 
-/* Custom Scrollbar matching reference site (qafdentalclinic) in theme blue */
+/* Custom Scrollbar in theme blue */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -119,7 +125,8 @@ ul {
   list-style: none;
 }
 
-button, input {
+button,
+input {
   font-family: inherit;
 }
 
@@ -248,7 +255,9 @@ button, input {
   backdrop-filter: blur(16px);
   border-radius: var(--radius-pill);
   border: 1px solid rgba(216, 238, 245, 0.85);
-  box-shadow: 0 10px 30px -5px rgba(28, 131, 170, 0.12), 0 4px 12px rgba(28, 67, 79, 0.05);
+  box-shadow:
+    0 10px 30px -5px rgba(28, 131, 170, 0.12),
+    0 4px 12px rgba(28, 67, 79, 0.05);
   transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -260,7 +269,9 @@ button, input {
   padding: 7px 20px;
   background-color: rgba(255, 255, 255, 0.98);
   border-color: rgba(196, 234, 247, 0.95);
-  box-shadow: 0 14px 34px -5px rgba(28, 131, 170, 0.18), 0 6px 16px rgba(28, 67, 79, 0.08);
+  box-shadow:
+    0 14px 34px -5px rgba(28, 131, 170, 0.18),
+    0 6px 16px rgba(28, 67, 79, 0.08);
 }
 
 .header-logo a {
@@ -274,7 +285,8 @@ button, input {
   object-fit: contain;
   display: block;
   transition: transform 0.3s ease;
-  -webkit-mask: linear-gradient(-60deg, #000 30%, rgba(0, 0, 0, 0.35) 40%, #000 50%) right / 300% 100%;
+  -webkit-mask: linear-gradient(-60deg, #000 30%, rgba(0, 0, 0, 0.35) 40%, #000 50%) right / 300%
+    100%;
   mask: linear-gradient(-60deg, #000 30%, rgba(0, 0, 0, 0.35) 40%, #000 50%) right / 300% 100%;
   animation: logoShine 10s ease-in-out infinite;
 }
@@ -284,7 +296,8 @@ button, input {
 }
 
 .footer-logo-img {
-  -webkit-mask: linear-gradient(-60deg, #000 30%, rgba(0, 0, 0, 0.35) 40%, #000 50%) right / 300% 100%;
+  -webkit-mask: linear-gradient(-60deg, #000 30%, rgba(0, 0, 0, 0.35) 40%, #000 50%) right / 300%
+    100%;
   mask: linear-gradient(-60deg, #000 30%, rgba(0, 0, 0, 0.35) 40%, #000 50%) right / 300% 100%;
   animation: logoShine 10s ease-in-out infinite;
 }
@@ -322,7 +335,8 @@ button, input {
   position: relative;
 }
 
-.nav-link:hover, .nav-item.active .nav-link {
+.nav-link:hover,
+.nav-item.active .nav-link {
   color: var(--color-primary);
 }
 
@@ -399,7 +413,11 @@ button, input {
 .hero-section {
   margin-top: -85px;
   padding: 145px 0 80px;
-  background: radial-gradient(circle at top right, rgba(196, 234, 247, 0.4) 0%, rgba(255, 255, 255, 0.8) 60%);
+  background: radial-gradient(
+    circle at top right,
+    rgba(196, 234, 247, 0.4) 0%,
+    rgba(255, 255, 255, 0.8) 60%
+  );
   position: relative;
 }
 
@@ -530,31 +548,46 @@ button, input {
   justify-content: center;
   background: #ffffff;
   border-radius: 50%;
+  border: 3px solid #ffffff;
   box-shadow: 0 4px 14px rgba(28, 67, 79, 0.08);
   transition: var(--transition);
+  overflow: hidden;
+}
+
+.service-pill.active .pill-icon-box {
+  border: 3px solid #ffffff;
+  box-shadow: 0 4px 14px rgba(28, 67, 79, 0.12);
 }
 
 .pill-bg {
   position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: contain;
-  opacity: 0.22;
+  opacity: 0.7;
+  pointer-events: none;
+  transition: var(--transition);
+}
+
+.service-pill:hover .pill-bg,
+.service-pill.active .pill-bg {
+  opacity: 0.95;
 }
 
 .pill-fg {
-  width: 52px;
-  height: 52px;
+  width: 48px;
+  height: 48px;
   object-fit: contain;
   position: relative;
   z-index: 2;
-  filter: drop-shadow(0 3px 6px rgba(28, 131, 170, 0.2));
+  filter: drop-shadow(0 2px 5px rgba(28, 131, 170, 0.15));
   transition: var(--transition);
 }
 
 .service-pill:hover .pill-fg,
 .service-pill.active .pill-fg {
-  transform: scale(1.1);
+  transform: scale(1.08);
 }
 
 .pill-title {
@@ -588,8 +621,14 @@ button, input {
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .service-tab-body {
@@ -614,19 +653,12 @@ button, input {
 }
 
 .service-tab-graphic img {
-  max-width: 190px;
-  max-height: 190px;
+  max-width: 155px;
+  max-height: 155px;
   width: auto;
   height: auto;
   margin: 0 auto;
-  filter: drop-shadow(0 12px 24px rgba(28, 131, 170, 0.2));
-}
-
-/* Crown & Composite SVGs have larger visual optical weight than the illustrations, scale slightly to match */
-#tab-crown .service-tab-graphic img,
-#tab-composite-laminate .service-tab-graphic img {
-  max-width: 145px;
-  max-height: 145px;
+  filter: drop-shadow(0 10px 20px rgba(28, 131, 170, 0.18));
 }
 
 /* ==================== PORTFOLIO / INTERACTIVE BEFORE-AFTER ==================== */
@@ -655,7 +687,8 @@ button, input {
   transition: var(--transition);
 }
 
-.gallery-tab-btn:hover, .gallery-tab-btn.active {
+.gallery-tab-btn:hover,
+.gallery-tab-btn.active {
   background-color: var(--color-primary);
   color: var(--color-white);
   border-color: var(--color-primary);
@@ -680,7 +713,9 @@ button, input {
   border-radius: 16px !important;
   overflow: hidden !important;
   box-shadow: 0 6px 20px rgba(28, 67, 79, 0.08) !important;
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease !important;
+  transition:
+    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.35s ease !important;
 }
 
 .nGY2 .nGY2GThumbnail img {
@@ -721,8 +756,12 @@ button, input {
 }
 
 @keyframes skeletonPulse {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
 }
 
 /* Fallback Mosaic in case CDN is restricted or loading */
@@ -828,14 +867,18 @@ button, input {
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   overflow: hidden;
-  box-shadow: 0 10px 28px -6px rgba(28, 131, 170, 0.18), 0 4px 12px rgba(28, 67, 79, 0.05);
+  box-shadow:
+    0 10px 28px -6px rgba(28, 131, 170, 0.18),
+    0 4px 12px rgba(28, 67, 79, 0.05);
   transition: var(--transition);
   display: flex;
   flex-direction: column;
 }
 
 .ba-card:hover {
-  box-shadow: 0 18px 36px -8px rgba(28, 131, 170, 0.28), 0 8px 18px rgba(28, 67, 79, 0.08);
+  box-shadow:
+    0 18px 36px -8px rgba(28, 131, 170, 0.28),
+    0 8px 18px rgba(28, 67, 79, 0.08);
   transform: translateY(-5px);
 }
 
@@ -1094,7 +1137,9 @@ button, input {
   top: 50%;
   height: 210px;
   margin: -105px 0 0;
-  transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+  transition:
+    transform 0.8s cubic-bezier(0.25, 1, 0.5, 1),
+    opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1);
   opacity: 0;
   z-index: 0;
   cursor: pointer;
@@ -1111,21 +1156,21 @@ button, input {
 
 .vertical-carousel-item.prev {
   transform: translateY(-130px) scale(0.85);
-  opacity: 0.55;
+  opacity: 0.72;
   z-index: 2;
   pointer-events: auto;
 }
 
 .vertical-carousel-item.next {
   transform: translateY(130px) scale(0.85);
-  opacity: 0.55;
+  opacity: 0.72;
   z-index: 2;
   pointer-events: auto;
 }
 
 /* Active Card Accent Pill on the Right (RTL leading edge) */
 .vertical-carousel-item.active::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 22px;
   right: -8px;
@@ -1154,7 +1199,9 @@ button, input {
 }
 
 .vertical-carousel-item.active .v-card-inner {
-  box-shadow: 0 20px 55px rgba(28, 131, 170, 0.12), 0 4px 16px rgba(0, 0, 0, 0.04);
+  box-shadow:
+    0 20px 55px rgba(28, 131, 170, 0.12),
+    0 4px 16px rgba(0, 0, 0, 0.04);
   border-color: rgba(28, 131, 170, 0.16);
 }
 
@@ -1210,7 +1257,7 @@ button, input {
 .v-card-text {
   font-size: 14px;
   line-height: 1.75;
-  color: #555555;
+  color: #383838;
   margin: 0;
   display: -webkit-box;
   -webkit-line-clamp: 4;
@@ -1219,7 +1266,7 @@ button, input {
 }
 
 .vertical-carousel-item.active .v-card-text {
-  color: #333333;
+  color: #1a1a1a;
   font-weight: 500;
 }
 
@@ -1344,9 +1391,10 @@ button, input {
 
 .doctor-slide {
   position: relative;
-  transition: transform 0.6s cubic-bezier(0.25, 0.1, 0.25, 1),
-              opacity 0.6s ease,
-              filter 0.6s ease;
+  transition:
+    transform 0.6s cubic-bezier(0.25, 0.1, 0.25, 1),
+    opacity 0.6s ease,
+    filter 0.6s ease;
   transform: scale(0.75);
   opacity: 0.5;
   filter: saturate(0.1) brightness(1) contrast(1);
@@ -1379,19 +1427,23 @@ button, input {
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
   background-color: var(--color-white);
   border: 1px solid rgba(0, 0, 0, 0.06);
-  transition: box-shadow 0.6s ease, border-color 0.6s ease;
+  transition:
+    box-shadow 0.6s ease,
+    border-color 0.6s ease;
 }
 
 /* Active card elevated shadow & border accent */
 .doctor-slide.swiper-slide-active .doctor-card,
 .doctor-slide.swiper-slide-duplicate-active .doctor-card {
-  box-shadow: 0 20px 48px rgba(28, 131, 170, 0.18), 0 8px 24px rgba(0, 0, 0, 0.05);
+  box-shadow:
+    0 20px 48px rgba(28, 131, 170, 0.18),
+    0 8px 24px rgba(0, 0, 0, 0.05);
   border-color: rgba(28, 131, 170, 0.35);
 }
 
 /* Reference site signature bottom accent bar on active card */
 .doctor-slide::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: 0px;
   left: 15%;
@@ -1402,7 +1454,9 @@ button, input {
   box-shadow: 0 4px 15px rgba(28, 131, 170, 0.45);
   opacity: 0;
   transform: scaleX(0.3);
-  transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
+  transition:
+    opacity 0.5s ease,
+    transform 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
   z-index: 12;
 }
 
@@ -1482,9 +1536,13 @@ button, input {
 
 @media (max-width: 1060px) {
   .doctor-arrow-prev,
-  .doctor-arrow-left { left: 4px; }
+  .doctor-arrow-left {
+    left: 4px;
+  }
   .doctor-arrow-next,
-  .doctor-arrow-right { right: 4px; }
+  .doctor-arrow-right {
+    right: 4px;
+  }
 }
 
 @media (max-width: 640px) {
@@ -1521,7 +1579,9 @@ button, input {
     justify-content: center;
     border-radius: 24px;
     background: transparent;
-    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    transition:
+      transform 0.4s ease,
+      box-shadow 0.4s ease;
   }
 
   .doctor-cards-item {
@@ -1530,7 +1590,9 @@ button, input {
     background: #ffffff;
     border-radius: 24px;
     overflow: hidden;
-    box-shadow: 0 14px 34px rgba(28, 131, 170, 0.16), 0 4px 14px rgba(0, 0, 0, 0.06);
+    box-shadow:
+      0 14px 34px rgba(28, 131, 170, 0.16),
+      0 4px 14px rgba(0, 0, 0, 0.06);
     border: 1px solid rgba(28, 131, 170, 0.14);
     display: flex;
     flex-direction: column;
@@ -1717,7 +1779,9 @@ button, input {
   display: block;
   border-radius: 32px;
   filter: brightness(101%) contrast(68%) saturate(11%) blur(0px);
-  transition: filter 0.4s ease, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  transition:
+    filter 0.4s ease,
+    transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .article-interactive-card:hover .article-photo-link img {
@@ -1738,7 +1802,10 @@ button, input {
   position: relative;
   z-index: 2;
   border: 1px solid rgba(226, 232, 240, 0.85);
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.35s ease;
+  transition:
+    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.35s ease;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
@@ -1815,7 +1882,7 @@ button, input {
 .article-read-more {
   font-size: 13px;
   font-weight: 700;
-  color: var(--color-primary);
+  color: #166e90;
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -2055,7 +2122,7 @@ button, input {
 }
 
 .footer-bottom-bar {
-  background-color: var(--color-primary);
+  background-color: #166e90;
   color: #ffffff;
   padding: 4px 20px 28px;
   text-align: center;
@@ -2103,7 +2170,9 @@ body.booking-drawer-open .site-header {
   filter: blur(8px) brightness(0.92);
   opacity: 0.6;
   pointer-events: none !important;
-  transition: filter 0.35s ease, opacity 0.35s ease;
+  transition:
+    filter 0.35s ease,
+    opacity 0.35s ease;
 }
 
 .booking-drawer-overlay {
@@ -2115,7 +2184,9 @@ body.booking-drawer-open .site-header {
   z-index: 1001;
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.35s ease, visibility 0.35s ease;
+  transition:
+    opacity 0.35s ease,
+    visibility 0.35s ease;
 }
 
 .booking-drawer-overlay.active {
@@ -2135,15 +2206,24 @@ body.booking-drawer-open .site-header {
   z-index: 1002;
   border-radius: 28px;
   border: 1px solid rgba(196, 234, 247, 0.7);
-  box-shadow: -15px 0 45px rgba(18, 44, 53, 0.22), 0 10px 30px rgba(28, 131, 170, 0.12);
-  transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow:
+    -15px 0 45px rgba(18, 44, 53, 0.22),
+    0 10px 30px rgba(28, 131, 170, 0.12);
+  transition:
+    right 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    visibility 0.4s;
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  visibility: hidden;
+  pointer-events: none;
 }
 
 .booking-drawer.active {
   right: 14px;
+  visibility: visible;
+  pointer-events: auto;
 }
 
 .drawer-header {
@@ -2292,9 +2372,10 @@ body.booking-drawer-open .site-header {
   opacity: 0;
   transform: translateX(-35px);
   pointer-events: none;
-  transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1),
-              transform 0.5s cubic-bezier(0.4, 0, 0.2, 1),
-              filter 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  transition:
+    opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    filter 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .social-bubble-card.active {
@@ -2330,7 +2411,7 @@ body.booking-drawer-open .site-header {
 }
 
 .social-bubble-title {
-  font-family: 'PeydaWeb', sans-serif;
+  font-family: "PeydaWeb", sans-serif;
   font-size: 16px;
   font-weight: 800;
   text-align: right;
@@ -2345,7 +2426,9 @@ body.booking-drawer-open .site-header {
   font-size: 26px;
   line-height: 1;
   color: var(--color-primary);
-  transition: transform 0.25s ease, color 0.25s ease;
+  transition:
+    transform 0.25s ease,
+    color 0.25s ease;
 }
 
 .social-bubble-link:hover .social-bubble-icon {
@@ -2367,7 +2450,9 @@ body.booking-drawer-open .site-header {
   justify-content: center;
   pointer-events: auto;
   cursor: pointer;
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
+  transition:
+    transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.3s ease;
 }
 
 .social-btn-icon3:hover {
@@ -2403,8 +2488,9 @@ body.booking-drawer-open .site-header {
   stroke-linecap: round;
   stroke-linejoin: round;
   stroke-width: 3;
-  transition: stroke-dasharray 600ms cubic-bezier(0.4, 0, 0.2, 1),
-              stroke-dashoffset 600ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition:
+    stroke-dasharray 600ms cubic-bezier(0.4, 0, 0.2, 1),
+    stroke-dashoffset 600ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .line-top-bottom {
@@ -2492,7 +2578,9 @@ body.booking-drawer-open .site-header {
     opacity: 0 !important;
     pointer-events: none !important;
     transform: scale(0.8) !important;
-    transition: opacity 0.25s ease, transform 0.25s ease !important;
+    transition:
+      opacity 0.25s ease,
+      transform 0.25s ease !important;
   }
 
   /* ==================== MODERN MOBILE OFFCANVAS MENU (REFERENCE FIDELITY) ==================== */
@@ -2569,7 +2657,9 @@ body.booking-drawer-open .site-header {
     justify-content: center;
     cursor: pointer;
     pointer-events: auto;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition:
+      transform 0.2s ease,
+      box-shadow 0.2s ease;
   }
   .mobile-offcanvas-close-btn:hover {
     transform: scale(1.05);
@@ -2612,7 +2702,9 @@ body.booking-drawer-open .site-header {
     justify-content: center;
     font-size: 24px;
     color: var(--color-primary);
-    transition: transform 0.22s cubic-bezier(0.4, 0, 0.2, 1), color 0.22s ease;
+    transition:
+      transform 0.22s cubic-bezier(0.4, 0, 0.2, 1),
+      color 0.22s ease;
   }
   .rapid-access-link:hover {
     transform: scale(1.18);
@@ -2731,7 +2823,9 @@ body.booking-drawer-open .site-header {
     justify-content: center;
     font-size: 14px;
     color: var(--color-text-muted);
-    transition: transform 0.25s ease, color 0.2s ease;
+    transition:
+      transform 0.25s ease,
+      color 0.2s ease;
   }
   .services-chevron.rotated {
     transform: rotate(180deg);
@@ -2743,7 +2837,9 @@ body.booking-drawer-open .site-header {
     max-height: 0;
     opacity: 0;
     overflow: hidden;
-    transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease;
+    transition:
+      max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+      opacity 0.25s ease;
     background-color: rgba(248, 253, 255, 0.85);
     border-radius: var(--radius-sm);
     margin: 2px 6px 6px 6px;
@@ -2819,12 +2915,20 @@ body.booking-drawer-open .site-header {
 
   /* Keyframe Animations for Bidirectional Reveal */
   @keyframes fadeInBackdrop {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
   }
   @keyframes fadeOutBackdrop {
-    from { opacity: 1; }
-    to { opacity: 0; }
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
   }
   @keyframes fadeFromLeft {
     0% {
@@ -2944,14 +3048,9 @@ body.booking-drawer-open .site-header {
     direction: rtl;
   }
   .service-tab-graphic img {
-    max-width: 150px;
-    max-height: 150px;
+    max-width: 135px;
+    max-height: 135px;
     margin: 0 auto;
-  }
-  #tab-crown .service-tab-graphic img,
-  #tab-composite-laminate .service-tab-graphic img {
-    max-width: 125px;
-    max-height: 125px;
   }
 
   /* Footer on Tablet */
@@ -3016,18 +3115,22 @@ body.booking-drawer-open .site-header {
     padding: 0;
     gap: 0;
     border-radius: 50%;
-    border-width: 1.5px;
+    border: 1.5px solid var(--color-border);
     box-shadow: 0 2px 8px rgba(28, 67, 79, 0.08);
     -webkit-tap-highlight-color: transparent;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    transition:
+      transform 0.2s ease,
+      border-color 0.2s ease,
+      box-shadow 0.2s ease,
+      background 0.2s ease;
   }
   .service-pill.active {
     transform: translateY(-2px) scale(1.08);
-    border-color: var(--color-primary);
-    box-shadow: 0 4px 14px rgba(28, 131, 170, 0.25);
+    border: 1.5px solid var(--color-primary);
+    box-shadow: 0 4px 14px rgba(28, 131, 170, 0.22);
   }
   .service-pill:hover {
     transform: translateY(-2px);
@@ -3035,11 +3138,16 @@ body.booking-drawer-open .site-header {
   .pill-icon-box {
     width: 100%;
     height: 100%;
-    box-shadow: none;
-    background: transparent;
+    box-shadow: none !important;
+    background: transparent !important;
+    border: none !important;
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+  .service-pill.active .pill-icon-box {
+    border: none !important;
+    box-shadow: none !important;
   }
   .pill-bg {
     display: none;
@@ -3722,7 +3830,9 @@ body.booking-drawer-open .site-header {
   height: 48px;
   border-radius: 50%;
   background-color: var(--color-white);
-  box-shadow: 0 6px 22px rgba(28, 67, 79, 0.18), 0 2px 6px rgba(0, 0, 0, 0.06);
+  box-shadow:
+    0 6px 22px rgba(28, 67, 79, 0.18),
+    0 2px 6px rgba(0, 0, 0, 0.06);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -3731,11 +3841,12 @@ body.booking-drawer-open .site-header {
   opacity: 0;
   visibility: hidden;
   transform: translateY(20px) scale(0.85);
-  transition: opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-              transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-              visibility 0.35s ease,
-              box-shadow 0.3s ease,
-              background-color 0.3s ease;
+  transition:
+    opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    visibility 0.35s ease,
+    box-shadow 0.3s ease,
+    background-color 0.3s ease;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
 }
@@ -3748,7 +3859,9 @@ body.booking-drawer-open .site-header {
 
 .scroll-progress-widget:hover {
   transform: translateY(-4px) scale(1.08);
-  box-shadow: 0 10px 28px rgba(28, 131, 170, 0.32), 0 4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow:
+    0 10px 28px rgba(28, 131, 170, 0.32),
+    0 4px 10px rgba(0, 0, 0, 0.1);
   background-color: var(--color-sky-tint);
 }
 
@@ -3787,7 +3900,9 @@ body.booking-drawer-open .site-header {
   align-items: center;
   justify-content: center;
   color: var(--color-primary);
-  transition: transform 0.25s ease, color 0.25s ease;
+  transition:
+    transform 0.25s ease,
+    color 0.25s ease;
 }
 
 .scroll-progress-widget:hover .scroll-arrow-icon {
@@ -3803,4 +3918,3 @@ body.booking-drawer-open .site-header {
     height: 44px;
   }
 }
-

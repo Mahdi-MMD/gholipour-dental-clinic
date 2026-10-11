@@ -82,11 +82,7 @@ export default function MobileMenu({
       aria-label="منوی موبایل"
     >
       {/* Dark Blurred Backdrop */}
-      <div
-        className="mobile-offcanvas-backdrop"
-        onClick={onClose}
-        aria-hidden="true"
-      />
+      <div className="mobile-offcanvas-backdrop" onClick={onClose} aria-hidden="true" />
 
       {/* Left Side Containers: Close Button (Top) & Rapid Access Pill (Bottom) */}
       <div className="mobile-offcanvas-left-boxes">
@@ -207,7 +203,7 @@ export default function MobileMenu({
               <li className={`drawer-nav-item has-submenu ${isServicesOpen ? 'submenu-open' : ''}`}>
                 <div
                   className="drawer-nav-link services-toggle-row"
-                  onClick={() => setIsServicesOpen((prev) => !prev)}
+                  onClick={() => setIsServicesOpen(prev => !prev)}
                   role="button"
                   tabIndex={0}
                   aria-expanded={isServicesOpen}

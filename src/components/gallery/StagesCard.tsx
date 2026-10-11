@@ -19,7 +19,7 @@ export default function StagesCard({ item }: StagesCardProps) {
     if (!stages || stages.length === 0) return;
 
     // Build items formatted for Fancybox v5/v6 with caption and zoom capability
-    const fancyboxSlides = stages.map((st) => ({
+    const fancyboxSlides = stages.map(st => ({
       src: st.image,
       caption: `
         <div style="direction: rtl; text-align: right; font-family: inherit;">
@@ -29,25 +29,22 @@ export default function StagesCard({ item }: StagesCardProps) {
       `,
     }));
 
-    Fancybox.show(
-      fancyboxSlides,
-      {
-        theme: 'dark',
-        dragToClose: true,
-        Carousel: {
-          Toolbar: {
-            display: {
-              left: ['infobar'],
-              middle: ['zoomIn', 'zoomOut', 'toggle1to1', 'rotateCCW', 'rotateCW'],
-              right: ['thumbs', 'close'],
-            },
-          },
-          Thumbs: {
-            type: 'classic',
+    Fancybox.show(fancyboxSlides, {
+      theme: 'dark',
+      dragToClose: true,
+      Carousel: {
+        Toolbar: {
+          display: {
+            left: ['infobar'],
+            middle: ['zoomIn', 'zoomOut', 'toggle1to1', 'rotateCCW', 'rotateCW'],
+            right: ['thumbs', 'close'],
           },
         },
-      } as any
-    );
+        Thumbs: {
+          type: 'classic',
+        },
+      },
+    } as any);
   };
 
   return (

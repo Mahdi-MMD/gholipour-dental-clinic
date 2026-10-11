@@ -111,8 +111,7 @@ export const SERVICES_DATA: Record<string, ServiceDetailData> = {
     heroBadge: 'کاشت تخصصی ایمپلنت در گیلان',
     heroHeadline: 'کاشت ایمپلنت دندان',
     heroHeadlineAccent: 'با دقت دیجیتال',
-    heroSubheadline:
-      'طرح درمانی روشن و متناسب با شرایط شما.',
+    heroSubheadline: 'طرح درمانی روشن و متناسب با شرایط شما.',
     heroIllustration: '/assets/implant-anatomy-modern.webp',
     experienceSummary:
       'شما شایسته درمانی هستید که در تمام طول آن حس امنیت و آرامش داشته باشید. از لحظه اسکن اولیه تا تحویل روکش نهایی، تمام جزئیات با در نظر گرفتن آسایش بیمار و ماندگاری مادام‌العمر طراحی شده است.',
@@ -120,8 +119,7 @@ export const SERVICES_DATA: Record<string, ServiceDetailData> = {
     mobilePainManagementHeadline: 'کنترل درد و آرامش شما',
     painManagementLead:
       'بزرگ‌ترین نگرانی مراجعین «درد حین جراحی و تورم پس از آن» است. در کلینیک قلی‌پور این دغدغه را با پروتکل اختصاصی بی‌حسی مرحله‌ای و جراحی ظریف برطرف کرده‌ایم:',
-    mobilePainManagementLead:
-      'آرامش با بی‌حسی دقیق و مرحله‌ای.',
+    mobilePainManagementLead: 'آرامش با بی‌حسی دقیق و مرحله‌ای.',
     painManagementPillars: [
       {
         icon: 'fa-solid fa-syringe',
@@ -149,8 +147,7 @@ export const SERVICES_DATA: Record<string, ServiceDetailData> = {
     mobileDiagnosisHeadline: 'تشخیص دقیق با اسکن دیجیتال',
     diagnosisLead:
       'موفقیت پایدار ایمپلنت به جای‌گذاری دقیق فیکسچر در بهترین زاویه و بیشترین تراکم استخوان وابسته است. ما درمان شما را پیش از آغاز به صورت دیجیتال طراحی می‌کنیم:',
-    mobileDiagnosisLead:
-      'برنامه‌ریزی دقیق با اسکن سه‌بعدی فک.',
+    mobileDiagnosisLead: 'برنامه‌ریزی دقیق با اسکن سه‌بعدی فک.',
     diagnosisFeatures: [
       {
         icon: 'fa-solid fa-cube',
@@ -181,21 +178,22 @@ export const SERVICES_DATA: Record<string, ServiceDetailData> = {
     mobileJourneyHeadline: 'مراحل درمان شما',
     journeyLead:
       'درمان شما دارای برنامه زمانی مشخص، شفاف و بدون غافلگیری مالی یا بالینی خواهد بود:',
-    mobileJourneyLead:
-      'از مشاوره تا نصب روکش، مرحله‌به‌مرحله.',
+    mobileJourneyLead: 'از مشاوره تا نصب روکش، مرحله‌به‌مرحله.',
     journeySteps: [
       {
         stepNumber: '۰۱',
         title: 'مشاوره اختصاصی، اسکن و برنامه درمان',
         mobileTitle: 'مشاوره و طرح درمان',
         duration: 'جلسه اول (حدود ۳۰ تا ۴۰ دقیقه)',
-        summary: 'بررسی تصاویر فک، گفت‌وگوی صمیمانه درباره انتظارات و تعیین شفاف هزینه و برند مناسب.',
+        summary:
+          'بررسی تصاویر فک، گفت‌وگوی صمیمانه درباره انتظارات و تعیین شفاف هزینه و برند مناسب.',
         details: [
           'بررسی وضعیت لثه، بهداشت و بیماری‌های زمینه‌ای (مانند قند خون یا فشار)',
           'ارائه طرح درمان مکتوب همراه با برنامه زمان‌بندی',
           'پاسخ به تمام پرسش‌ها و رفع هرگونه ابهام درباره جراحی',
         ],
-        patientComfortTip: 'در این جلسه هیچ جراحی انجام نمی‌شود و تنها هدف، آگاهی و تصمیم‌گیری مطمئن شماست.',
+        patientComfortTip:
+          'در این جلسه هیچ جراحی انجام نمی‌شود و تنها هدف، آگاهی و تصمیم‌گیری مطمئن شماست.',
       },
       {
         stepNumber: '۰۲',
@@ -208,41 +206,45 @@ export const SERVICES_DATA: Record<string, ServiceDetailData> = {
           'جای‌گذاری آرام پایه تیتانیومی در استخوان فک',
           'بخیه ظریف با نخ‌های غیرتحریک‌کننده در صورت نیاز',
         ],
-        patientComfortTip: 'اکثر مراجعین اذعان دارند که کاشت ایمپلنت از کشیدن دندان هم راحت‌تر و سریع‌تر سپری شد.',
+        patientComfortTip:
+          'اکثر مراجعین اذعان دارند که کاشت ایمپلنت از کشیدن دندان هم راحت‌تر و سریع‌تر سپری شد.',
       },
       {
         stepNumber: '۰۳',
         title: 'دوره استئواینتگریشن (جوش خوردن ایمپلنت) و مراقبت مداوم',
         mobileTitle: 'ترمیم و پیگیری',
         duration: 'حدود ۶ الی ۱۰ هفته',
-        summary: 'فرایند پیوند محکم ایمپلنت با استخوان، با همراهی تلفنی و پیگیری تیم مراقبت کلینیک.',
+        summary:
+          'فرایند پیوند محکم ایمپلنت با استخوان، با همراهی تلفنی و پیگیری تیم مراقبت کلینیک.',
         details: [
           'تماس پشتیبان کلینیک در روزهای اول برای بررسی حال عمومی',
           'امکان برقراری تماس اورژانسی مستقیم در تمام ساعات در صورت بروز سوال',
           'ویزیت کوتاه پایش جهت اطمینان از سلامت بافت نرم اطراف ایمپلنت',
         ],
-        patientComfortTip: 'در صورت نیاز به دندان در ناحیه جلویی، پروتز موقت زیبایی برای حفظ ظاهر لبخند تعبیه می‌شود.',
+        patientComfortTip:
+          'در صورت نیاز به دندان در ناحیه جلویی، پروتز موقت زیبایی برای حفظ ظاهر لبخند تعبیه می‌شود.',
       },
       {
         stepNumber: '۰۴',
         title: 'قالب‌گیری دیجیتال و نصب روکش تمام‌سرامیک دائمی',
         mobileTitle: 'نصب روکش نهایی',
         duration: 'جلسات نهایی تحویل',
-        summary: 'طراحی و ساخت روکش زیرکونیا یا تمام‌سرامیک با هماهنگی دقیق رنگ، فرم و عملکرد طبیعی.',
+        summary:
+          'طراحی و ساخت روکش زیرکونیا یا تمام‌سرامیک با هماهنگی دقیق رنگ، فرم و عملکرد طبیعی.',
         details: [
           'قالب‌گیری دقیق فرم لثه و جایگاه فیکسچر',
           'تست فریم، تنظیم بایت (جفت‌شدن دندان‌ها) و درخشش طبیعی',
           'تحویل نهایی، آموزش نخ دندان سوپرفلاس و ثبت پرونده گارانتی',
         ],
-        patientComfortTip: 'دندان جدید شما مانند دندان طبیعی‌تان قابلیت جویدن انواع غذاها را با بالاترین استحکام خواهد داشت.',
+        patientComfortTip:
+          'دندان جدید شما مانند دندان طبیعی‌تان قابلیت جویدن انواع غذاها را با بالاترین استحکام خواهد داشت.',
       },
     ],
     supportHeadline: 'پشتیبانی و همراهی اختصاصی پس از درمان',
     mobileSupportHeadline: 'مراقبت پس از درمان',
     supportLead:
       'در پایان جلسه جراحی، وظیفه ما تمام نمیشود؛ بلکه مراقبت پس از درمان با بالاترین حساسیت آغاز میگردد:',
-    mobileSupportLead:
-      'پیگیری و مراقبت پس از جراحی.',
+    mobileSupportLead: 'پیگیری و مراقبت پس از جراحی.',
     supportCommitments: [
       {
         icon: 'fa-solid fa-headset',
@@ -347,8 +349,7 @@ export const SERVICES_DATA: Record<string, ServiceDetailData> = {
     mobilePainManagementHeadline: 'زیبایی با حفظ مینای دندان',
     painManagementLead:
       'دوران تراش‌های سنگین و آسیب به دندان گذشته است. رویکرد ما در کلینیک قلی‌پور، زیبایی ماندگار با کمترین مداخله و حفظ بافت سالم دندان است:',
-    mobilePainManagementLead:
-      'اصلاح فرم و رنگ دندان‌ها با تکنیک کم‌تراش و بدون آسیب.',
+    mobilePainManagementLead: 'اصلاح فرم و رنگ دندان‌ها با تکنیک کم‌تراش و بدون آسیب.',
     painManagementPillars: [
       {
         icon: 'fa-solid fa-shield-heart',
@@ -377,8 +378,7 @@ export const SERVICES_DATA: Record<string, ServiceDetailData> = {
     mobileDiagnosisHeadline: 'طراحی دیجیتال و شبیه‌سازی لبخند',
     diagnosisLead:
       'با طراحی دیجیتال لبخند، هیچ حدس و گمانی در کار نیست. فرم، رنگ و زاویه دندان‌ها متناسب با آناتومی چهره شما از قبل شبیه‌سازی می‌شود:',
-    mobileDiagnosisLead:
-      'طراحی متناسب با فرم صورت و پیش‌نمایش قبل از درمان.',
+    mobileDiagnosisLead: 'طراحی متناسب با فرم صورت و پیش‌نمایش قبل از درمان.',
     diagnosisFeatures: [
       {
         icon: 'fa-solid fa-face-smile',
@@ -410,8 +410,7 @@ export const SERVICES_DATA: Record<string, ServiceDetailData> = {
     mobileJourneyHeadline: 'مراحل درمان لبخند',
     journeyLead:
       'درمان شما دارای برنامه شفاف، آسوده و همراه با رضایت کامل در تمام مراحل خواهد بود:',
-    mobileJourneyLead:
-      'از مشاوره و شبیه‌سازی تا تحویل نهایی.',
+    mobileJourneyLead: 'از مشاوره و شبیه‌سازی تا تحویل نهایی.',
     journeySteps: [
       {
         stepNumber: '۰۱',
@@ -464,8 +463,7 @@ export const SERVICES_DATA: Record<string, ServiceDetailData> = {
     mobileSupportHeadline: 'پشتیبانی و پولیش دوره‌ای',
     supportLead:
       'حفظ زیبایی لبخند نیازمند مراقبت تخصصی است؛ ما با چکاپ‌های منظم و پالیش دوره‌ای در کنار شما هستیم:',
-    mobileSupportLead:
-      'چکاپ منظم و پولیش برای ماندگاری درخشش.',
+    mobileSupportLead: 'چکاپ منظم و پولیش برای ماندگاری درخشش.',
     supportCommitments: [
       {
         icon: 'fa-solid fa-wand-magic-sparkles',
@@ -504,8 +502,7 @@ export const SERVICES_DATA: Record<string, ServiceDetailData> = {
     mobileFaqHeadline: 'پرسش‌های رایج کامپوزیت و لمینت',
     faqLead:
       'شفافیت بالینی اصل اول ماست. در اینجا به متداول‌ترین پرسش‌های مراجعین پیرامون زیبایی و سلامت دندان پاسخ داده‌ایم:',
-    mobileFaqLead:
-      'پاسخ به پرسش‌های پرتکرار درباره ماندگاری، تراش و تغییر رنگ.',
+    mobileFaqLead: 'پاسخ به پرسش‌های پرتکرار درباره ماندگاری، تراش و تغییر رنگ.',
     faqs: [
       {
         question: 'تفاوت اصلی کامپوزیت با لمینت سرامیکی چیست و کدام برای من مناسب‌تر است؟',
@@ -580,8 +577,7 @@ export const SERVICES_DATA: Record<string, ServiceDetailData> = {
     mobilePainManagementHeadline: 'راحتی کامل و بدون لق‌شدن',
     painManagementLead:
       'بزرگ‌ترین نارضایتی از دندان‌های مصنوعی سنتی، تکان خوردن حین صحبت و زخم شدن لثه است. ما با قالب‌گیری علمی این دغدغه را برطرف کرده‌ایم:',
-    mobilePainManagementLead:
-      'گیرایی بالا، بدون زخم لثه و با آسایش کامل در جویدن.',
+    mobilePainManagementLead: 'گیرایی بالا، بدون زخم لثه و با آسایش کامل در جویدن.',
     painManagementPillars: [
       {
         icon: 'fa-solid fa-hand-holding-medical',
@@ -610,8 +606,7 @@ export const SERVICES_DATA: Record<string, ServiceDetailData> = {
     mobileDiagnosisHeadline: 'انواع دندان مصنوعی مدرن',
     diagnosisLead:
       'بسته به تعداد دندان‌های باقی‌مانده و میزان تحلیل استخوان، مناسب‌ترین گزینه به شکل شفاف به شما پیشنهاد می‌شود:',
-    mobileDiagnosisLead:
-      'دست‌دندان کامل، پروتز ژله‌ای یا اوردنچر متصل به ایمپلنت.',
+    mobileDiagnosisLead: 'دست‌دندان کامل، پروتز ژله‌ای یا اوردنچر متصل به ایمپلنت.',
     diagnosisFeatures: [
       {
         icon: 'fa-solid fa-teeth',
@@ -641,10 +636,8 @@ export const SERVICES_DATA: Record<string, ServiceDetailData> = {
     journeyKicker: 'PATIENT JOURNEY',
     journeyHeadline: 'مسیر ساخت دقیق و آسوده دندان مصنوعی شما',
     mobileJourneyHeadline: 'مراحل ساخت پروتز',
-    journeyLead:
-      'ساخت پروتز در مراحلی منظم، بدون معطلی و با بررسی دقیق فک انجام می‌شود:',
-    mobileJourneyLead:
-      'از معاینه تا تحویل و تنظیمات تکمیلی رایگان.',
+    journeyLead: 'ساخت پروتز در مراحلی منظم، بدون معطلی و با بررسی دقیق فک انجام می‌شود:',
+    mobileJourneyLead: 'از معاینه تا تحویل و تنظیمات تکمیلی رایگان.',
     journeySteps: [
       {
         stepNumber: '۰۱',
@@ -703,8 +696,7 @@ export const SERVICES_DATA: Record<string, ServiceDetailData> = {
           'آموزش روش صحیح قرار دادن، خارج کردن و ضدعفونی روزانه پروتز',
           'تنظیم نوبت چکاپ رایگان ۴۸ ساعت پس از تحویل برای راحتی کامل',
         ],
-        patientComfortTip:
-          'پس از تحویل، جلسات تنظیم برای رفع هرگونه نقطه فشاری کاملاً رایگان است.',
+        patientComfortTip: 'پس از تحویل، جلسات تنظیم برای رفع هرگونه نقطه فشاری کاملاً رایگان است.',
       },
     ],
     supportKicker: 'CARE & QUALITY COMMITMENT',
@@ -712,8 +704,7 @@ export const SERVICES_DATA: Record<string, ServiceDetailData> = {
     mobileSupportHeadline: 'پشتیبانی و جلسات تنظیم رایگان',
     supportLead:
       'عادت کردن به دندان جدید نیازمند چند روز زمان و تنظیمات ظریف است؛ ما تا آسایش کامل در کنار شما هستیم:',
-    mobileSupportLead:
-      'تنظیمات دوره‌ای رایگان و راهنمای نگهداری.',
+    mobileSupportLead: 'تنظیمات دوره‌ای رایگان و راهنمای نگهداری.',
     supportCommitments: [
       {
         icon: 'fa-solid fa-headset',
@@ -752,8 +743,7 @@ export const SERVICES_DATA: Record<string, ServiceDetailData> = {
     mobileFaqHeadline: 'پرسش‌های رایج دندان مصنوعی',
     faqLead:
       'شفافیت بالینی اصل اول ماست. در اینجا به متداول‌ترین پرسش‌های مراجعین پیرامون استفاده و مراقبت از دندان مصنوعی پاسخ داده‌ایم:',
-    mobileFaqLead:
-      'پاسخ به پرسش‌های رایج درباره لقی، عادت کردن، دندان ژله‌ای و اوردنچر.',
+    mobileFaqLead: 'پاسخ به پرسش‌های رایج درباره لقی، عادت کردن، دندان ژله‌ای و اوردنچر.',
     faqs: [
       {
         question: 'چه مدت طول می‌کشد تا به دندان مصنوعی جدید عادت کنم؟',
@@ -803,7 +793,8 @@ export const SERVICES_DATA: Record<string, ServiceDetailData> = {
     slug: 'crowns',
     serviceKey: 'روکش دندان',
     title: 'روکش دندان',
-    seoTitle: 'روکش دندان در رشت و گیلان | انواع روکش زیرکونیا و تمام‌سرامیک بدون سیاهی لثه | کلینیک قلی‌پور',
+    seoTitle:
+      'روکش دندان در رشت و گیلان | انواع روکش زیرکونیا و تمام‌سرامیک بدون سیاهی لثه | کلینیک قلی‌پور',
     seoDescription:
       'روکش دندان تمام سرامیک و زیرکونیا در کلینیک دندانپزشکی قلی‌پور؛ انطباق میکرونی لبه با تراش شولدر، بدون سیاهی لثه، محافظت از دندان عصب‌کشی‌شده و چسباندن با سمان رزینی مقاوم.',
     keywords: [
@@ -828,8 +819,7 @@ export const SERVICES_DATA: Record<string, ServiceDetailData> = {
     mobilePainManagementHeadline: 'سلامت لثه و استحکام دندان',
     painManagementLead:
       'روکش غیراصولی می‌تواند باعث التهاب لثه یا گیر غذایی شود. در کلینیک دندانپزشکی قلی‌پور با تراش میکرونی و متریال تمام‌سرامیک، سلامت دندان و لثه تضمین می‌شود:',
-    mobilePainManagementLead:
-      'انطباق میکرونی لبه روکش بدون ایجاد التهاب و سیاهی لثه.',
+    mobilePainManagementLead: 'انطباق میکرونی لبه روکش بدون ایجاد التهاب و سیاهی لثه.',
     painManagementPillars: [
       {
         icon: 'fa-solid fa-gem',
@@ -858,8 +848,7 @@ export const SERVICES_DATA: Record<string, ServiceDetailData> = {
     mobileDiagnosisHeadline: 'انواع روکش‌های تخصصی دندان',
     diagnosisLead:
       'هر دندان با توجه به موقعیت در دهان (جلو یا عقب) و نیاز زیبایی یا استحکام، روکش مناسب خود را می‌طلبد:',
-    mobileDiagnosisLead:
-      'روکش زیرکونیا، ایمکس و سرامیکی متناسب با شرایط دهان شما.',
+    mobileDiagnosisLead: 'روکش زیرکونیا، ایمکس و سرامیکی متناسب با شرایط دهان شما.',
     diagnosisFeatures: [
       {
         icon: 'fa-solid fa-shield-virus',
@@ -889,10 +878,8 @@ export const SERVICES_DATA: Record<string, ServiceDetailData> = {
     journeyKicker: 'TREATMENT TIMELINE',
     journeyHeadline: 'مسیر آماده‌سازی و تحویل دقیق روکش دندان شما',
     mobileJourneyHeadline: 'مراحل روکش دندان',
-    journeyLead:
-      'فرآیند روکش با دقت میکرومتری، در جلسات منظم و با پوشش محافظ موقت انجام می‌شود:',
-    mobileJourneyLead:
-      'از تراش و قالب‌گیری تا تحویل روکش نهایی با سمان دائم.',
+    journeyLead: 'فرآیند روکش با دقت میکرومتری، در جلسات منظم و با پوشش محافظ موقت انجام می‌شود:',
+    mobileJourneyLead: 'از تراش و قالب‌گیری تا تحویل روکش نهایی با سمان دائم.',
     journeySteps: [
       {
         stepNumber: '۰۱',
@@ -921,8 +908,7 @@ export const SERVICES_DATA: Record<string, ServiceDetailData> = {
           'حفظ فضای دندانی و ممانعت از حرکت دندان‌های مجاور',
           'امکان صحبت کردن و جویدن راحت در طول دوره لابراتوار',
         ],
-        patientComfortTip:
-          'در طول دوره ساخت روکش در لابراتوار هرگز بدون دندان نخواهید ماند.',
+        patientComfortTip: 'در طول دوره ساخت روکش در لابراتوار هرگز بدون دندان نخواهید ماند.',
       },
       {
         stepNumber: '۰۳',
@@ -960,8 +946,7 @@ export const SERVICES_DATA: Record<string, ServiceDetailData> = {
     mobileSupportHeadline: 'ضمانت کیفیت روکش دندان',
     supportLead:
       'دوام یک روکش بیش از هر چیز به نوع سمان (چسب) و دقت لبه‌های آن بستگی دارد؛ ما بالاترین استانداردهای بالینی را به کار می‌بندیم:',
-    mobileSupportLead:
-      'استفاده از چسب‌های رزینی مدرن و لابراتوارهای تخصصی CAD/CAM.',
+    mobileSupportLead: 'استفاده از چسب‌های رزینی مدرن و لابراتوارهای تخصصی CAD/CAM.',
     supportCommitments: [
       {
         icon: 'fa-solid fa-flask-vial',
@@ -1000,8 +985,7 @@ export const SERVICES_DATA: Record<string, ServiceDetailData> = {
     mobileFaqHeadline: 'پرسش‌های رایج روکش دندان',
     faqLead:
       'شفافیت بالینی اصل اول ماست. در اینجا به متداول‌ترین پرسش‌های مراجعین پیرامون روکش دندان پاسخ داده‌ایم:',
-    mobileFaqLead:
-      'پاسخ به پرسش‌های رایج درباره تفاوت زیرکونیا با PFM، ماندگاری و درد.',
+    mobileFaqLead: 'پاسخ به پرسش‌های رایج درباره تفاوت زیرکونیا با PFM، ماندگاری و درد.',
     faqs: [
       {
         question: 'تفاوت روکش زیرکونیا با روکش‌های فلز-سرامیک (PFM) قدیمی چیست؟',
@@ -1076,8 +1060,7 @@ export const SERVICES_DATA: Record<string, ServiceDetailData> = {
     mobilePainManagementHeadline: 'ترمیم بدون درد و بدون حساسیت',
     painManagementLead:
       'دغدغه اصلی مراجعین، احساس درد حین تراش و تیر کشیدن دندان هنگام نوشیدن آب سرد پس از درمان است. ما این نگرانی را با پروتکل‌های محافظتی برطرف کرده‌ایم:',
-    mobilePainManagementLead:
-      'کنترل کامل درد با بی‌حسی مرحله‌ای و لایه‌گذاری ضدحساسیت.',
+    mobilePainManagementLead: 'کنترل کامل درد با بی‌حسی مرحله‌ای و لایه‌گذاری ضدحساسیت.',
     painManagementPillars: [
       {
         icon: 'fa-solid fa-shield-virus',
@@ -1106,8 +1089,7 @@ export const SERVICES_DATA: Record<string, ServiceDetailData> = {
     mobileDiagnosisHeadline: 'انواع ترمیم‌های تخصصی دندان',
     diagnosisLead:
       'از پوسیدگی‌های سطحی شیارهای دندان تا بازسازی دیواره‌های از دست رفته، روش مناسب با دقت انتخاب می‌شود:',
-    mobileDiagnosisLead:
-      'کامپوزیت نانو، تعویض آمالگام سیاه و بازسازی دیواره با ماتریکس.',
+    mobileDiagnosisLead: 'کامپوزیت نانو، تعویض آمالگام سیاه و بازسازی دیواره با ماتریکس.',
     diagnosisFeatures: [
       {
         icon: 'fa-solid fa-tooth',
@@ -1139,8 +1121,7 @@ export const SERVICES_DATA: Record<string, ServiceDetailData> = {
     mobileJourneyHeadline: 'مراحل ترمیم دندان',
     journeyLead:
       'تمامی مراحل ترمیم دندان در یک جلسه کوتاه، با نظم و بدون کوچک‌ترین معطلی انجام می‌پذیرد:',
-    mobileJourneyLead:
-      'از بی‌حسی و حذف پوسیدگی تا فرم‌دهی آناتومیک و پولیش نهایی.',
+    mobileJourneyLead: 'از بی‌حسی و حذف پوسیدگی تا فرم‌دهی آناتومیک و پولیش نهایی.',
     journeySteps: [
       {
         stepNumber: '۰۱',
@@ -1154,8 +1135,7 @@ export const SERVICES_DATA: Record<string, ServiceDetailData> = {
           'استفاده از ژل بی‌حسی قبل از تزریق موضعی',
           'اطمینان از بی‌حسی کامل قبل از شروع کار',
         ],
-        patientComfortTip:
-          'خیالتان راحت باشد، تا بی‌حسی کامل حاصل نشود درمان آغاز نخواهد شد.',
+        patientComfortTip: 'خیالتان راحت باشد، تا بی‌حسی کامل حاصل نشود درمان آغاز نخواهد شد.',
       },
       {
         stepNumber: '۰۲',
@@ -1169,8 +1149,7 @@ export const SERVICES_DATA: Record<string, ServiceDetailData> = {
           'حذف دقیق بافت پوسیده بدون آسیب به دیواره‌های سالم اطراف',
           'استفاده از مواد ضدعفونی‌کننده لایه‌ای جهت استریل کردن حفره',
         ],
-        patientComfortTip:
-          'در طول تراش به دلیل وجود رابردم هیچ آبی وارد گلوی شما نخواهد شد.',
+        patientComfortTip: 'در طول تراش به دلیل وجود رابردم هیچ آبی وارد گلوی شما نخواهد شد.',
       },
       {
         stepNumber: '۰۳',
@@ -1199,8 +1178,7 @@ export const SERVICES_DATA: Record<string, ServiceDetailData> = {
           'پولیش با خمیرهای الماسه برای ممانعت از رنگ‌پذیری و رسوب پلاک',
           'چک کردن نخ دندان بین دندان‌ها جهت تضمین سلامت لثه',
         ],
-        patientComfortTip:
-          'به محض برطرف شدن بی‌حسی می‌توانید بدون نگرانی غذا بخورید.',
+        patientComfortTip: 'به محض برطرف شدن بی‌حسی می‌توانید بدون نگرانی غذا بخورید.',
       },
     ],
     supportKicker: 'MATERIAL INTEGRITY & WARRANTY',
@@ -1208,8 +1186,7 @@ export const SERVICES_DATA: Record<string, ServiceDetailData> = {
     mobileSupportHeadline: 'ضمانت کیفیت مواد ترمیم',
     supportLead:
       'دوام ترمیم دندان رابطه مستقیمی با برند کامپوزیت و ایزولاسیون صحیح دارد؛ ما استانداردهای سخت‌گیرانه‌ای داریم:',
-    mobileSupportLead:
-      'کامپوزیت‌های نانو ساخت آمریکا و آلمان با ضمانت استحکام.',
+    mobileSupportLead: 'کامپوزیت‌های نانو ساخت آمریکا و آلمان با ضمانت استحکام.',
     supportCommitments: [
       {
         icon: 'fa-solid fa-award',
@@ -1248,8 +1225,7 @@ export const SERVICES_DATA: Record<string, ServiceDetailData> = {
     mobileFaqHeadline: 'پرسش‌های رایج ترمیم دندان',
     faqLead:
       'شفافیت بالینی اصل اول ماست. در اینجا به متداول‌ترین پرسش‌های مراجعین پیرامون ترمیم و پرکردن دندان پاسخ داده‌ایم:',
-    mobileFaqLead:
-      'پاسخ به پرسش‌های رایج درباره تفاوت کامپوزیت با آمالگام، حساسیت و ماندگاری.',
+    mobileFaqLead: 'پاسخ به پرسش‌های رایج درباره تفاوت کامپوزیت با آمالگام، حساسیت و ماندگاری.',
     faqs: [
       {
         question: 'تفاوت ترمیم کامپوزیت با پرکردگی آمالگام (سیاه) چیست؟',
@@ -1299,7 +1275,8 @@ export const SERVICES_DATA: Record<string, ServiceDetailData> = {
     slug: 'root-canal',
     serviceKey: 'عصب کشی دندان',
     title: 'عصب کشی دندان',
-    seoTitle: 'عصب کشی دندان در رشت و گیلان | درمان ریشه بدون درد با دستگاه روتاری | کلینیک قلی‌پور',
+    seoTitle:
+      'عصب کشی دندان در رشت و گیلان | درمان ریشه بدون درد با دستگاه روتاری | کلینیک قلی‌پور',
     seoDescription:
       'عصب‌کشی و درمان ریشه دندان در کلینیک دندانپزشکی قلی‌پور؛ بی‌حسی عمیق بدون درد، فایل‌های روتاری مدرن، اپکس لوکیتور دیجیتال، پاکسازی کامل کانال‌های عفونی و نجات دندان طبیعی.',
     keywords: [
@@ -1324,8 +1301,7 @@ export const SERVICES_DATA: Record<string, ServiceDetailData> = {
     mobilePainManagementHeadline: 'عصب‌کشی آرام و بدون درد',
     painManagementLead:
       'عصب‌کشی به اشتباه با درد گره خورده است؛ در حالی که این درمان برای «پایان دادن به درد» انجام می‌شود. در کلینیک دندانپزشکی قلی‌پور با بی‌حسی عمیق چندمرحله‌ای، درمان در آرامش کامل انجام می‌پذیرد:',
-    mobilePainManagementLead:
-      'بی‌حسی عمیق مرحله‌ای و تضمین تجربه درمانی بدون درد.',
+    mobilePainManagementLead: 'بی‌حسی عمیق مرحله‌ای و تضمین تجربه درمانی بدون درد.',
     painManagementPillars: [
       {
         icon: 'fa-solid fa-syringe',
@@ -1354,8 +1330,7 @@ export const SERVICES_DATA: Record<string, ServiceDetailData> = {
     mobileDiagnosisHeadline: 'فناوری مدرن درمان ریشه',
     diagnosisLead:
       'موفقیت پایدار درمان ریشه وابسته به تخلیه صددرصدی میکروب‌ها تا انتهای ریشه است. ما از دقیق‌ترین ابزارهای دیجیتال بهره می‌بریم:',
-    mobileDiagnosisLead:
-      'پاکسازی دیجیتال با فایل‌های روتاری و عایق رابردم.',
+    mobileDiagnosisLead: 'پاکسازی دیجیتال با فایل‌های روتاری و عایق رابردم.',
     diagnosisFeatures: [
       {
         icon: 'fa-solid fa-arrows-spin',
@@ -1387,38 +1362,33 @@ export const SERVICES_DATA: Record<string, ServiceDetailData> = {
     mobileJourneyHeadline: 'مراحل عصب‌کشی دندان',
     journeyLead:
       'درمان ریشه دندان در مراحلی دقیق، منظم و عموماً در یک جلسه با آرامش کامل انجام می‌شود:',
-    mobileJourneyLead:
-      'از بی‌حسی عمیق تا پاکسازی روتاری و مهروموم دائمی کانال.',
+    mobileJourneyLead: 'از بی‌حسی عمیق تا پاکسازی روتاری و مهروموم دائمی کانال.',
     journeySteps: [
       {
         stepNumber: '۰۱',
         title: 'معاینه رادیوگرافی، تست سلامت پالپ و بی‌حسی عمیق',
         mobileTitle: 'معاینه و بی‌حسی عمیق',
         duration: 'شروع جلسه (۱۵ دقیقه)',
-        summary:
-          'ثبت رادیوگرافی دیجیتال، بررسی تعداد و آناتومی ریشه‌ها و بی‌حسی عمیق موضعی.',
+        summary: 'ثبت رادیوگرافی دیجیتال، بررسی تعداد و آناتومی ریشه‌ها و بی‌حسی عمیق موضعی.',
         details: [
           'بررسی رادیوگرافی جهت مشاهده دقیق فرم ریشه‌ها و انحنای کانال‌ها',
           'بی‌حسی موضعی مرحله‌ای با پایش کامل عدم وجود هرگونه حس درد',
           'ایزولاسیون کامل دندان با رابردم جهت ایجاد محیط استریل',
         ],
-        patientComfortTip:
-          'کار فقط پس از اطمینان کامل از بی‌حس شدن دندان آغاز خواهد شد.',
+        patientComfortTip: 'کار فقط پس از اطمینان کامل از بی‌حس شدن دندان آغاز خواهد شد.',
       },
       {
         stepNumber: '۰۲',
         title: 'باز کردن راه دسترسی و تخلیه بافت ملتهب عصب',
         mobileTitle: 'تخلیه بافت ملتهب',
         duration: 'مرحله دوم (۱۵ الی ۲۰ دقیقه)',
-        summary:
-          'ایجاد دسترسی ظریف، حذف کامل بافت‌های آلوده و برداشتن فشار از روی عصب دندان.',
+        summary: 'ایجاد دسترسی ظریف، حذف کامل بافت‌های آلوده و برداشتن فشار از روی عصب دندان.',
         details: [
           'ورود به اتاقک پالپ با فرزهای الماسه و حفظ دیواره‌های سالم',
           'تخلیه کامل عروق و اعصاب ملتهب و عفونی داخل ریشه',
           'کاهش آنی التهاب و قطع سیگنال‌های درد به مغز',
         ],
-        patientComfortTip:
-          'با تخلیه اتاقک پالپ، احساس درد و نبض در دندان بلافاصله متوقف می‌شود.',
+        patientComfortTip: 'با تخلیه اتاقک پالپ، احساس درد و نبض در دندان بلافاصله متوقف می‌شود.',
       },
       {
         stepNumber: '۰۳',
@@ -1432,8 +1402,7 @@ export const SERVICES_DATA: Record<string, ServiceDetailData> = {
           'پاکسازی کانال‌ها با حرکت نرم فایل‌های چرخشی روتاری',
           'شست‌وشوی کانال‌ها با مواد آنتی‌سپتیک جهت استریلیزاسیون کامل',
         ],
-        patientComfortTip:
-          'صدای آرام دستگاه روتاری جایگزین سوهان‌کاری‌های دستی قدیمی شده است.',
+        patientComfortTip: 'صدای آرام دستگاه روتاری جایگزین سوهان‌کاری‌های دستی قدیمی شده است.',
       },
       {
         stepNumber: '۰۴',
@@ -1447,8 +1416,7 @@ export const SERVICES_DATA: Record<string, ServiceDetailData> = {
           'قرار دادن پانسمان نفوذناپذیر یا ترمیم دائم بسته به شرایط دندان',
           'ثبت عکس رادیوگرافی تایید نهایی کیفیت مهروموم کانال‌ها',
         ],
-        patientComfortTip:
-          'در بیش از ۹۰٪ موارد، تمام مراحل در همین جلسه با موفقیت پایان می‌یابد.',
+        patientComfortTip: 'در بیش از ۹۰٪ موارد، تمام مراحل در همین جلسه با موفقیت پایان می‌یابد.',
       },
     ],
     supportKicker: 'ENDODONTIC INTEGRITY & PROTECTION',
@@ -1456,8 +1424,7 @@ export const SERVICES_DATA: Record<string, ServiceDetailData> = {
     mobileSupportHeadline: 'ضمانت درمان ریشه و تاج',
     supportLead:
       'یک عصب‌کشی موفق نیازمند مهروموم دائمی و بازسازی به موقع تاج دندان است؛ ما این تعهدات را تضمین می‌کنیم:',
-    mobileSupportLead:
-      'مهروموم کامل ریشه و بازسازی مقاوم تاج دندان.',
+    mobileSupportLead: 'مهروموم کامل ریشه و بازسازی مقاوم تاج دندان.',
     supportCommitments: [
       {
         icon: 'fa-solid fa-shield-virus',
@@ -1496,8 +1463,7 @@ export const SERVICES_DATA: Record<string, ServiceDetailData> = {
     mobileFaqHeadline: 'پرسش‌های رایج عصب‌کشی دندان',
     faqLead:
       'شفافیت بالینی اصل اول ماست. در اینجا به متداول‌ترین پرسش‌های مراجعین پیرامون عصب‌کشی دندان پاسخ داده‌ایم:',
-    mobileFaqLead:
-      'پاسخ به پرسش‌های رایج درباره درد، تعداد جلسات، روکش و عوارض.',
+    mobileFaqLead: 'پاسخ به پرسش‌های رایج درباره درد، تعداد جلسات، روکش و عوارض.',
     faqs: [
       {
         question: 'آیا عصب‌کشی دندان درد دارد؟',
@@ -1572,8 +1538,7 @@ export const SERVICES_DATA: Record<string, ServiceDetailData> = {
     mobilePainManagementHeadline: 'جراحی دندان بدون درد و تورم',
     painManagementLead:
       'تصور سنتی از کشیدن دندان با فشار سنگین و درد همراه است؛ در کلینیک دندانپزشکی قلی‌پور با تکنیک‌های آتروماتیک و بی‌حسی عمیق، جراحی به تجربه‌ای آرام و سریع تبدیل شده است:',
-    mobilePainManagementLead:
-      'بی‌حسی عمیق مرحله‌ای و خروج ظریف دندان بدون فشار.',
+    mobilePainManagementLead: 'بی‌حسی عمیق مرحله‌ای و خروج ظریف دندان بدون فشار.',
     painManagementPillars: [
       {
         icon: 'fa-solid fa-syringe',
@@ -1602,8 +1567,7 @@ export const SERVICES_DATA: Record<string, ServiceDetailData> = {
     mobileDiagnosisHeadline: 'انواع جراحی‌های تخصصی دندان',
     diagnosisLead:
       'از دندان‌های عقل نهفته و افقی گرفته تا ریشه‌های شکسته و نسوج باقیمانده، هر جراحی با دقت سه‌بعدی انجام می‌شود:',
-    mobileDiagnosisLead:
-      'جراحی دندان عقل نهفته، خارج کردن ریشه شکسته و حفظ استخوان.',
+    mobileDiagnosisLead: 'جراحی دندان عقل نهفته، خارج کردن ریشه شکسته و حفظ استخوان.',
     diagnosisFeatures: [
       {
         icon: 'fa-solid fa-tooth',
@@ -1635,8 +1599,7 @@ export const SERVICES_DATA: Record<string, ServiceDetailData> = {
     mobileJourneyHeadline: 'مراحل جراحی دندان',
     journeyLead:
       'جراحی دندان در فرآیندی کاملاً استاندارد، سریع و با همراهی مداوم جراح انجام می‌پذیرد:',
-    mobileJourneyLead:
-      'از بی‌حسی عمیق تا خارج کردن آرام و بخیه محافظ جذبی.',
+    mobileJourneyLead: 'از بی‌حسی عمیق تا خارج کردن آرام و بخیه محافظ جذبی.',
     journeySteps: [
       {
         stepNumber: '۰۱',
@@ -1658,8 +1621,7 @@ export const SERVICES_DATA: Record<string, ServiceDetailData> = {
         title: 'آماده‌سازی ظریف و تقسیم دندان (در صورت نیاز)',
         mobileTitle: 'آزادسازی آرام دندان',
         duration: 'مرحله دوم (۱۵ الی ۲۰ دقیقه)',
-        summary:
-          'آزادسازی آرام بافت لثه و تقسیم تاج یا ریشه‌ها برای خروج بدون فشار به استخوان فک.',
+        summary: 'آزادسازی آرام بافت لثه و تقسیم تاج یا ریشه‌ها برای خروج بدون فشار به استخوان فک.',
         details: [
           'برش میکرونی لثه تنها به اندازه نیاز بدون خونریزی وسیع',
           'سکشن کردن با فرزهای خنک‌شونده بدون ایجاد حرارت در استخوان',
@@ -1704,8 +1666,7 @@ export const SERVICES_DATA: Record<string, ServiceDetailData> = {
     mobileSupportHeadline: 'پشتیبانی بعد از جراحی',
     supportLead:
       'وظیفه ما با پایان جراحی تمام نمی‌شود؛ آرامش و بهبودی سریع شما تا ترمیم کامل لثه اولویت ماست:',
-    mobileSupportLead:
-      'پیگیری اختصاصی، دارودرمانی هوشمند و کشیدن رایگان بخیه.',
+    mobileSupportLead: 'پیگیری اختصاصی، دارودرمانی هوشمند و کشیدن رایگان بخیه.',
     supportCommitments: [
       {
         icon: 'fa-solid fa-headset',
@@ -1744,8 +1705,7 @@ export const SERVICES_DATA: Record<string, ServiceDetailData> = {
     mobileFaqHeadline: 'پرسش‌های رایج جراحی دندان',
     faqLead:
       'شفافیت بالینی اصل اول ماست. در اینجا به متداول‌ترین پرسش‌های مراجعین پیرامون جراحی و کشیدن دندان پاسخ داده‌ایم:',
-    mobileFaqLead:
-      'پاسخ به پرسش‌های رایج درباره درد، دندان عقل، درای ساکت و تورم.',
+    mobileFaqLead: 'پاسخ به پرسش‌های رایج درباره درد، دندان عقل، درای ساکت و تورم.',
     faqs: [
       {
         question: 'آیا جراحی یا کشیدن دندان درد دارد؟',
@@ -1821,7 +1781,8 @@ export const SERVICES_DATA: Record<string, ServiceDetailData> = {
     mobilePainManagementHeadline: 'دندانپزشکی شاد و بدون ترس کودکان',
     painManagementLead:
       'ما اولین تجربه دندانپزشکی کودک شما را به رویدادی مثبت و مفرح تبدیل می‌کنیم تا هرگز استرس و ترسی از مراقبت‌های دهان و دندان به همراه نداشته باشد:',
-    mobilePainManagementLead: 'درمان مهربانانه و بدون درد برای ایجاد رابطه‌ای پایدار و مثبت با دندانپزشکی.',
+    mobilePainManagementLead:
+      'درمان مهربانانه و بدون درد برای ایجاد رابطه‌ای پایدار و مثبت با دندانپزشکی.',
     painManagementPillars: [
       {
         icon: 'fa-solid fa-face-smile-beam',
@@ -1895,7 +1856,8 @@ export const SERVICES_DATA: Record<string, ServiceDetailData> = {
           'معاینه دیداری با آینه کوچک مخصوص کودک و شمارش دندان‌ها به صورت بازی',
           'گفت‌وگو با والدین درباره عادات غذایی و بهداشتی کودک',
         ],
-        patientComfortTip: 'کودک می‌تواند اسباب‌بازی مورد علاقه خود را همراه بیاورد یا روی پای والد بنشیند.',
+        patientComfortTip:
+          'کودک می‌تواند اسباب‌بازی مورد علاقه خود را همراه بیاورد یا روی پای والد بنشیند.',
       },
       {
         stepNumber: '۰۲',
@@ -1928,13 +1890,15 @@ export const SERVICES_DATA: Record<string, ServiceDetailData> = {
         title: 'اهدای جایزه شجاعت و راهنمای مراقبت خانگی',
         mobileTitle: 'اهدای جایزه و راهنمای والدین',
         duration: '۱۰ دقیقه',
-        summary: 'تجلیل از شجاعت کودک با هدیه اختصاصی و ارائه توصیه‌های کاربردی تغذیه و مسواک به والدین.',
+        summary:
+          'تجلیل از شجاعت کودک با هدیه اختصاصی و ارائه توصیه‌های کاربردی تغذیه و مسواک به والدین.',
         details: [
           'انتخاب هدیه و استیکر تشویقی توسط خود کودک از جعبه جوایز کلینیک',
           'ارائه جدول مسواک‌زدن هفتگی اختصاصی برای افزایش انگیزه در منزل',
           'ارائه دستورالعمل شفاف مصرف داروها و زمان معاینه دوره‌ای بعدی به والدین',
         ],
-        patientComfortTip: 'فرزند شما با لبخندی از رضایت و خاطره‌ای بدون درد از کلینیک خداحافظی خواهد کرد.',
+        patientComfortTip:
+          'فرزند شما با لبخندی از رضایت و خاطره‌ای بدون درد از کلینیک خداحافظی خواهد کرد.',
       },
     ],
     supportKicker: 'PARENTAL SUPPORT & LONG-TERM CARE',
@@ -2093,4 +2057,3 @@ SERVICES_DATA['pediatric-dentistry'] = {
   ...SERVICES_DATA.pediatric,
   slug: 'pediatric-dentistry',
 };
-

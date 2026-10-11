@@ -8,12 +8,7 @@ interface ServicesProps {
 }
 
 type ServiceTab =
-  | 'root-canal'
-  | 'restoration'
-  | 'crown'
-  | 'composite-laminate'
-  | 'denture'
-  | 'implant';
+  'root-canal' | 'restoration' | 'crown' | 'composite-laminate' | 'denture' | 'implant';
 
 export default function Services({ onOpenBooking }: ServicesProps) {
   const [activeTab, setActiveTab] = useState<ServiceTab>('implant');
@@ -36,7 +31,7 @@ export default function Services({ onOpenBooking }: ServicesProps) {
           >
             <div className="pill-icon-box">
               <Image
-                src="https://qafdentalclinic.com/wp-content/uploads/2025/08/درمان-ربشه-3.png"
+                src="/assets/icons/service-pill-bg.svg"
                 className="pill-bg"
                 alt="عصب کشی"
                 width={82}
@@ -44,7 +39,7 @@ export default function Services({ onOpenBooking }: ServicesProps) {
                 loading="eager"
               />
               <Image
-                src="https://qafdentalclinic.com/wp-content/uploads/2025/08/عصب-کشی.png"
+                src="/assets/icons/root-canal.svg"
                 className="pill-fg"
                 alt="عصب کشی"
                 width={54}
@@ -63,7 +58,7 @@ export default function Services({ onOpenBooking }: ServicesProps) {
           >
             <div className="pill-icon-box">
               <Image
-                src="https://qafdentalclinic.com/wp-content/uploads/2025/08/درمان-ربشه-3.png"
+                src="/assets/icons/service-pill-bg.svg"
                 className="pill-bg"
                 alt="ترمیم"
                 width={82}
@@ -71,7 +66,7 @@ export default function Services({ onOpenBooking }: ServicesProps) {
                 loading="eager"
               />
               <Image
-                src="https://qafdentalclinic.com/wp-content/uploads/2025/08/ترمیم-4.png"
+                src="/assets/icons/restoration.svg"
                 className="pill-fg"
                 alt="ترمیم"
                 width={54}
@@ -90,7 +85,7 @@ export default function Services({ onOpenBooking }: ServicesProps) {
           >
             <div className="pill-icon-box">
               <Image
-                src="https://qafdentalclinic.com/wp-content/uploads/2025/08/درمان-ربشه-3.png"
+                src="/assets/icons/service-pill-bg.svg"
                 className="pill-bg"
                 alt="روکش"
                 width={82}
@@ -117,7 +112,7 @@ export default function Services({ onOpenBooking }: ServicesProps) {
           >
             <div className="pill-icon-box">
               <Image
-                src="https://qafdentalclinic.com/wp-content/uploads/2025/08/درمان-ربشه-3.png"
+                src="/assets/icons/service-pill-bg.svg"
                 className="pill-bg"
                 alt="کامپوزیت"
                 width={82}
@@ -144,7 +139,7 @@ export default function Services({ onOpenBooking }: ServicesProps) {
           >
             <div className="pill-icon-box">
               <Image
-                src="https://qafdentalclinic.com/wp-content/uploads/2025/08/درمان-ربشه-3.png"
+                src="/assets/icons/service-pill-bg.svg"
                 className="pill-bg"
                 alt="دندان مصنوعی"
                 width={82}
@@ -171,7 +166,7 @@ export default function Services({ onOpenBooking }: ServicesProps) {
           >
             <div className="pill-icon-box">
               <Image
-                src="https://qafdentalclinic.com/wp-content/uploads/2025/08/درمان-ربشه-3.png"
+                src="/assets/icons/service-pill-bg.svg"
                 className="pill-bg"
                 alt="ایمپلنت"
                 width={82}
@@ -179,7 +174,7 @@ export default function Services({ onOpenBooking }: ServicesProps) {
                 loading="eager"
               />
               <Image
-                src="https://qafdentalclinic.com/wp-content/uploads/2025/08/ایمپلنت-5.png"
+                src="/assets/icons/implant.svg"
                 className="pill-fg"
                 alt="ایمپلنت"
                 width={54}
@@ -202,12 +197,11 @@ export default function Services({ onOpenBooking }: ServicesProps) {
               <div className="service-tab-text">
                 <h3 className="service-tab-title">ایمپلنت دندان دیجیتال</h3>
                 <p>
-                  ایمپلنت دندان یکی از مطمئن‌ترین روش‌ها برای جایگزینی دندان از
-                  دست‌رفته است که لبخند طبیعی و عملکرد فک را بازمی‌گرداند. در
-                  کلینیک دندانپزشکی قلی‌پور، کاشت ایمپلنت با استفاده از تجهیزات
-                  پیشرفته و برندهای معتبر جهانی و توسط تیمی مجرب انجام می‌شود.
-                  این فرایند با بی‌حسی موضعی مدرن بدون درد صورت می‌گیرد تا
-                  تجربه‌ای امن، راحت و موفق را برای مراجعین فراهم آورد.
+                  ایمپلنت دندان یکی از مطمئن‌ترین روش‌ها برای جایگزینی دندان از دست‌رفته است که
+                  لبخند طبیعی و عملکرد فک را بازمی‌گرداند. در کلینیک دندانپزشکی قلی‌پور، کاشت
+                  ایمپلنت با استفاده از تجهیزات پیشرفته و برندهای معتبر جهانی و توسط تیمی مجرب انجام
+                  می‌شود. این فرایند با بی‌حسی موضعی مدرن بدون درد صورت می‌گیرد تا تجربه‌ای امن،
+                  راحت و موفق را برای مراجعین فراهم آورد.
                 </p>
                 <button
                   className="btn-primary open-booking-btn"
@@ -218,7 +212,7 @@ export default function Services({ onOpenBooking }: ServicesProps) {
               </div>
               <div className="service-tab-graphic">
                 <Image
-                  src="https://qafdentalclinic.com/wp-content/uploads/2025/08/ایمپلنت-5.png"
+                  src="/assets/icons/implant.svg"
                   alt="ایمپلنت"
                   width={220}
                   height={220}
@@ -237,11 +231,10 @@ export default function Services({ onOpenBooking }: ServicesProps) {
               <div className="service-tab-text">
                 <h3 className="service-tab-title">ترمیم و زیبایی دندان</h3>
                 <p>
-                  ترمیم دندان روشی است برای بازگرداندن سلامت، استحکام و ظاهر
-                  طبیعی دندان‌های آسیب‌دیده. در کلینیک دندانپزشکی قلی‌پور، این خدمات
-                  با مواد همرنگ دندان کامپوزیتی و سرامیکی با دوام بسیار بالا و
-                  با ظرافت میکروسکوپی ارائه می‌شود تا زیبایی لبخند شما کاملاً حفظ
-                  گردد.
+                  ترمیم دندان روشی است برای بازگرداندن سلامت، استحکام و ظاهر طبیعی دندان‌های
+                  آسیب‌دیده. در کلینیک دندانپزشکی قلی‌پور، این خدمات با مواد همرنگ دندان کامپوزیتی و
+                  سرامیکی با دوام بسیار بالا و با ظرافت میکروسکوپی ارائه می‌شود تا زیبایی لبخند شما
+                  کاملاً حفظ گردد.
                 </p>
                 <button
                   className="btn-primary open-booking-btn"
@@ -252,7 +245,7 @@ export default function Services({ onOpenBooking }: ServicesProps) {
               </div>
               <div className="service-tab-graphic">
                 <Image
-                  src="https://qafdentalclinic.com/wp-content/uploads/2025/08/ترمیم-4.png"
+                  src="/assets/icons/restoration.svg"
                   alt="ترمیم"
                   width={220}
                   height={220}
@@ -269,14 +262,11 @@ export default function Services({ onOpenBooking }: ServicesProps) {
           >
             <div className="service-tab-body">
               <div className="service-tab-text">
-                <h3 className="service-tab-title">
-                  روکش‌های تمام سرامیک و زیرکونیا
-                </h3>
+                <h3 className="service-tab-title">روکش‌های تمام سرامیک و زیرکونیا</h3>
                 <p>
-                  روکش‌های دندانی برای محافظت و احیای دندان‌های آسیب‌دیده و پس
-                  از عصب‌کشی استفاده می‌شوند. در کلینیک دندانپزشکی قلی‌پور از روکش‌های مدرن
-                  زیرکونیوم و E-max بدون لبه تیره با تطابق رنگی ۱۰۰٪ طبیعی با
-                  دندان‌های مجاور استفاده می‌گردد.
+                  روکش‌های دندانی برای محافظت و احیای دندان‌های آسیب‌دیده و پس از عصب‌کشی استفاده
+                  می‌شوند. در کلینیک دندانپزشکی قلی‌پور از روکش‌های مدرن زیرکونیوم و E-max بدون لبه
+                  تیره با تطابق رنگی ۱۰۰٪ طبیعی با دندان‌های مجاور استفاده می‌گردد.
                 </p>
                 <button
                   className="btn-primary open-booking-btn"
@@ -304,15 +294,12 @@ export default function Services({ onOpenBooking }: ServicesProps) {
           >
             <div className="service-tab-body">
               <div className="service-tab-text">
-                <h3 className="service-tab-title">
-                  ونیر کامپوزیت و لمینت
-                </h3>
+                <h3 className="service-tab-title">ونیر کامپوزیت و لمینت</h3>
                 <p>
-                  اصلاح طرح لبخند با ونیر کامپوزیت و لمینت‌های فوق‌نازک سرامیکی،
-                  ظاهری یکدست، شفاف و درخشان به دندان‌ها می‌بخشد. در کلینیک
-                  دندانپزشکی قلی‌پور با رعایت دقیق تناسبات طلایی چهره، فرم لثه
-                  و بدون تراش یا با حداقل تراش ممکن، لبخندی طبیعی و متناسب با چهره
-                  شما خلق می‌گردد.
+                  اصلاح طرح لبخند با ونیر کامپوزیت و لمینت‌های فوق‌نازک سرامیکی، ظاهری یکدست، شفاف و
+                  درخشان به دندان‌ها می‌بخشد. در کلینیک دندانپزشکی قلی‌پور با رعایت دقیق تناسبات
+                  طلایی چهره، فرم لثه و بدون تراش یا با حداقل تراش ممکن، لبخندی طبیعی و متناسب با
+                  چهره شما خلق می‌گردد.
                 </p>
                 <button
                   className="btn-primary open-booking-btn"
@@ -340,14 +327,12 @@ export default function Services({ onOpenBooking }: ServicesProps) {
           >
             <div className="service-tab-body">
               <div className="service-tab-text">
-                <h3 className="service-tab-title">
-                  پروتز متحرک و دندان مصنوعی
-                </h3>
+                <h3 className="service-tab-title">پروتز متحرک و دندان مصنوعی</h3>
                 <p>
-                  پروتزهای دندانی متحرک (دست دندان کامل و پارسیل) راه‌حلی کارآمد و
-                  مقرون‌به‌صرفه برای بازیابی قدرت جویدن، تکلم طبیعی و چهره‌ای شاداب
-                  هستند. در کلینیک قلی‌پور انواع پروتزهای ژله‌ای (فلکسیبل)، کروم
-                  کبالت و اوردنچر با تطابق بالا و حداکثر راحتی ساخته می‌شوند.
+                  پروتزهای دندانی متحرک (دست دندان کامل و پارسیل) راه‌حلی کارآمد و مقرون‌به‌صرفه
+                  برای بازیابی قدرت جویدن، تکلم طبیعی و چهره‌ای شاداب هستند. در کلینیک قلی‌پور انواع
+                  پروتزهای ژله‌ای (فلکسیبل)، کروم کبالت و اوردنچر با تطابق بالا و حداکثر راحتی ساخته
+                  می‌شوند.
                 </p>
                 <button
                   className="btn-primary open-booking-btn"
@@ -377,10 +362,9 @@ export default function Services({ onOpenBooking }: ServicesProps) {
               <div className="service-tab-text">
                 <h3 className="service-tab-title">عصب‌کشی تخصصی و بدون درد</h3>
                 <p>
-                  عصب‌کشی روشی برای نجات دندان و حذف عفونت پالپ است. کلینیک
-                  دندانپزشکی قلی‌پور با سیستم‌های روتاری مدرن و دستگاه‌های اپکس
-                  لوکیتور دیجیتال، درمان ریشه دندان را در کوتاه‌ترین زمان و
-                  کاملاً بدون درد به انجام می‌رساند.
+                  عصب‌کشی روشی برای نجات دندان و حذف عفونت پالپ است. کلینیک دندانپزشکی قلی‌پور با
+                  سیستم‌های روتاری مدرن و دستگاه‌های اپکس لوکیتور دیجیتال، درمان ریشه دندان را در
+                  کوتاه‌ترین زمان و کاملاً بدون درد به انجام می‌رساند.
                 </p>
                 <button
                   className="btn-primary open-booking-btn"
@@ -391,7 +375,7 @@ export default function Services({ onOpenBooking }: ServicesProps) {
               </div>
               <div className="service-tab-graphic">
                 <Image
-                  src="https://qafdentalclinic.com/wp-content/uploads/2025/08/عصب-کشی.png"
+                  src="/assets/icons/root-canal.svg"
                   alt="عصب کشی"
                   width={220}
                   height={220}

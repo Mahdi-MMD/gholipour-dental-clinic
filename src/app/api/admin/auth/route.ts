@@ -9,7 +9,7 @@ export async function POST(request: Request) {
       // In production, this can be an HMAC-signed token or encrypted cookie
       const token = Buffer.from(`admin:${correctPassword}:${Date.now()}`).toString('base64');
       const response = NextResponse.json({ success: true, token });
-      
+
       response.cookies.set('admin_token', token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
@@ -26,10 +26,7 @@ export async function POST(request: Request) {
       { status: 401 }
     );
   } catch {
-    return NextResponse.json(
-      { success: false, message: 'خطا در احراز هویت' },
-      { status: 500 }
-    );
+    return NextResponse.json({ success: false, message: 'خطا در احراز هویت' }, { status: 500 });
   }
 }
 

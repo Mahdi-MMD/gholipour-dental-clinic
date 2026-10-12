@@ -42,7 +42,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link
           rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+          media="print"
+          id="fa-css"
         />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){var l=document.getElementById('fa-css');if(l){if(l.sheet){l.media='all'}else{l.addEventListener('load',function(){l.media='all'});setTimeout(function(){l.media='all'},3000)}}})()`,
+          }}
+        />
+        <noscript>
+          <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+          />
+        </noscript>
         <link
           rel="alternate"
           type="application/rss+xml"

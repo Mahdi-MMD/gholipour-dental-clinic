@@ -290,6 +290,9 @@ input {
     100%;
   mask: linear-gradient(-60deg, #000 30%, rgba(0, 0, 0, 0.35) 40%, #000 50%) right / 300% 100%;
   animation: logoShine 10s ease-in-out infinite;
+  will-change:
+    mask-position,
+    -webkit-mask-position;
 }
 
 .header-logo a:hover .logo-img {
@@ -301,6 +304,9 @@ input {
     100%;
   mask: linear-gradient(-60deg, #000 30%, rgba(0, 0, 0, 0.35) 40%, #000 50%) right / 300% 100%;
   animation: logoShine 10s ease-in-out infinite;
+  will-change:
+    mask-position,
+    -webkit-mask-position;
 }
 
 @keyframes logoShine {
@@ -315,6 +321,14 @@ input {
   100% {
     -webkit-mask-position: -20% -20%;
     mask-position: -20% -20%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .logo-img,
+  .footer-logo-img,
+  .nanogallery-skeleton-tile {
+    animation: none !important;
   }
 }
 

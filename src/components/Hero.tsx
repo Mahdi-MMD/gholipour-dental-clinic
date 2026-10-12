@@ -40,7 +40,7 @@ export default function Hero({ onOpenBooking }: HeroProps) {
             height={660}
             priority
             fetchPriority="high"
-            sizes="(max-width: 640px) 90vw, (max-width: 1024px) 48vw, 480px"
+            sizes="(max-width: 480px) 340px, (max-width: 768px) 400px, (max-width: 1024px) 48vw, 480px"
             quality={75}
           />
         </div>

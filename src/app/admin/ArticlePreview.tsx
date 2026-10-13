@@ -77,14 +77,151 @@ function renderInlineFormatting(inlineText: string): React.ReactNode {
   return segments;
 }
 
+// List item detection helpers
+function isOrderedLine(line: string): boolean {
+  const trimmed = line.trim();
+  // Standard: 1. or ۱. or 1- or ۱- or 1) or ۱)
+  // Bolded: **1.** or **۱.** or **1. or **۱. or **1-** or **1)
+  return /^(?:\*\*\s*)?[0-9۰-۹]+(?:[\.\-\)]|\.(?=\s))(?:(?:\s*\*\*)|(?:\*\*\s*))?\s*/.test(trimmed);
+}
+
+function isBulletLine(line: string): boolean {
+  const trimmed = line.trim();
+  return /^(?:\*\*\s*)?[\-\*•](?:(?:\s*\*\*)|(?:\*\*\s*))?\s*/.test(trimmed);
+}
+
+function cleanOrderedItemContent(line: string): string {
+  const trimmed = line.trim();
+
+  // Pattern A: **۱.** text or **1.** text (number alone is wrapped in **)
+  if (/^\*\*\s*[0-9۰-۹]+[\.\-\)]\s*\*\*\s*/.test(trimmed)) {
+    return trimmed.replace(/^\*\*\s*[0-9۰-۹]+[\.\-\)]\s*\*\*\s*/, '');
+  }
+
+  // Pattern B: **۱. title** text or **1. title:** text (bold starts before number)
+  if (/^\*\*\s*[0-9۰-۹]+[\.\-\)]\s*/.test(trimmed)) {
+    const afterMarker = trimmed.replace(/^\*\*\s*[0-9۰-۹]+[\.\-\)]\s*/, '');
+    if (afterMarker.includes('**')) {
+      return '**' + afterMarker;
+    }
+    return afterMarker;
+  }
+
+  // Pattern C: Standard 1. or ۱. or 1- or ۱- or 1) or ۱)
+  return trimmed.replace(/^[0-9۰-۹]+[\.\-\)]\s*/, '');
+}
+
+function cleanBulletItemContent(line: string): string {
+  const trimmed = line.trim();
+
+  // Pattern A: **-** text or **•** text
+  if (/^\*\*\s*[\-\*•]\s*\*\*\s*/.test(trimmed)) {
+    return trimmed.replace(/^\*\*\s*[\-\*•]\s*\*\*\s*/, '');
+  }
+
+  // Pattern B: **- title** text
+  if (/^\*\*\s*[\-\*•]\s*/.test(trimmed)) {
+    const after = trimmed.replace(/^\*\*\s*[\-\*•]\s*/, '');
+    if (after.includes('**')) {
+      return '**' + after;
+    }
+    return after;
+  }
+
+  // Pattern C: Standard - or * or •
+  return trimmed.replace(/^[\-\*•]\s*/, '');
+}
+
+// Helper to split raw markdown text into semantic blocks (headings, tables, callouts, lists, paragraphs)
+function splitMarkdownBlocks(text: string): string[] {
+  if (!text) return [];
+
+  const rawLines = text.split('\n');
+  const blocks: string[] = [];
+  let currentLines: string[] = [];
+  let currentType: 'text' | 'bullet' | 'ordered' | 'table' | null = null;
+
+  const flush = () => {
+    if (currentLines.length > 0) {
+      blocks.push(currentLines.join('\n').trim());
+      currentLines = [];
+    }
+    currentType = null;
+  };
+
+  for (let i = 0; i < rawLines.length; i++) {
+    const line = rawLines[i];
+    const trimmed = line.trim();
+
+    // Empty line flushes current block
+    if (!trimmed) {
+      flush();
+      continue;
+    }
+
+    // Table line
+    if (trimmed.includes('|')) {
+      if (currentType !== 'table') {
+        flush();
+        currentType = 'table';
+      }
+      currentLines.push(trimmed);
+      continue;
+    } else if (currentType === 'table') {
+      flush();
+    }
+
+    // Heading: ### or ####
+    if (/^#{1,6}\s+/.test(trimmed)) {
+      flush();
+      blocks.push(trimmed);
+      continue;
+    }
+
+    // Callout quote: > ...
+    if (/^>\s*/.test(trimmed)) {
+      flush();
+      blocks.push(trimmed);
+      continue;
+    }
+
+    // Bullet list item
+    if (isBulletLine(trimmed)) {
+      if (currentType !== 'bullet') {
+        flush();
+        currentType = 'bullet';
+      }
+      currentLines.push(trimmed);
+      continue;
+    }
+
+    // Ordered list item
+    if (isOrderedLine(trimmed)) {
+      if (currentType !== 'ordered') {
+        flush();
+        currentType = 'ordered';
+      }
+      currentLines.push(trimmed);
+      continue;
+    }
+
+    // Regular text line
+    if (currentType !== 'text') {
+      flush();
+      currentType = 'text';
+    }
+    currentLines.push(trimmed);
+  }
+
+  flush();
+  return blocks.filter(Boolean);
+}
+
 // Structured block parser for section body: handles paragraphs, lists, tables, headings, callouts
 function renderFormattedBody(text: string) {
   if (!text) return null;
 
-  const rawBlocks = text
-    .split(/\n\s*\n/)
-    .map(b => b.trim())
-    .filter(Boolean);
+  const rawBlocks = splitMarkdownBlocks(text);
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', textAlign: 'justify' }}>
@@ -93,6 +230,36 @@ function renderFormattedBody(text: string) {
           .split('\n')
           .map(l => l.trim())
           .filter(Boolean);
+
+        // Sub-heading H4 (#### Heading)
+        if (block.startsWith('####')) {
+          const headingText = block.replace(/^####\s*/, '');
+          return (
+            <h4
+              key={`h4-${blockIdx}`}
+              style={{
+                fontSize: '15px',
+                fontWeight: 700,
+                color: '#1c434f',
+                margin: '6px 0 2px 0',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+              }}
+            >
+              <span
+                style={{
+                  display: 'inline-block',
+                  width: '6px',
+                  height: '6px',
+                  borderRadius: '50%',
+                  backgroundColor: '#1c83aa',
+                }}
+              />
+              <span>{renderInlineFormatting(headingText)}</span>
+            </h4>
+          );
+        }
 
         // Sub-heading (### Heading)
         if (block.startsWith('###')) {
@@ -119,7 +286,7 @@ function renderFormattedBody(text: string) {
                   backgroundColor: '#1c83aa',
                 }}
               />
-              <span>{headingText}</span>
+              <span>{renderInlineFormatting(headingText)}</span>
             </h3>
           );
         }
@@ -225,8 +392,8 @@ function renderFormattedBody(text: string) {
         }
 
         // Ordered List
-        const isOrderedList = lines.every(line => /^[0-9۰-۹]+[\.\-]\s+/.test(line));
-        if (isOrderedList && lines.length > 0) {
+        const isOrderedList = lines.length > 0 && lines.every(line => isOrderedLine(line));
+        if (isOrderedList) {
           return (
             <ol
               key={`ol-${blockIdx}`}
@@ -236,11 +403,11 @@ function renderFormattedBody(text: string) {
                 display: 'flex',
                 flexDirection: 'column',
                 gap: '8px',
-                listStyleType: 'decimal',
+                listStyleType: 'persian',
               }}
             >
               {lines.map((line, lineIdx) => {
-                const itemContent = line.replace(/^[0-9۰-۹]+[\.\-]\s+/, '');
+                const itemContent = cleanOrderedItemContent(line);
                 return (
                   <li key={`oli-${lineIdx}`} style={{ lineHeight: 1.9, color: '#2d4f5c' }}>
                     {renderInlineFormatting(itemContent)}
@@ -252,8 +419,8 @@ function renderFormattedBody(text: string) {
         }
 
         // Bullet List
-        const isBulletList = lines.every(line => /^[\-\*•]\s+/.test(line));
-        if (isBulletList && lines.length > 0) {
+        const isBulletList = lines.length > 0 && lines.every(line => isBulletLine(line));
+        if (isBulletList) {
           return (
             <ul
               key={`ul-${blockIdx}`}
@@ -267,7 +434,7 @@ function renderFormattedBody(text: string) {
               }}
             >
               {lines.map((line, lineIdx) => {
-                const itemContent = line.replace(/^[\-\*•]\s+/, '');
+                const itemContent = cleanBulletItemContent(line);
                 return (
                   <li key={`uli-${lineIdx}`} style={{ lineHeight: 1.9, color: '#2d4f5c' }}>
                     {renderInlineFormatting(itemContent)}
@@ -285,14 +452,18 @@ function renderFormattedBody(text: string) {
             <div
               key={`callout-${blockIdx}`}
               style={{
-                backgroundColor: '#fffbeb',
-                borderRight: '4px solid #f59e0b',
-                padding: '12px 16px',
-                borderRadius: '8px',
-                margin: '6px 0',
+                backgroundColor: '#f6fbfd',
+                borderRight: '4px solid #1c83aa',
+                borderTop: '1px solid #e1eff5',
+                borderBottom: '1px solid #e1eff5',
+                borderLeft: '1px solid #e1eff5',
+                padding: '14px 18px',
+                borderRadius: '12px',
+                margin: '12px 0',
                 fontSize: '14px',
-                lineHeight: 1.8,
-                color: '#78350f',
+                lineHeight: 1.85,
+                color: '#2d4f5c',
+                boxShadow: '0 2px 8px rgba(28, 131, 170, 0.04)',
               }}
             >
               {renderInlineFormatting(calloutText)}
@@ -300,7 +471,108 @@ function renderFormattedBody(text: string) {
           );
         }
 
+        // Fallback for mixed block: group consecutive items cleanly without sub-numbers or indentation shifts
+        const hasListItems = lines.some(l => isOrderedLine(l) || isBulletLine(l));
+        if (hasListItems) {
+          type RunType = 'ordered' | 'bullet' | 'text';
+          const runs: { type: RunType; items: string[] }[] = [];
+          for (const line of lines) {
+            const lineType: RunType = isOrderedLine(line)
+              ? 'ordered'
+              : isBulletLine(line)
+                ? 'bullet'
+                : 'text';
+            if (runs.length === 0 || runs[runs.length - 1].type !== lineType) {
+              runs.push({ type: lineType, items: [line] });
+            } else {
+              runs[runs.length - 1].items.push(line);
+            }
+          }
+
+          return (
+            <div
+              key={`mixed-${blockIdx}`}
+              style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}
+            >
+              {runs.map((run, rIdx) => {
+                if (run.type === 'ordered') {
+                  return (
+                    <ol
+                      key={`m-ol-${rIdx}`}
+                      style={{
+                        margin: '2px 0',
+                        paddingRight: '24px',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '8px',
+                        listStyleType: 'persian',
+                      }}
+                    >
+                      {run.items.map((line, lIdx) => (
+                        <li key={`m-oli-${lIdx}`} style={{ lineHeight: 1.9, color: '#2d4f5c' }}>
+                          {renderInlineFormatting(cleanOrderedItemContent(line))}
+                        </li>
+                      ))}
+                    </ol>
+                  );
+                }
+                if (run.type === 'bullet') {
+                  return (
+                    <ul
+                      key={`m-ul-${rIdx}`}
+                      style={{
+                        margin: '2px 0',
+                        paddingRight: '22px',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '8px',
+                        listStyleType: 'disc',
+                      }}
+                    >
+                      {run.items.map((line, lIdx) => (
+                        <li key={`m-uli-${lIdx}`} style={{ lineHeight: 1.9, color: '#2d4f5c' }}>
+                          {renderInlineFormatting(cleanBulletItemContent(line))}
+                        </li>
+                      ))}
+                    </ul>
+                  );
+                }
+                return (
+                  <div
+                    key={`m-txt-${rIdx}`}
+                    style={{ margin: 0, lineHeight: 2.0, color: '#2d4f5c' }}
+                  >
+                    {run.items.map((l, lIdx) => (
+                      <div key={`m-txline-${lIdx}`}>{renderInlineFormatting(l)}</div>
+                    ))}
+                  </div>
+                );
+              })}
+            </div>
+          );
+        }
+
         // Regular paragraph block
+        if (lines.length > 1) {
+          return (
+            <div
+              key={`p-${blockIdx}`}
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '4px',
+                margin: 0,
+                lineHeight: 2.0,
+                color: '#2d4f5c',
+              }}
+            >
+              {lines.map((l, lIdx) => (
+                <div key={`pl-${lIdx}`}>{renderInlineFormatting(l)}</div>
+              ))}
+            </div>
+          );
+        }
+
         return (
           <div key={`p-${blockIdx}`} style={{ margin: 0, lineHeight: 2.0, color: '#2d4f5c' }}>
             {renderInlineFormatting(block)}
@@ -391,6 +663,7 @@ export default function ArticlePreview({ article }: ArticlePreviewProps) {
 
           {/* Category Badge */}
           <span
+            id="preview-article-category"
             style={{
               display: 'inline-block',
               backgroundColor: '#e3f9ff',
@@ -400,6 +673,7 @@ export default function ArticlePreview({ article }: ArticlePreviewProps) {
               padding: '3px 12px',
               borderRadius: '16px',
               marginBottom: '14px',
+              transition: 'all 0.4s ease',
             }}
           >
             {article.category || 'دسته‌بندی مقاله'}
@@ -407,12 +681,14 @@ export default function ArticlePreview({ article }: ArticlePreviewProps) {
 
           {/* Title */}
           <h1
+            id="preview-article-title"
             style={{
               fontSize: '22px',
               fontWeight: 800,
               color: '#1c434f',
               lineHeight: 1.45,
               marginBottom: '14px',
+              transition: 'all 0.4s ease',
             }}
           >
             {article.title || 'عنوان مقاله'}
@@ -442,7 +718,7 @@ export default function ArticlePreview({ article }: ArticlePreviewProps) {
       {/* Main Content Area */}
       <div style={{ padding: '28px 24px', maxWidth: '800px', margin: '0 auto' }}>
         {/* Featured Image */}
-        {article.image && (
+        {article.image ? (
           <figure
             style={{
               margin: '0 0 28px 0',
@@ -476,6 +752,7 @@ export default function ArticlePreview({ article }: ArticlePreviewProps) {
             </div>
             {article.imageCaption && (
               <figcaption
+                id="preview-image-caption"
                 style={{
                   padding: '8px 16px',
                   fontSize: '12.5px',
@@ -485,6 +762,7 @@ export default function ArticlePreview({ article }: ArticlePreviewProps) {
                   display: 'flex',
                   alignItems: 'center',
                   gap: '6px',
+                  transition: 'all 0.4s ease',
                 }}
               >
                 <span>📷</span>
@@ -492,11 +770,66 @@ export default function ArticlePreview({ article }: ArticlePreviewProps) {
               </figcaption>
             )}
           </figure>
+        ) : (
+          <div
+            style={{
+              margin: '0 0 28px 0',
+              padding: '44px 20px',
+              borderRadius: '14px',
+              border: '2px dashed #a4cddc',
+              backgroundColor: '#f8fcfe',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '12px',
+              textAlign: 'center',
+              boxSizing: 'border-box',
+            }}
+          >
+            <div
+              style={{
+                width: '64px',
+                height: '64px',
+                borderRadius: '50%',
+                backgroundColor: '#e6f7fc',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: '#1c83aa',
+              }}
+            >
+              <svg
+                width="36"
+                height="36"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242" />
+                <path d="M12 12v9" />
+                <path d="m8 16 4-4 4 4" />
+              </svg>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+              <span style={{ fontSize: '14px', fontWeight: 700, color: '#1c434f' }}>
+                محل قرارگیری تصویر شاخص مقاله
+              </span>
+              <span style={{ fontSize: '12px', color: '#688c99' }}>
+                برای نمایش تصویر، از پنل ویرایش آدرس تصویر را وارد کنید یا فایل جدید آپلود نمایید
+              </span>
+            </div>
+          </div>
         )}
 
         {/* Lead / Summary */}
         {article.summary && (
           <div
+            id="preview-article-summary"
             style={{
               fontSize: '15px',
               lineHeight: 1.9,
@@ -507,6 +840,7 @@ export default function ArticlePreview({ article }: ArticlePreviewProps) {
               backgroundColor: '#f9fbfc',
               borderRadius: '12px',
               borderRight: '3px solid #1c83aa',
+              transition: 'all 0.4s ease',
             }}
           >
             {article.summary}
@@ -516,6 +850,7 @@ export default function ArticlePreview({ article }: ArticlePreviewProps) {
         {/* TL;DR Box */}
         {article.tldr && (
           <div
+            id="preview-article-tldr"
             style={{
               backgroundColor: '#eef8ff',
               border: '1.5px solid #bce1f5',
@@ -523,6 +858,7 @@ export default function ArticlePreview({ article }: ArticlePreviewProps) {
               borderRadius: '12px',
               padding: '16px 20px',
               marginBottom: '24px',
+              transition: 'all 0.4s ease',
             }}
           >
             <div
@@ -639,12 +975,15 @@ export default function ArticlePreview({ article }: ArticlePreviewProps) {
             <section
               key={section.id || idx}
               id={section.id || `sec-${idx}`}
+              data-preview-section={idx}
               style={{
-                paddingBottom: '20px',
+                padding: '8px 12px 20px 12px',
                 borderBottom: idx < article.sections.length - 1 ? '1px dashed #e2edf1' : 'none',
+                transition: 'background-color 0.4s ease, box-shadow 0.4s ease',
               }}
             >
               <h2
+                id={`preview-sec-title-${idx}`}
                 style={{
                   fontSize: '18px',
                   fontWeight: 800,
@@ -655,17 +994,21 @@ export default function ArticlePreview({ article }: ArticlePreviewProps) {
                   display: 'flex',
                   alignItems: 'center',
                   gap: '8px',
+                  transition: 'all 0.4s ease',
                 }}
               >
                 <span style={{ color: '#1c83aa' }}>✓</span>
                 <span>{section.title}</span>
               </h2>
 
-              {renderFormattedBody(section.body)}
+              <div id={`preview-sec-body-${idx}`} style={{ transition: 'all 0.4s ease' }}>
+                {renderFormattedBody(section.body)}
+              </div>
 
               {/* Doctor Comment */}
               {section.doctorComment && (
                 <aside
+                  id={`preview-sec-comment-${idx}`}
                   style={{
                     marginTop: '16px',
                     backgroundColor: '#f6fbfd',
@@ -676,6 +1019,7 @@ export default function ArticlePreview({ article }: ArticlePreviewProps) {
                     borderRadius: '12px',
                     padding: '14px 18px',
                     boxShadow: '0 2px 8px rgba(28, 131, 170, 0.04)',
+                    transition: 'all 0.4s ease',
                   }}
                 >
                   <div
@@ -772,11 +1116,13 @@ export default function ArticlePreview({ article }: ArticlePreviewProps) {
               {article.faqs.map((faq, fIdx) => (
                 <div
                   key={fIdx}
+                  id={`preview-faq-${fIdx}`}
                   style={{
                     border: '1px solid #d8eef5',
                     borderRadius: '10px',
                     overflow: 'hidden',
                     backgroundColor: '#ffffff',
+                    transition: 'all 0.4s ease',
                   }}
                 >
                   <button
@@ -937,7 +1283,7 @@ export default function ArticlePreview({ article }: ArticlePreviewProps) {
               }}
             >
               {article.citations.map((cite, cIdx) => (
-                <li key={cIdx}>
+                <li key={cIdx} id={`preview-cite-${cIdx}`} style={{ transition: 'all 0.4s ease' }}>
                   <strong style={{ color: '#1c434f' }}>{cite.title}</strong>
                   {cite.source && <span> — {cite.source}</span>}
                   {cite.doi && (

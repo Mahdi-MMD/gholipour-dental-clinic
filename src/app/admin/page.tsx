@@ -1,10 +1,49 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import './admin.css';
-import RichTextEditor from './RichTextEditor';
+import RichTextEditor, { RichTextEditorRef } from './RichTextEditor';
 import ArticlePreview from './ArticlePreview';
 import { ArticleItem, ArticleSection, ArticleFAQ, ArticleCitation } from '@/data/articlesData';
+
+function PreviewLocateBtn({
+  targetId,
+  title = 'مشاهده در پیش‌نمایش زنده',
+  onLocate,
+}: {
+  targetId: string;
+  title?: string;
+  onLocate: (targetId: string) => void;
+}) {
+  return (
+    <button
+      type="button"
+      className="admin-field-locate-btn"
+      onClick={() => onLocate(targetId)}
+      title={title}
+      aria-label={title}
+    >
+      <svg
+        width="13"
+        height="13"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2.2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+        <circle cx="12" cy="12" r="3" />
+      </svg>
+    </button>
+  );
+}
+
+const toPersianDigits = (num: number | string): string => {
+  const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+  return String(num).replace(/\d/g, d => persianDigits[parseInt(d, 10)]);
+};
 
 export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
@@ -21,6 +60,15 @@ export default function AdminPage() {
   const [editorViewMode, setEditorViewMode] = useState<'split' | 'editor' | 'preview'>('split');
   const [isUploadingImage, setIsUploadingImage] = useState(false);
   const [keywordsInput, setKeywordsInput] = useState('');
+  const [dateSortOrder, setDateSortOrder] = useState<'asc' | 'desc' | null>(null);
+
+  // Undo / Redo History Stacks
+  const [undoStack, setUndoStack] = useState<ArticleItem[]>([]);
+  const [redoStack, setRedoStack] = useState<ArticleItem[]>([]);
+  const [editorCanUndo, setEditorCanUndo] = useState(false);
+  const [editorCanRedo, setEditorCanRedo] = useState(false);
+  const [activeSectionIndex, setActiveSectionIndex] = useState<number>(0);
+  const editorRefs = useRef<Record<number, RichTextEditorRef | null>>({});
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -75,27 +123,113 @@ export default function AdminPage() {
     }
   };
 
+  const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Push snapshot to undo stack
+  const pushUndoSnapshot = useCallback((articleToSave: ArticleItem) => {
+    setUndoStack(u => [...u.slice(-40), JSON.parse(JSON.stringify(articleToSave))]);
+    setRedoStack([]); // Clear redo stack on new action
+  }, []);
+
+  const updateArticleWithHistory = useCallback(
+    (newArticle: ArticleItem) => {
+      setSelectedArticle(prev => {
+        if (prev) {
+          pushUndoSnapshot(prev);
+        }
+        return newArticle;
+      });
+    },
+    [pushUndoSnapshot]
+  );
+
+  const handleUndo = useCallback(() => {
+    // 1. Delegate to active text editor buffer if it has undo history
+    const activeEditor = editorRefs.current[activeSectionIndex];
+    if (activeEditor && activeEditor.canUndo()) {
+      activeEditor.undo();
+      setEditorCanUndo(activeEditor.canUndo());
+      setEditorCanRedo(activeEditor.canRedo());
+      return;
+    }
+
+    // 2. Fallback to top-level article undo
+    if (undoStack.length === 0 || !selectedArticle) return;
+    const previous = undoStack[undoStack.length - 1];
+    setUndoStack(u => u.slice(0, -1));
+    setRedoStack(r => [...r, JSON.parse(JSON.stringify(selectedArticle))]);
+    setSelectedArticle(previous);
+  }, [activeSectionIndex, undoStack, selectedArticle]);
+
+  const handleRedo = useCallback(() => {
+    // 1. Delegate to active text editor buffer if it has redo history
+    const activeEditor = editorRefs.current[activeSectionIndex];
+    if (activeEditor && activeEditor.canRedo()) {
+      activeEditor.redo();
+      setEditorCanUndo(activeEditor.canUndo());
+      setEditorCanRedo(activeEditor.canRedo());
+      return;
+    }
+
+    // 2. Fallback to top-level article redo
+    if (redoStack.length === 0 || !selectedArticle) return;
+    const next = redoStack[redoStack.length - 1];
+    setRedoStack(r => r.slice(0, -1));
+    setUndoStack(u => [...u, JSON.parse(JSON.stringify(selectedArticle))]);
+    setSelectedArticle(next);
+  }, [activeSectionIndex, redoStack, selectedArticle]);
+
+  // Synchronize ribbon undo/redo state when active section changes
+  useEffect(() => {
+    const activeEditor = editorRefs.current[activeSectionIndex];
+    if (activeEditor) {
+      setEditorCanUndo(activeEditor.canUndo());
+      setEditorCanRedo(activeEditor.canRedo());
+    } else {
+      setEditorCanUndo(false);
+      setEditorCanRedo(false);
+    }
+  }, [activeSectionIndex]);
+
+  // Global Keyboard Shortcuts (Ctrl+Z, Ctrl+Y) supporting both English & Persian keyboard layouts
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (activeTab !== 'edit-article') return;
+
+      const isZKey =
+        e.code === 'KeyZ' || e.key.toLowerCase() === 'z' || e.key === 'ظ' || e.key === 'ئ';
+
+      const isYKey =
+        e.code === 'KeyY' || e.key.toLowerCase() === 'y' || e.key === 'غ' || e.key === 'ي';
+
+      if ((e.ctrlKey || e.metaKey) && isZKey) {
+        if (e.shiftKey) {
+          e.preventDefault();
+          handleRedo();
+        } else {
+          e.preventDefault();
+          handleUndo();
+        }
+      } else if ((e.ctrlKey || e.metaKey) && isYKey) {
+        e.preventDefault();
+        handleRedo();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [activeTab, handleUndo, handleRedo]);
+
   const handleEditArticle = (art: ArticleItem) => {
     setSelectedArticle(JSON.parse(JSON.stringify(art)));
     setKeywordsInput((art.keywords || []).join('، '));
     setIsNewArticle(false);
     setActiveTab('edit-article');
     setSaveMessage('');
-  };
-
-  const handleDuplicateArticle = (art: ArticleItem) => {
-    const cloned: ArticleItem = JSON.parse(JSON.stringify(art));
-    cloned.id = ''; // Empty ID to trigger new creation
-    cloned.title = `${art.title} (نسخه شبیه‌سازی شده)`;
-    cloned.seoTitle = art.seoTitle ? `${art.seoTitle} - کپی` : '';
-    cloned.slug = `${art.slug}-copy`;
-    setSelectedArticle(cloned);
-    setKeywordsInput((cloned.keywords || []).join('، '));
-    setIsNewArticle(true);
-    setActiveTab('edit-article');
-    setSaveMessage(
-      '📋 این مقاله از روی نسخه موجود کپی شده است. عنوان یا نامک را تغییر دهید و ذخیره نمایید.'
-    );
+    setUndoStack([]);
+    setRedoStack([]);
+    setEditorCanUndo(false);
+    setEditorCanRedo(false);
+    setActiveSectionIndex(0);
   };
 
   const handleDeleteArticle = async (id: string, title: string) => {
@@ -132,7 +266,7 @@ export default function AdminPage() {
       summary: '',
       tldr: '',
       keywords: ['دندانپزشکی', 'کلینیک قلی پور'],
-      image: '/assets/article-implant-care.webp',
+      image: '',
       imageAlt: '',
       imageCaption: '',
       sections: [
@@ -152,6 +286,11 @@ export default function AdminPage() {
     setIsNewArticle(true);
     setActiveTab('edit-article');
     setSaveMessage('');
+    setUndoStack([]);
+    setRedoStack([]);
+    setEditorCanUndo(false);
+    setEditorCanRedo(false);
+    setActiveSectionIndex(0);
   };
 
   const handleSaveArticle = async () => {
@@ -220,20 +359,38 @@ export default function AdminPage() {
       body: '',
       doctorComment: '',
     };
-    setSelectedArticle({
+    updateArticleWithHistory({
       ...selectedArticle,
       sections: [...selectedArticle.sections, newSec],
     });
+    setActiveSectionIndex(selectedArticle.sections.length);
   };
 
   const handleRemoveSection = (idx: number) => {
     if (!selectedArticle) return;
     const updated = selectedArticle.sections.filter((_, i) => i !== idx);
-    setSelectedArticle({ ...selectedArticle, sections: updated });
+    updateArticleWithHistory({ ...selectedArticle, sections: updated });
+    if (activeSectionIndex >= updated.length) {
+      setActiveSectionIndex(Math.max(0, updated.length - 1));
+    }
   };
 
   const handleUpdateSection = (idx: number, field: keyof ArticleSection, val: string) => {
     if (!selectedArticle) return;
+
+    // For non-body fields (title, doctor comment, anchor id), preserve article history snapshots
+    if (field !== 'body') {
+      if (!typingTimeoutRef.current) {
+        pushUndoSnapshot(selectedArticle);
+      }
+      if (typingTimeoutRef.current) {
+        clearTimeout(typingTimeoutRef.current);
+      }
+      typingTimeoutRef.current = setTimeout(() => {
+        typingTimeoutRef.current = null;
+      }, 800);
+    }
+
     const updated = [...selectedArticle.sections];
     updated[idx] = { ...updated[idx], [field]: val };
     setSelectedArticle({ ...selectedArticle, sections: updated });
@@ -247,8 +404,60 @@ export default function AdminPage() {
     const temp = updated[idx];
     updated[idx] = updated[newIdx];
     updated[newIdx] = temp;
-    setSelectedArticle({ ...selectedArticle, sections: updated });
+    updateArticleWithHistory({ ...selectedArticle, sections: updated });
+    setActiveSectionIndex(newIdx);
   };
+
+  // Top Ribbon Formatting Helpers
+  const triggerRibbonAction = (action: (ref: RichTextEditorRef) => void) => {
+    const targetRef = editorRefs.current[activeSectionIndex];
+    if (targetRef) {
+      action(targetRef);
+      setEditorCanUndo(targetRef.canUndo());
+      setEditorCanRedo(targetRef.canRedo());
+    } else {
+      // If no active section ref, fallback to first available
+      const firstRef = Object.values(editorRefs.current).find(Boolean);
+      if (firstRef) {
+        action(firstRef);
+        setEditorCanUndo(firstRef.canUndo());
+        setEditorCanRedo(firstRef.canRedo());
+      }
+    }
+  };
+
+  const handleEditorHistoryChange = useCallback(
+    (sIdx: number, canU: boolean, canR: boolean) => {
+      if (sIdx === activeSectionIndex) {
+        setEditorCanUndo(canU);
+        setEditorCanRedo(canR);
+      }
+    },
+    [activeSectionIndex]
+  );
+
+  const scrollToPreviewElement = useCallback(
+    (targetId: string) => {
+      if (editorViewMode === 'editor') {
+        setEditorViewMode('split');
+      }
+
+      setTimeout(
+        () => {
+          const el = document.getElementById(targetId);
+          if (el) {
+            el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            el.classList.add('preview-section-highlight');
+            setTimeout(() => {
+              el.classList.remove('preview-section-highlight');
+            }, 2200);
+          }
+        },
+        editorViewMode === 'editor' ? 140 : 20
+      );
+    },
+    [editorViewMode]
+  );
 
   // FAQ handling
   const handleAddFaq = () => {
@@ -301,13 +510,60 @@ export default function AdminPage() {
     setSelectedArticle({ ...selectedArticle, citations: updated });
   };
 
-  // Filter articles for list view
-  const filteredArticles = articles.filter(
-    art =>
-      (art.title || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
-      (art.slug || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
-      (art.category || '').toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  // Helper to parse Persian date strings like "۸ مهر ۱۴۰۵" into comparable timestamps
+  const parsePersianDate = (dateStr?: string): number => {
+    if (!dateStr) return 0;
+    const persianMonths: Record<string, number> = {
+      فروردین: 1,
+      اردیبهشت: 2,
+      خرداد: 3,
+      تیر: 4,
+      مرداد: 5,
+      شهریور: 6,
+      مهر: 7,
+      آبان: 8,
+      آذر: 9,
+      دی: 10,
+      بهمن: 11,
+      اسفند: 12,
+    };
+    const normalizeDigits = (str: string) =>
+      str.replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d).toString());
+
+    const parts = dateStr.trim().split(/\s+/);
+    if (parts.length >= 3) {
+      const day = parseInt(normalizeDigits(parts[0]), 10) || 1;
+      const month = persianMonths[parts[1]] || 1;
+      const year = parseInt(normalizeDigits(parts[2]), 10) || 1400;
+      return year * 10000 + month * 100 + day;
+    }
+    return 0;
+  };
+
+  const handleToggleDateSort = () => {
+    setDateSortOrder(prev => {
+      if (prev === 'desc') return 'asc';
+      return 'desc';
+    });
+  };
+
+  // Filter and sort articles for list view
+  const filteredArticles = articles
+    .filter(
+      art =>
+        (art.title || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (art.slug || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (art.category || '').toLowerCase().includes(searchQuery.toLowerCase())
+    )
+    .sort((a, b) => {
+      if (!dateSortOrder) return 0;
+      const dateA = parsePersianDate(a.date);
+      const dateB = parsePersianDate(b.date);
+      if (dateSortOrder === 'asc') {
+        return dateA - dateB;
+      }
+      return dateB - dateA;
+    });
 
   // Login Screen
   if (!isAuthenticated) {
@@ -353,61 +609,444 @@ export default function AdminPage() {
   // Admin Dashboard
   return (
     <div className="admin-wrapper">
-      {/* Top Navbar */}
-      <header className="admin-navbar">
-        <div className="admin-nav-brand">
-          <h2 style={{ fontSize: '18px', fontWeight: 800 }}>
-            پنل مدیریت کلینیک دندانپزشکی قلی‌پور
-          </h2>
-          <span className="admin-nav-badge">ادمین فعال</span>
-        </div>
-        <div className="admin-nav-actions">
-          <a
-            href="/"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{ fontSize: '14px', color: '#1c83aa', textDecoration: 'none', fontWeight: 600 }}
-          >
-            مشاهده سایت ↗
-          </a>
-          <button
-            type="button"
-            onClick={handleLogout}
-            style={{
-              padding: '6px 14px',
-              border: '1px solid #d8eef5',
-              background: '#fff',
-              borderRadius: '8px',
-              cursor: 'pointer',
-              fontSize: '13px',
-              color: '#5a7d8c',
-            }}
-          >
-            خروج
-          </button>
-        </div>
-      </header>
+      {/* Top Navbar / Office Ribbon Toolbar */}
+      {activeTab === 'edit-article' && selectedArticle ? (
+        <header className="admin-ribbon-container">
+          {/* Top Bar: Title, Slug, History (Undo/Redo), Save & Back */}
+          <div className="admin-ribbon-topbar">
+            <div className="admin-ribbon-title-box">
+              <span style={{ fontSize: '20px' }}>📄</span>
+              <div>
+                <h2 className="admin-ribbon-title">
+                  {selectedArticle.title || 'مقاله بدون عنوان'}
+                </h2>
+                {saveMessage && (
+                  <div style={{ marginTop: '2px' }}>
+                    <span className="admin-ribbon-save-status">{saveMessage}</span>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Quick Actions: Undo, Redo, Save, Back */}
+            <div className="admin-ribbon-actions">
+              <div className="ribbon-group" style={{ direction: 'ltr' }}>
+                <button
+                  type="button"
+                  className="ribbon-btn ribbon-history-btn"
+                  onClick={handleUndo}
+                  disabled={!editorCanUndo && undoStack.length === 0}
+                  title="واگرد / بازگشت (Ctrl+Z)"
+                  aria-label="Undo"
+                >
+                  <svg
+                    width="17"
+                    height="17"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.4"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <polyline points="9 14 4 9 9 4" />
+                    <path d="M20 20v-7a4 4 0 0 0-4-4H4" />
+                  </svg>
+                </button>
+                <button
+                  type="button"
+                  className="ribbon-btn ribbon-history-btn"
+                  onClick={handleRedo}
+                  disabled={!editorCanRedo && redoStack.length === 0}
+                  title="ازنو / پیش‌روی (Ctrl+Y)"
+                  aria-label="Redo"
+                >
+                  <svg
+                    width="17"
+                    height="17"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.4"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <polyline points="15 14 20 9 15 4" />
+                    <path d="M4 20v-7a4 4 0 0 1 4-4h12" />
+                  </svg>
+                </button>
+              </div>
+
+              <div className="ribbon-divider" />
+
+              <button
+                type="button"
+                className="ribbon-btn"
+                onClick={() => setActiveTab('articles')}
+                title="بازگشت به لیست مقالات"
+                aria-label="بازگشت به لیست مقالات"
+              >
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M19 12H5M12 19l-7-7 7-7" />
+                </svg>
+                <span className="ribbon-btn-text">بازگشت به لیست</span>
+              </button>
+
+              {/* Mobile Only: Single Toggle Button (Pen/Pencil Icon). On = Editing, Off = Preview */}
+              <button
+                type="button"
+                className={`ribbon-btn mobile-mode-toggle-btn ${editorViewMode === 'preview' ? 'mobile-mode-preview' : 'mobile-mode-edit active'}`}
+                onClick={() => {
+                  setEditorViewMode(prev => (prev === 'preview' ? 'editor' : 'preview'));
+                }}
+                title={
+                  editorViewMode === 'preview'
+                    ? 'حالت فعلی: پیش‌نمایش | کلیک برای ورود به حالت ویرایش (مداد روشن)'
+                    : 'حالت فعلی: ویرایش متون | کلیک برای مشاهده پیش‌نمایش نهایی (مداد خاموش)'
+                }
+                aria-label={
+                  editorViewMode === 'preview' ? 'تغییر به حالت ویرایش' : 'تغییر به حالت پیش‌نمایش'
+                }
+              >
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z" />
+                </svg>
+              </button>
+
+              <button
+                type="button"
+                className="admin-btn-primary ribbon-save-btn"
+                onClick={handleSaveArticle}
+                disabled={isSaving}
+                title="ذخیره تغییرات در سایت"
+                aria-label="ذخیره مقاله"
+              >
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+                  <polyline points="17 21 17 13 7 13 7 21" />
+                  <polyline points="7 3 7 8 15 8" />
+                </svg>
+                <span className="ribbon-btn-text">
+                  {isSaving ? 'در حال ذخیره‌سازی...' : 'ذخیره در سایت'}
+                </span>
+              </button>
+            </div>
+          </div>
+
+          {/* Lower Ribbon: Word/Office Formatting Tools & Mode Switcher */}
+          <div className="admin-ribbon-commandbar">
+            {/* Formatting Group */}
+            <div className="ribbon-group">
+              <button
+                type="button"
+                className="ribbon-btn"
+                title="تیتر ۳ (H3)"
+                onClick={() => triggerRibbonAction(r => r.insertText('### ', '', 'عنوان بخش'))}
+                aria-label="تیتر ۳"
+              >
+                <strong style={{ fontSize: '13.5px', fontFamily: 'sans-serif' }}>H3</strong>
+              </button>
+              <button
+                type="button"
+                className="ribbon-btn"
+                title="تیتر ۴ (H4)"
+                onClick={() => triggerRibbonAction(r => r.insertText('#### ', '', 'عنوان فرعی'))}
+                aria-label="تیتر ۴"
+              >
+                <strong style={{ fontSize: '13.5px', fontFamily: 'sans-serif' }}>H4</strong>
+              </button>
+              <button
+                type="button"
+                className="ribbon-btn"
+                title="متن برجسته (Bold / Ctrl+B)"
+                onClick={() => triggerRibbonAction(r => r.insertBold())}
+                aria-label="بولد"
+              >
+                <svg
+                  width="15"
+                  height="15"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.6"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M6 4h8a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z" />
+                  <path d="M6 12h9a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z" />
+                </svg>
+              </button>
+            </div>
+
+            <div className="ribbon-divider" />
+
+            {/* Lists Group */}
+            <div className="ribbon-group">
+              <button
+                type="button"
+                className="ribbon-btn"
+                title="لیست گلوله‌ای (Bullet list)"
+                onClick={() => triggerRibbonAction(r => r.insertBulletList())}
+                aria-label="لیست گلوله‌ای"
+              >
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <line x1="9" y1="6" x2="20" y2="6" />
+                  <line x1="9" y1="12" x2="20" y2="12" />
+                  <line x1="9" y1="18" x2="20" y2="18" />
+                  <circle cx="4" cy="6" r="2" fill="currentColor" />
+                  <circle cx="4" cy="12" r="2" fill="currentColor" />
+                  <circle cx="4" cy="18" r="2" fill="currentColor" />
+                </svg>
+                <span className="ribbon-btn-text">لیست گلوله‌ای</span>
+              </button>
+              <button
+                type="button"
+                className="ribbon-btn"
+                title="لیست عددی ترتیبی (Numbered list)"
+                onClick={() => triggerRibbonAction(r => r.insertNumberedList())}
+                aria-label="لیست عددی"
+              >
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <line x1="10" y1="6" x2="21" y2="6" />
+                  <line x1="10" y1="12" x2="21" y2="12" />
+                  <line x1="10" y1="18" x2="21" y2="18" />
+                  <path d="M4 6h1v4" />
+                  <path d="M4 10h2" />
+                  <path d="M6 18H4c0-1 2-2 2-3s-1-1.5-2-1" />
+                </svg>
+                <span className="ribbon-btn-text">لیست عددی</span>
+              </button>
+            </div>
+
+            <div className="ribbon-divider" />
+
+            {/* Inserts Group: Table & Note/Callout */}
+            <div className="ribbon-group">
+              <button
+                type="button"
+                className="ribbon-btn"
+                title="درج جدول مقایسه‌ای"
+                onClick={() => triggerRibbonAction(r => r.insertTable())}
+                aria-label="درج جدول"
+              >
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <rect x="3" y="3" width="18" height="18" rx="2" />
+                  <path d="M3 9h18" />
+                  <path d="M3 15h18" />
+                  <path d="M9 3v18" />
+                  <path d="M15 3v18" />
+                </svg>
+                <span className="ribbon-btn-text">جدول</span>
+              </button>
+              <button
+                type="button"
+                className="ribbon-btn"
+                title="درج کادر نکته بالینی"
+                onClick={() => triggerRibbonAction(r => r.insertCallout())}
+                aria-label="کادر نکته"
+              >
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M9 18h6" />
+                  <path d="M10 22h4" />
+                  <path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14" />
+                </svg>
+                <span className="ribbon-btn-text">کادر نکته</span>
+              </button>
+            </div>
+
+            <div className="ribbon-divider desktop-only-divider" />
+
+            {/* View Mode Toggle Pill (Desktop Only) */}
+            <div className="admin-mode-pill desktop-only-view-pill">
+              <button
+                type="button"
+                className={`admin-mode-btn ${editorViewMode === 'split' ? 'active' : ''}`}
+                onClick={() => setEditorViewMode('split')}
+                title="نمایش همزمان ویرایشگر و پیش‌نمایش گرافیکی"
+                aria-label="نمای دوطرفه"
+              >
+                <svg
+                  width="15"
+                  height="15"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <rect x="3" y="4" width="7" height="16" rx="1.5" />
+                  <rect x="14" y="4" width="7" height="16" rx="1.5" />
+                  <line x1="10.5" y1="12" x2="13.5" y2="12" />
+                </svg>
+                <span>نمای دوطرفه</span>
+              </button>
+              <button
+                type="button"
+                className={`admin-mode-btn ${editorViewMode === 'editor' ? 'active' : ''}`}
+                onClick={() => setEditorViewMode('editor')}
+                title="تنها فرم ویرایش متون و جداول"
+                aria-label="فرم ویرایش"
+              >
+                <svg
+                  width="15"
+                  height="15"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z" />
+                </svg>
+                <span>فرم ویرایش</span>
+              </button>
+              <button
+                type="button"
+                className={`admin-mode-btn ${editorViewMode === 'preview' ? 'active' : ''}`}
+                onClick={() => setEditorViewMode('preview')}
+                title="تنها خروجی نهایی گرافیکی مقاله"
+                aria-label="پیش‌نمایش"
+              >
+                <svg
+                  width="15"
+                  height="15"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
+                <span>پیش‌نمایش</span>
+              </button>
+            </div>
+          </div>
+        </header>
+      ) : (
+        <header className="admin-navbar">
+          <div className="admin-nav-brand">
+            <h2 style={{ fontSize: '18px', fontWeight: 800 }}>
+              پنل مدیریت کلینیک دندانپزشکی قلی‌پور
+            </h2>
+            <span className="admin-nav-badge">ادمین فعال</span>
+          </div>
+          <div className="admin-nav-actions">
+            <a href="/" target="_blank" rel="noopener noreferrer" className="admin-nav-site-link">
+              مشاهده سایت ↗
+            </a>
+            <button
+              type="button"
+              onClick={handleLogout}
+              style={{
+                padding: '6px 14px',
+                border: '1px solid #d8eef5',
+                background: '#fff',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                fontSize: '13px',
+                color: '#5a7d8c',
+              }}
+            >
+              خروج
+            </button>
+          </div>
+        </header>
+      )}
 
       {/* Main Content */}
-      <main className="admin-main-container">
-        {/* Navigation Tabs */}
-        <div className="admin-tabs">
-          <button
-            className={`admin-tab-btn ${activeTab === 'articles' ? 'active' : ''}`}
-            onClick={() => setActiveTab('articles')}
-          >
-            📚 لیست مقالات ({articles.length})
-          </button>
-          {selectedArticle && (
+      <main
+        className={`admin-main-container ${activeTab === 'edit-article' ? 'admin-main-container-edit' : ''}`}
+      >
+        {/* Navigation Tabs (Shown in list mode) */}
+        {activeTab !== 'edit-article' && (
+          <div className="admin-tabs">
             <button
-              className={`admin-tab-btn ${activeTab === 'edit-article' ? 'active' : ''}`}
-              onClick={() => setActiveTab('edit-article')}
+              className={`admin-tab-btn ${activeTab === 'articles' ? 'active' : ''}`}
+              onClick={() => setActiveTab('articles')}
             >
-              ✍️ {isNewArticle ? 'افزودن / شبیه‌سازی مقاله' : 'ویرایش مقاله'} (
-              {selectedArticle.title.substring(0, 25)}...)
+              📚 لیست مقالات ({articles.length})
             </button>
-          )}
-        </div>
+          </div>
+        )}
 
         {/* TAB 1: Articles List */}
         {activeTab === 'articles' && (
@@ -424,19 +1063,27 @@ export default function AdminPage() {
             >
               <div>
                 <h3 style={{ fontSize: '17px', fontWeight: 800 }}>مقالات منتشر شده در سایت</h3>
-                <p style={{ fontSize: '13px', color: '#5a7d8c', marginTop: '4px' }}>
-                  می‌توانید هر مقاله را ویرایش کنید، یک کپی شبیه‌سازی شده از آن بسازید، یا مقاله
-                  جدید ایجاد نمایید.
+                <p
+                  className="admin-article-list-subtitle-desktop"
+                  style={{ fontSize: '13px', color: '#5a7d8c', marginTop: '4px' }}
+                >
+                  مدیریت، ویرایش و انتشار مقالات تخصصی کلینیک دندانپزشکی قلی‌پور.
+                </p>
+                <p
+                  className="admin-article-list-subtitle-mobile"
+                  style={{ fontSize: '13px', color: '#5a7d8c', marginTop: '4px' }}
+                >
+                  مدیریت، ویرایش و انتشار مقالات تخصصی
                 </p>
               </div>
               <div style={{ display: 'flex', gap: '10px' }}>
                 <button
                   type="button"
-                  className="admin-btn-primary"
+                  className="admin-btn-primary admin-create-article-btn"
                   style={{ width: 'auto' }}
                   onClick={handleCreateNewArticle}
                 >
-                  + افزودن مقاله خام جدید
+                  + افزودن مقاله جدید
                 </button>
               </div>
             </div>
@@ -446,7 +1093,7 @@ export default function AdminPage() {
               <input
                 type="text"
                 className="admin-input"
-                placeholder="🔍 جستجو در عنوان، دسته‌بندی یا نامک مقاله..."
+                placeholder="جست و جو در مقالات..."
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
                 style={{ maxWidth: '400px' }}
@@ -457,65 +1104,123 @@ export default function AdminPage() {
               <table className="admin-table">
                 <thead>
                   <tr>
-                    <th>شناسه</th>
+                    <th className="admin-col-hide-mobile">شناسه</th>
                     <th>عنوان مقاله</th>
-                    <th>دسته‌بندی</th>
-                    <th>تاریخ</th>
-                    <th>بخش‌ها</th>
+                    <th className="admin-col-hide-mobile">دسته‌بندی</th>
+                    <th>
+                      <button
+                        type="button"
+                        onClick={handleToggleDateSort}
+                        className="admin-table-sort-btn"
+                        title={
+                          dateSortOrder === 'desc'
+                            ? 'مرتب‌سازی تاریخ: جدیدترین به قدیمی‌ترین (کلیک برای صعودی)'
+                            : dateSortOrder === 'asc'
+                              ? 'مرتب‌سازی تاریخ: قدیمی‌ترین به جدیدترین (کلیک برای نزولی)'
+                              : 'مرتب‌سازی بر اساس تاریخ (کلیک کنید)'
+                        }
+                      >
+                        <span>تاریخ</span>
+                        <span className="admin-sort-arrows" aria-hidden="true">
+                          <svg
+                            className={`admin-sort-arrow-up ${dateSortOrder === 'asc' ? 'active' : ''}`}
+                            width="9"
+                            height="9"
+                            viewBox="0 0 24 24"
+                            fill="currentColor"
+                          >
+                            <path d="M12 4l-8 8h16z" />
+                          </svg>
+                          <svg
+                            className={`admin-sort-arrow-down ${dateSortOrder === 'desc' ? 'active' : ''}`}
+                            width="9"
+                            height="9"
+                            viewBox="0 0 24 24"
+                            fill="currentColor"
+                          >
+                            <path d="M12 20l8-8H4z" />
+                          </svg>
+                        </span>
+                      </button>
+                    </th>
+                    <th className="admin-col-hide-mobile">بخش‌ها</th>
                     <th>عملیات</th>
                   </tr>
                 </thead>
                 <tbody>
                   {filteredArticles.map(art => (
                     <tr key={art.id}>
-                      <td style={{ fontWeight: 700 }}>{art.id}</td>
+                      <td className="admin-col-hide-mobile" style={{ fontWeight: 700 }}>
+                        {art.id}
+                      </td>
                       <td style={{ fontWeight: 600, maxWidth: '320px' }}>
-                        <div>{art.title}</div>
-                        <div style={{ fontSize: '12px', color: '#5a7d8c', marginTop: '2px' }}>
-                          /articles/{art.slug}
+                        {/* Desktop View: Title text + URL link underneath */}
+                        <div className="admin-article-title-desktop">
+                          <div>{art.title}</div>
+                          <div>
+                            <a
+                              href={`/articles/${art.slug}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="admin-article-slug-link"
+                              title={`مشاهده مقاله «${art.title}» در تب جدید`}
+                            >
+                              articles/{art.slug}/
+                            </a>
+                          </div>
+                        </div>
+
+                        {/* Mobile View: SEO Article Name directly clickable, opening article in new tab without URL */}
+                        <div className="admin-article-title-mobile">
+                          <a
+                            href={`/articles/${art.slug}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="admin-article-title-link-mobile"
+                            title={`مشاهده مقاله «${art.title}» در تب جدید`}
+                          >
+                            {art.title}
+                          </a>
                         </div>
                       </td>
-                      <td>
+                      <td className="admin-col-hide-mobile">
                         <span className="admin-badge">{art.category}</span>
                       </td>
-                      <td style={{ color: '#5a7d8c' }}>{art.date}</td>
-                      <td>{art.sections?.length || 0} بخش</td>
+                      <td style={{ color: '#5a7d8c', whiteSpace: 'nowrap' }}>{art.date}</td>
+                      <td className="admin-col-hide-mobile" style={{ direction: 'rtl' }}>
+                        {toPersianDigits(art.sections?.length || 0)} بخش
+                      </td>
                       <td>
-                        <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+                        <div
+                          style={{
+                            display: 'flex',
+                            gap: '6px',
+                            flexWrap: 'wrap',
+                            alignItems: 'center',
+                          }}
+                        >
+                          {/* Desktop action buttons */}
                           <button
                             type="button"
-                            className="toolbar-btn"
+                            className="toolbar-btn admin-action-btn-desktop"
                             onClick={() => handleEditArticle(art)}
                             style={{ color: '#1c83aa', borderColor: '#1c83aa' }}
                             title="ویرایش مقاله"
                           >
                             ✏️ ویرایش
                           </button>
-                          <button
-                            type="button"
-                            className="toolbar-btn"
-                            onClick={() => handleDuplicateArticle(art)}
-                            style={{
-                              color: '#059669',
-                              borderColor: '#059669',
-                              background: '#ecfdf5',
-                            }}
-                            title="شبیه‌سازی و ایجاد یک مقاله دقیقاً مشابه"
-                          >
-                            📋 کپی/شبیه‌سازی
-                          </button>
                           <a
                             href={`/articles/${art.slug}`}
                             target="_blank"
                             rel="noreferrer"
-                            className="toolbar-btn"
+                            className="toolbar-btn admin-view-btn-desktop"
                             style={{ textDecoration: 'none' }}
                           >
                             مشاهده
                           </a>
                           <button
                             type="button"
-                            className="toolbar-btn"
+                            className="toolbar-btn admin-action-btn-desktop"
                             onClick={() => handleDeleteArticle(art.id, art.title)}
                             style={{
                               color: '#e11d48',
@@ -526,6 +1231,55 @@ export default function AdminPage() {
                           >
                             🗑️
                           </button>
+
+                          {/* Mobile action buttons: clean pencil and trash icons without box, outline, or subtitle */}
+                          <div className="admin-actions-mobile">
+                            <button
+                              type="button"
+                              className="admin-mobile-icon-btn admin-mobile-edit-btn"
+                              onClick={() => handleEditArticle(art)}
+                              title="ویرایش مقاله"
+                              aria-label="ویرایش مقاله"
+                            >
+                              <svg
+                                width="18"
+                                height="18"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2.2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                aria-hidden="true"
+                              >
+                                <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z" />
+                              </svg>
+                            </button>
+                            <button
+                              type="button"
+                              className="admin-mobile-icon-btn admin-mobile-delete-btn"
+                              onClick={() => handleDeleteArticle(art.id, art.title)}
+                              title="حذف مقاله"
+                              aria-label="حذف مقاله"
+                            >
+                              <svg
+                                width="18"
+                                height="18"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2.2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                aria-hidden="true"
+                              >
+                                <polyline points="3 6 5 6 21 6" />
+                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                                <line x1="10" y1="11" x2="10" y2="17" />
+                                <line x1="14" y1="11" x2="14" y2="17" />
+                              </svg>
+                            </button>
+                          </div>
                         </div>
                       </td>
                     </tr>
@@ -549,84 +1303,16 @@ export default function AdminPage() {
         {/* TAB 2: Edit Selected Article */}
         {activeTab === 'edit-article' && selectedArticle && (
           <div>
-            {/* Header Actions & Mode Toggle */}
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                flexWrap: 'wrap',
-                gap: '16px',
-                marginBottom: '20px',
-                background: '#fff',
-                padding: '16px 24px',
-                borderRadius: '16px',
-                border: '1px solid #d8eef5',
-              }}
-            >
-              <div>
-                <h3 style={{ fontSize: '18px', fontWeight: 800 }}>
-                  {isNewArticle ? '✨ ساخت مقاله جدید / شبیه‌سازی شده' : 'ویرایش بصری مقاله'}
-                </h3>
-                <span style={{ fontSize: '13px', color: '#5a7d8c' }}>
-                  آدرس در سایت: /articles/{selectedArticle.slug}
-                </span>
-              </div>
-
-              {/* View Mode Toggle */}
-              <div className="admin-mode-pill">
-                <button
-                  type="button"
-                  className={`admin-mode-btn ${editorViewMode === 'split' ? 'active' : ''}`}
-                  onClick={() => setEditorViewMode('split')}
-                  title="نمایش همزمان ویرایشگر و پیش‌نمایش گرافیکی"
-                >
-                  🌗 نمای دوطرفه (ویرایش + زنده)
-                </button>
-                <button
-                  type="button"
-                  className={`admin-mode-btn ${editorViewMode === 'editor' ? 'active' : ''}`}
-                  onClick={() => setEditorViewMode('editor')}
-                  title="تنها فرم ویرایش"
-                >
-                  📝 فقط فرم ویرایش
-                </button>
-                <button
-                  type="button"
-                  className={`admin-mode-btn ${editorViewMode === 'preview' ? 'active' : ''}`}
-                  onClick={() => setEditorViewMode('preview')}
-                  title="تنها خروجی نهایی گرافیکی"
-                >
-                  👁️ فقط پیش‌نمایش
-                </button>
-              </div>
-
-              {/* Action Buttons */}
-              <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                {saveMessage && (
-                  <span style={{ fontSize: '13px', fontWeight: 600 }}>{saveMessage}</span>
-                )}
-                <button
-                  type="button"
-                  className="toolbar-btn"
-                  onClick={() => setActiveTab('articles')}
-                >
-                  بازگشت به لیست
-                </button>
-                <button
-                  type="button"
-                  className="admin-btn-primary"
-                  style={{ width: 'auto' }}
-                  onClick={handleSaveArticle}
-                  disabled={isSaving}
-                >
-                  {isSaving ? 'در حال ذخیره‌سازی...' : '💾 ذخیره در سایت'}
-                </button>
-              </div>
-            </div>
-
             {/* Layout based on View Mode */}
-            <div className={editorViewMode === 'split' ? 'admin-editor-layout-split' : ''}>
+            <div
+              className={`admin-editor-layout ${
+                editorViewMode === 'split'
+                  ? 'admin-editor-layout-split is-split-mode'
+                  : editorViewMode === 'editor'
+                    ? 'is-editor-mode'
+                    : 'is-preview-mode'
+              }`}
+            >
               {/* Left/Right Column: Form Editor */}
               {(editorViewMode === 'split' || editorViewMode === 'editor') && (
                 <div className="admin-editor-form-col">
@@ -643,7 +1329,13 @@ export default function AdminPage() {
                       }}
                     >
                       <div className="admin-input-group">
-                        <label>عنوان اصلی مقاله</label>
+                        <div className="admin-field-header">
+                          <label>عنوان اصلی مقاله</label>
+                          <PreviewLocateBtn
+                            targetId="preview-article-title"
+                            onLocate={scrollToPreviewElement}
+                          />
+                        </div>
                         <input
                           type="text"
                           className="admin-input"
@@ -670,10 +1362,17 @@ export default function AdminPage() {
                         />
                       </div>
                       <div className="admin-input-group">
-                        <label>دسته‌بندی کلینیک</label>
+                        <div className="admin-field-header">
+                          <label>دسته‌بندی کلینیک</label>
+                          <PreviewLocateBtn
+                            targetId="preview-article-category"
+                            onLocate={scrollToPreviewElement}
+                          />
+                        </div>
                         <input
                           type="text"
                           className="admin-input"
+                          list="clinic-categories"
                           value={selectedArticle.category}
                           onChange={e =>
                             setSelectedArticle(prev =>
@@ -681,6 +1380,15 @@ export default function AdminPage() {
                             )
                           }
                         />
+                        <datalist id="clinic-categories">
+                          <option value="ایمپلنت و جراحی" />
+                          <option value="دندانپزشکی کودکان" />
+                          <option value="ارتودنسی" />
+                          <option value="زیبایی و طراحی لبخند" />
+                          <option value="بهداشت و سلامت لثه" />
+                          <option value="رژیم غذایی و سلامت دهان" />
+                          <option value="سلامت عمومی و پیشگیری" />
+                        </datalist>
                       </div>
                       <div className="admin-input-group">
                         <label>نامک آدرس (Slug انگلیسی)</label>
@@ -739,7 +1447,13 @@ export default function AdminPage() {
 
                     {/* Summary Lead */}
                     <div className="admin-input-group" style={{ marginTop: '12px' }}>
-                      <label>خلاصه مقدماتی و لید مقاله (Summary)</label>
+                      <div className="admin-field-header">
+                        <label>خلاصه مقدماتی و لید مقاله (Summary)</label>
+                        <PreviewLocateBtn
+                          targetId="preview-article-summary"
+                          onLocate={scrollToPreviewElement}
+                        />
+                      </div>
                       <textarea
                         className="admin-input"
                         rows={2}
@@ -755,7 +1469,13 @@ export default function AdminPage() {
 
                     {/* TL;DR */}
                     <div className="admin-input-group" style={{ marginTop: '12px' }}>
-                      <label>چکیده و نکات کلیدی اجرایی (TL;DR کادر طلایی)</label>
+                      <div className="admin-field-header">
+                        <label>چکیده و نکات کلیدی اجرایی (TL;DR کادر طلایی)</label>
+                        <PreviewLocateBtn
+                          targetId="preview-article-tldr"
+                          onLocate={scrollToPreviewElement}
+                        />
+                      </div>
                       <textarea
                         className="admin-input"
                         rows={2}
@@ -802,8 +1522,10 @@ export default function AdminPage() {
                       }}
                     >
                       <div className="admin-input-group">
-                        <label>آدرس تصویر (URL یا مسیر محلی)</label>
-                        <div style={{ display: 'flex', gap: '8px' }}>
+                        <div className="admin-field-header">
+                          <label>آدرس تصویر (URL یا مسیر محلی)</label>
+                        </div>
+                        <div style={{ display: 'flex', gap: '8px', alignItems: 'stretch' }}>
                           <input
                             type="text"
                             className="admin-input"
@@ -817,8 +1539,26 @@ export default function AdminPage() {
                             className="admin-file-upload-btn"
                             onClick={() => fileInputRef.current?.click()}
                             disabled={isUploadingImage}
+                            title="آپلود تصویر شاخص"
+                            aria-label="آپلود تصویر"
                           >
-                            {isUploadingImage ? '...' : '📁 آپلود'}
+                            {isUploadingImage ? (
+                              <span style={{ fontSize: '13px' }}>...</span>
+                            ) : (
+                              <svg
+                                width="18"
+                                height="18"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2.2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                aria-hidden="true"
+                              >
+                                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
+                              </svg>
+                            )}
                           </button>
                           <input
                             ref={fileInputRef}
@@ -830,7 +1570,9 @@ export default function AdminPage() {
                         </div>
                       </div>
                       <div className="admin-input-group">
-                        <label>متن جایگزین تصویر (Alt Text برای سئو)</label>
+                        <div className="admin-field-header">
+                          <label>متن جایگزین تصویر (Alt Text برای سئو)</label>
+                        </div>
                         <input
                           type="text"
                           className="admin-input"
@@ -841,7 +1583,13 @@ export default function AdminPage() {
                         />
                       </div>
                       <div className="admin-input-group">
-                        <label>زیرنویس و توضیح تصویر (Caption)</label>
+                        <div className="admin-field-header">
+                          <label>زیرنویس و توضیح تصویر (Caption)</label>
+                          <PreviewLocateBtn
+                            targetId="preview-image-caption"
+                            onLocate={scrollToPreviewElement}
+                          />
+                        </div>
                         <input
                           type="text"
                           className="admin-input"
@@ -852,20 +1600,6 @@ export default function AdminPage() {
                         />
                       </div>
                     </div>
-                    {selectedArticle.image && (
-                      <div style={{ marginTop: '12px' }}>
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
-                          src={selectedArticle.image}
-                          alt="پیش‌نمایش تصویر"
-                          style={{
-                            maxHeight: '120px',
-                            borderRadius: '8px',
-                            border: '1px solid #d8eef5',
-                          }}
-                        />
-                      </div>
-                    )}
                   </div>
 
                   {/* Sections Card */}
@@ -880,7 +1614,8 @@ export default function AdminPage() {
                     >
                       <div>
                         <h4 style={{ fontSize: '16px', fontWeight: 700 }}>
-                          ۳. بخش‌های بدنه مقاله ({selectedArticle.sections.length} بخش)
+                          ۳. بخش‌های بدنه مقاله ({toPersianDigits(selectedArticle.sections.length)}{' '}
+                          بخش)
                         </h4>
                         <p style={{ fontSize: '13px', color: '#5a7d8c', marginTop: '2px' }}>
                           امکان درج جداول مقایسه‌ای، لیست‌های عددی و گلوله‌ای و نکات بالینی.
@@ -888,11 +1623,20 @@ export default function AdminPage() {
                       </div>
                       <button
                         type="button"
-                        className="toolbar-btn"
+                        className="card-add-icon-btn"
                         onClick={handleAddSection}
-                        style={{ background: '#e3f9ff', color: '#1c83aa', borderColor: '#1c83aa' }}
+                        title="افزودن بخش جدید"
+                        aria-label="افزودن بخش جدید"
                       >
-                        + افزودن بخش جدید
+                        <svg
+                          width="20"
+                          height="20"
+                          viewBox="0 0 24 24"
+                          fill="currentColor"
+                          aria-hidden="true"
+                        >
+                          <path d="M9 3a1.5 1.5 0 0 1 1.5-1.5h3A1.5 1.5 0 0 1 15 3v4.5h4.5A1.5 1.5 0 0 1 21 9v3a1.5 1.5 0 0 1-1.5 1.5H15V18a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 18v-4.5H4.5A1.5 1.5 0 0 1 3 12V9a1.5 1.5 0 0 1 1.5-1.5H9V3z" />
+                        </svg>
                       </button>
                     </div>
 
@@ -906,55 +1650,117 @@ export default function AdminPage() {
                             marginBottom: '12px',
                           }}
                         >
-                          <span style={{ fontWeight: 700, fontSize: '14px', color: '#1c434f' }}>
-                            بخش {sIdx + 1}: {sec.title || 'بدون عنوان'}
-                          </span>
-                          <div style={{ display: 'flex', gap: '8px' }}>
-                            <button
-                              type="button"
-                              className="toolbar-btn"
-                              disabled={sIdx === 0}
-                              onClick={() => handleMoveSection(sIdx, 'up')}
-                              title="انتقال به بالا"
-                            >
-                              ▲
-                            </button>
-                            <button
-                              type="button"
-                              className="toolbar-btn"
-                              disabled={sIdx === selectedArticle.sections.length - 1}
-                              onClick={() => handleMoveSection(sIdx, 'down')}
-                              title="انتقال به پایین"
-                            >
-                              ▼
-                            </button>
-                            <button
-                              type="button"
-                              onClick={() => handleRemoveSection(sIdx)}
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            <span
                               style={{
-                                background: 'transparent',
-                                border: 'none',
-                                color: '#e11d48',
-                                cursor: 'pointer',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                width: '28px',
+                                height: '28px',
+                                borderRadius: '50%',
+                                backgroundColor: '#e3f9ff',
+                                color: '#1c83aa',
+                                fontWeight: 800,
                                 fontSize: '13px',
-                                fontWeight: 600,
                               }}
                             >
-                              حذف بخش ✕
+                              {sIdx + 1}
+                            </span>
+                            {editorViewMode !== 'split' && (
+                              <span style={{ fontWeight: 700, fontSize: '14px', color: '#1c434f' }}>
+                                {sec.title || 'بدون عنوان'}
+                              </span>
+                            )}
+                          </div>
+                          <div className="item-actions-group">
+                            <button
+                              type="button"
+                              className="item-action-btn"
+                              disabled={sIdx === 0}
+                              onClick={() => handleMoveSection(sIdx, 'up')}
+                              title="انتقال بخش به بالا"
+                              aria-label="انتقال بخش به بالا"
+                            >
+                              <svg
+                                width="14"
+                                height="14"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2.4"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                aria-hidden="true"
+                              >
+                                <polyline points="18 15 12 9 6 15" />
+                              </svg>
+                            </button>
+                            <button
+                              type="button"
+                              className="item-action-btn"
+                              disabled={sIdx === selectedArticle.sections.length - 1}
+                              onClick={() => handleMoveSection(sIdx, 'down')}
+                              title="انتقال بخش به پایین"
+                              aria-label="انتقال بخش به پایین"
+                            >
+                              <svg
+                                width="14"
+                                height="14"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2.4"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                aria-hidden="true"
+                              >
+                                <polyline points="6 9 12 15 18 9" />
+                              </svg>
+                            </button>
+                            <button
+                              type="button"
+                              className="item-action-btn item-action-delete"
+                              onClick={() => handleRemoveSection(sIdx)}
+                              title="حذف این بخش"
+                              aria-label="حذف این بخش"
+                            >
+                              <svg
+                                width="15"
+                                height="15"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2.4"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                aria-hidden="true"
+                              >
+                                <line x1="18" y1="6" x2="6" y2="18" />
+                                <line x1="6" y1="6" x2="18" y2="18" />
+                              </svg>
                             </button>
                           </div>
                         </div>
 
+                        {/* Title and Anchor ID: Stacked into separate rows in split mode to prevent narrow squeezed inputs */}
                         <div
                           style={{
-                            display: 'grid',
-                            gridTemplateColumns: '2fr 1fr',
+                            display: editorViewMode === 'split' ? 'flex' : 'grid',
+                            flexDirection: editorViewMode === 'split' ? 'column' : undefined,
+                            gridTemplateColumns: editorViewMode === 'split' ? undefined : '2fr 1fr',
                             gap: '12px',
                             marginBottom: '12px',
                           }}
                         >
                           <div className="admin-input-group" style={{ marginBottom: 0 }}>
-                            <label>عنوان بخش</label>
+                            <div className="admin-field-header">
+                              <label>عنوان بخش</label>
+                              <PreviewLocateBtn
+                                targetId={`preview-sec-title-${sIdx}`}
+                                onLocate={scrollToPreviewElement}
+                              />
+                            </div>
                             <input
                               type="text"
                               className="admin-input"
@@ -974,15 +1780,41 @@ export default function AdminPage() {
                         </div>
 
                         <div className="admin-input-group">
-                          <label>متن بدنه، جداول و لیست‌ها</label>
+                          <div className="admin-field-header">
+                            <label>متن بدنه، جداول و لیست‌ها</label>
+                            <PreviewLocateBtn
+                              targetId={`preview-sec-body-${sIdx}`}
+                              onLocate={scrollToPreviewElement}
+                            />
+                          </div>
                           <RichTextEditor
+                            ref={r => {
+                              editorRefs.current[sIdx] = r;
+                            }}
                             value={sec.body}
                             onChange={val => handleUpdateSection(sIdx, 'body', val)}
+                            onFocus={() => {
+                              setActiveSectionIndex(sIdx);
+                              const ed = editorRefs.current[sIdx];
+                              if (ed) {
+                                setEditorCanUndo(ed.canUndo());
+                                setEditorCanRedo(ed.canRedo());
+                              }
+                            }}
+                            onHistoryChange={(canU, canR) =>
+                              handleEditorHistoryChange(sIdx, canU, canR)
+                            }
                           />
                         </div>
 
                         <div className="admin-input-group">
-                          <label>نکته بالینی پزشک (کادر کتیبه‌ای توصیه دکتر)</label>
+                          <div className="admin-field-header">
+                            <label>نکته بالینی پزشک (کادر کتیبه‌ای توصیه دکتر)</label>
+                            <PreviewLocateBtn
+                              targetId={`preview-sec-comment-${sIdx}`}
+                              onLocate={scrollToPreviewElement}
+                            />
+                          </div>
                           <input
                             type="text"
                             className="admin-input"
@@ -1012,11 +1844,20 @@ export default function AdminPage() {
                       </h4>
                       <button
                         type="button"
-                        className="toolbar-btn"
+                        className="card-add-icon-btn"
                         onClick={handleAddFaq}
-                        style={{ background: '#e3f9ff', color: '#1c83aa', borderColor: '#1c83aa' }}
+                        title="افزودن پرسش و پاسخ جدید"
+                        aria-label="افزودن پرسش و پاسخ"
                       >
-                        + افزودن پرسش و پاسخ
+                        <svg
+                          width="20"
+                          height="20"
+                          viewBox="0 0 24 24"
+                          fill="currentColor"
+                          aria-hidden="true"
+                        >
+                          <path d="M9 3a1.5 1.5 0 0 1 1.5-1.5h3A1.5 1.5 0 0 1 15 3v4.5h4.5A1.5 1.5 0 0 1 21 9v3a1.5 1.5 0 0 1-1.5 1.5H15V18a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 18v-4.5H4.5A1.5 1.5 0 0 1 3 12V9a1.5 1.5 0 0 1 1.5-1.5H9V3z" />
+                        </svg>
                       </button>
                     </div>
 
@@ -1034,18 +1875,35 @@ export default function AdminPage() {
                           </span>
                           <button
                             type="button"
+                            className="item-action-btn item-action-delete"
                             onClick={() => handleRemoveFaq(fIdx)}
-                            style={{
-                              background: 'transparent',
-                              border: 'none',
-                              color: '#e11d48',
-                              cursor: 'pointer',
-                            }}
+                            title="حذف این پرسش"
+                            aria-label="حذف پرسش"
                           >
-                            حذف ✕
+                            <svg
+                              width="15"
+                              height="15"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2.4"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              aria-hidden="true"
+                            >
+                              <line x1="18" y1="6" x2="6" y2="18" />
+                              <line x1="6" y1="6" x2="18" y2="18" />
+                            </svg>
                           </button>
                         </div>
                         <div className="admin-input-group">
+                          <div className="admin-field-header">
+                            <label style={{ fontSize: '12px' }}>پرسش بیمار</label>
+                            <PreviewLocateBtn
+                              targetId={`preview-faq-${fIdx}`}
+                              onLocate={scrollToPreviewElement}
+                            />
+                          </div>
                           <input
                             type="text"
                             className="admin-input"
@@ -1082,11 +1940,20 @@ export default function AdminPage() {
                       </h4>
                       <button
                         type="button"
-                        className="toolbar-btn"
+                        className="card-add-icon-btn"
                         onClick={handleAddCitation}
-                        style={{ background: '#e3f9ff', color: '#1c83aa', borderColor: '#1c83aa' }}
+                        title="افزودن رفرنس علمی جدید"
+                        aria-label="افزودن رفرنس علمی"
                       >
-                        + افزودن رفرنس علمی
+                        <svg
+                          width="20"
+                          height="20"
+                          viewBox="0 0 24 24"
+                          fill="currentColor"
+                          aria-hidden="true"
+                        >
+                          <path d="M9 3a1.5 1.5 0 0 1 1.5-1.5h3A1.5 1.5 0 0 1 15 3v4.5h4.5A1.5 1.5 0 0 1 21 9v3a1.5 1.5 0 0 1-1.5 1.5H15V18a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 18v-4.5H4.5A1.5 1.5 0 0 1 3 12V9a1.5 1.5 0 0 1 1.5-1.5H9V3z" />
+                        </svg>
                       </button>
                     </div>
 
@@ -1104,15 +1971,25 @@ export default function AdminPage() {
                           </span>
                           <button
                             type="button"
+                            className="item-action-btn item-action-delete"
                             onClick={() => handleRemoveCitation(cIdx)}
-                            style={{
-                              background: 'transparent',
-                              border: 'none',
-                              color: '#e11d48',
-                              cursor: 'pointer',
-                            }}
+                            title="حذف این منبع"
+                            aria-label="حذف منبع"
                           >
-                            حذف ✕
+                            <svg
+                              width="15"
+                              height="15"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2.4"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              aria-hidden="true"
+                            >
+                              <line x1="18" y1="6" x2="6" y2="18" />
+                              <line x1="6" y1="6" x2="18" y2="18" />
+                            </svg>
                           </button>
                         </div>
                         <div
@@ -1123,7 +2000,13 @@ export default function AdminPage() {
                           }}
                         >
                           <div className="admin-input-group" style={{ marginBottom: 0 }}>
-                            <label style={{ fontSize: '12px' }}>عنوان مقاله یا دستورالعمل</label>
+                            <div className="admin-field-header">
+                              <label style={{ fontSize: '12px' }}>عنوان مقاله یا دستورالعمل</label>
+                              <PreviewLocateBtn
+                                targetId={`preview-cite-${cIdx}`}
+                                onLocate={scrollToPreviewElement}
+                              />
+                            </div>
                             <input
                               type="text"
                               className="admin-input"

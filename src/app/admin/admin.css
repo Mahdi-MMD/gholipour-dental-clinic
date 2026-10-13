@@ -57,18 +57,18 @@
   width: 100%;
   padding: 12px 16px;
   border-radius: 12px;
-  border: 1px solid #d8eef5;
+  border: 1.5px solid #b6dbe6;
   font-size: 14.5px;
   outline: none;
   font-family: inherit;
   transition: all 0.2s;
   box-sizing: border-box;
-  background: #fbfdfe;
+  background: #ffffff;
 }
 
 .admin-input:focus {
   border-color: #1c83aa;
-  box-shadow: 0 0 0 3px rgba(28, 131, 170, 0.15);
+  box-shadow: 0 0 0 3px rgba(28, 131, 170, 0.18);
   background: #fff;
 }
 
@@ -125,6 +125,18 @@
   gap: 16px;
 }
 
+.admin-nav-site-link {
+  font-size: 13.5px;
+  color: #1c83aa;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.15s ease;
+}
+
+.admin-nav-site-link:hover {
+  color: #156b8c;
+}
+
 /* Dashboard Layout */
 .admin-main-container {
   max-width: 1300px;
@@ -162,10 +174,10 @@
 .admin-card {
   background: #ffffff;
   border-radius: 16px;
-  border: 1px solid #d8eef5;
+  border: 1.5px solid #b2dbe7;
   padding: 28px;
   margin-bottom: 24px;
-  box-shadow: 0 4px 15px rgba(28, 67, 79, 0.03);
+  box-shadow: 0 4px 18px rgba(28, 67, 79, 0.05);
 }
 
 .admin-table-container {
@@ -184,13 +196,101 @@
   background: #f4f8fa;
   color: #1c434f;
   font-weight: 700;
-  border-bottom: 2px solid #d8eef5;
+  border-bottom: 2px solid #b2dbe7;
+}
+
+.admin-table-sort-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  color: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  cursor: pointer;
+  user-select: none;
+  transition: color 0.15s ease;
+}
+
+.admin-table-sort-btn:hover {
+  color: #1c83aa;
+}
+
+.admin-sort-arrows {
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5px;
+  color: #94a3b8;
+  transition: color 0.15s ease;
+}
+
+.admin-sort-arrows svg {
+  display: block;
+  transition: all 0.15s ease;
+}
+
+.admin-sort-arrow-up.active,
+.admin-sort-arrow-down.active {
+  color: #1c83aa;
 }
 
 .admin-table td {
   padding: 14px 16px;
   border-bottom: 1px solid #edf5f7;
   color: #2d4f5c;
+}
+
+.admin-article-slug-link {
+  display: inline-block;
+  font-size: 12px;
+  color: #5a7d8c;
+  text-decoration: none;
+  margin-top: 3px;
+  direction: ltr;
+  transition: all 0.18s ease;
+  border-bottom: 1px dashed transparent;
+}
+
+.admin-article-slug-link:hover {
+  color: #1c83aa;
+  border-bottom-color: #1c83aa;
+  transform: translateX(-2px);
+}
+
+.admin-article-list-subtitle-desktop {
+  display: block;
+}
+
+.admin-article-list-subtitle-mobile {
+  display: none;
+}
+
+.admin-article-title-mobile {
+  display: none;
+}
+
+.admin-article-title-link-mobile {
+  display: inline-block;
+  color: #1c434f;
+  text-decoration: none;
+  font-weight: 700;
+  line-height: 1.5;
+  transition: color 0.15s ease;
+}
+
+.admin-article-title-link-mobile:hover,
+.admin-article-title-link-mobile:active {
+  color: #1c83aa;
+}
+
+.admin-actions-mobile {
+  display: none;
 }
 
 .admin-badge {
@@ -205,11 +305,12 @@
 
 /* Rich Editor UI */
 .rich-editor-container {
-  border: 1px solid #d8eef5;
+  border: 1.5px solid #b6dbe6;
   border-radius: 12px;
   overflow: hidden;
   background: #ffffff;
   margin-top: 8px;
+  box-shadow: 0 2px 6px rgba(28, 67, 79, 0.03);
 }
 
 .rich-editor-toolbar {
@@ -219,7 +320,7 @@
   gap: 8px;
   padding: 10px 14px;
   background: #f8fdff;
-  border-bottom: 1px solid #d8eef5;
+  border-bottom: 1px solid #b6dbe6;
 }
 
 .toolbar-group {
@@ -231,14 +332,14 @@
 .toolbar-separator {
   width: 1px;
   height: 20px;
-  background: #d8eef5;
+  background: #b6dbe6;
   margin: 0 4px;
 }
 
 .toolbar-btn {
   padding: 6px 10px;
   background: #ffffff;
-  border: 1px solid #d8eef5;
+  border: 1.5px solid #b6dbe6;
   border-radius: 6px;
   color: #1c434f;
   font-size: 13px;
@@ -260,6 +361,78 @@
   color: #0f766e;
 }
 
+/* Item Action Icons (Replaces outlined buttons with borderless icons and hover effects) */
+.item-actions-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.item-action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  color: #5a7d8c;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.item-action-btn:hover:not(:disabled) {
+  background: #e3f9ff;
+  color: #1c83aa;
+  transform: translateY(-1px);
+}
+
+.item-action-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.item-action-btn.item-action-delete {
+  color: #94a3b8;
+}
+
+.item-action-btn.item-action-delete:hover:not(:disabled) {
+  background: #fff1f2;
+  color: #e11d48;
+}
+
+/* Card Header Add Icon Button (Borderless, solid ocean blue filled rounded cross icon) */
+.card-add-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  background: transparent;
+  color: #1c83aa;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  line-height: 1;
+}
+
+.card-add-icon-btn:hover {
+  color: #156b8c;
+  transform: scale(1.12);
+}
+
+.card-add-icon-btn:active {
+  transform: scale(0.95);
+}
+
+.card-add-icon-btn svg {
+  display: block;
+}
+
 .rich-editor-textarea {
   width: 100%;
   padding: 16px;
@@ -276,10 +449,11 @@
 /* FAQ / Section Item Cards */
 .admin-item-block {
   background: #fbfdfe;
-  border: 1px solid #d8eef5;
+  border: 1.5px solid #b0d8e4;
   border-radius: 12px;
   padding: 18px;
   margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(28, 67, 79, 0.03);
 }
 
 /* Split-View & Live Preview Layout */
@@ -296,10 +470,14 @@
   }
 }
 
+.admin-main-container-edit {
+  margin-top: 24px;
+}
+
 .admin-preview-sticky-container {
   position: sticky;
-  top: 90px;
-  max-height: calc(100vh - 120px);
+  top: 110px;
+  max-height: calc(100vh - 130px);
   overflow-y: auto;
   border-radius: 16px;
 }
@@ -313,6 +491,9 @@
 }
 
 .admin-mode-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   padding: 6px 14px;
   border-radius: 8px;
   border: none;
@@ -334,18 +515,441 @@
 .admin-file-upload-btn {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 8px 14px;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  min-width: 46px;
+  padding: 0;
   background: #e3f9ff;
   color: #1c83aa;
-  border: 1px solid #bce1f5;
-  border-radius: 8px;
-  font-size: 13px;
-  font-weight: 700;
+  border: 1.5px solid #b6dbe6;
+  border-radius: 12px;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
 }
 
-.admin-file-upload-btn:hover {
+.admin-file-upload-btn:hover:not(:disabled) {
   background: #d4f3fd;
+  border-color: #1c83aa;
+  color: #156b8c;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(28, 131, 170, 0.15);
+}
+
+.admin-file-upload-btn:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+/* ==========================================================================
+   Office / Word-Style Fixed Ribbon Toolbar
+   ========================================================================== */
+
+.admin-ribbon-container {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: #ffffff;
+  border-bottom: 1px solid #d0e7f0;
+  box-shadow: 0 4px 20px rgba(28, 67, 79, 0.08);
+  backdrop-filter: blur(8px);
+}
+
+.admin-ribbon-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 24px;
+  background: #ffffff;
+  border-bottom: 1px solid #eef6f9;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.admin-ribbon-title-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.admin-ribbon-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: #1c434f;
+  margin: 0;
+}
+
+.admin-ribbon-slug-badge {
+  font-size: 12px;
+  color: #5a7d8c;
+  background: #f4f8fa;
+  padding: 3px 8px;
+  border-radius: 6px;
+  border: 1px solid #e1eff5;
+  direction: ltr;
+  display: inline-block;
+}
+
+.admin-ribbon-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.admin-ribbon-commandbar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 24px;
+  background: #f8fdff;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.ribbon-group {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 6px;
+}
+
+.ribbon-divider {
+  width: 1px;
+  height: 24px;
+  background: #d4eaf2;
+  margin: 0 4px;
+  flex-shrink: 0;
+}
+
+.ribbon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 6px 10px;
+  background: #ffffff;
+  border: 1px solid #d8eef5;
+  border-radius: 7px;
+  color: #1c434f;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-family: inherit;
+  flex-shrink: 0;
+}
+
+.ribbon-btn:hover:not(:disabled) {
+  background: #e3f9ff;
+  border-color: #1c83aa;
+  color: #156b8c;
+  transform: translateY(-1px);
+}
+
+.ribbon-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.ribbon-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  border-color: #e5edf0;
+  background: #fdfdfd;
+}
+
+.ribbon-history-btn {
+  padding: 6px 8px;
+  width: 34px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ribbon-history-btn svg {
+  display: block;
+}
+
+.admin-ribbon-save-status {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #059669;
+}
+
+.preview-section-highlight {
+  animation: previewPulse 2.2s ease;
+  border-radius: 12px;
+}
+
+@keyframes previewPulse {
+  0% {
+    background-color: rgba(28, 131, 170, 0.22);
+    box-shadow: 0 0 0 4px rgba(28, 131, 170, 0.4);
+  }
+  60% {
+    background-color: rgba(28, 131, 170, 0.1);
+    box-shadow: 0 0 0 2px rgba(28, 131, 170, 0.2);
+  }
+  100% {
+    background-color: transparent;
+    box-shadow: none;
+  }
+}
+
+.admin-field-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.admin-field-header label {
+  margin-bottom: 0 !important;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #1c434f;
+}
+
+/* Linked view locator eye icon is strictly limited to two-sided view (split mode) */
+.admin-field-locate-btn {
+  display: none;
+}
+
+.is-split-mode .admin-field-locate-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 22px;
+  padding: 0;
+  background: #ffffff;
+  border: 1.2px solid #bce2ee;
+  border-radius: 5px;
+  color: #1c83aa;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.admin-field-locate-btn:hover {
+  background: #e3f9ff;
+  border-color: #1c83aa;
+  color: #156b8c;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(28, 131, 170, 0.16);
+}
+
+.mobile-mode-toggle-btn {
+  display: none !important;
+}
+
+@media (max-width: 768px) {
+  /* 1. Mobile view is either editor mode OR preview mode (no side-by-side) */
+  .admin-preview-sticky-container {
+    position: static !important;
+    max-height: none !important;
+    overflow-y: visible !important;
+  }
+
+  .admin-editor-layout-split {
+    display: block !important;
+  }
+
+  /* 2. Hide side panel view switch pill and locate eye buttons on mobile */
+  .desktop-only-divider,
+  .desktop-only-view-pill,
+  .admin-field-locate-btn {
+    display: none !important;
+  }
+
+  /* 3. Top Menu on Mobile: compact toolbar with icon-only buttons */
+  .admin-ribbon-topbar {
+    padding: 8px 12px;
+    gap: 8px;
+  }
+
+  .admin-ribbon-title {
+    font-size: 13.5px;
+    max-width: 150px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .admin-ribbon-actions {
+    gap: 6px;
+  }
+
+  /* Hide textual descriptions inside ribbon buttons on mobile, showing clean Word/Docs icons only */
+  .ribbon-btn-text {
+    display: none !important;
+  }
+
+  .ribbon-btn {
+    padding: 6px 8px;
+    min-width: 34px;
+    height: 32px;
+  }
+
+  .ribbon-save-btn {
+    padding: 6px 10px !important;
+    min-width: 36px;
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* 4. Single Toggle Pen/Pencil Button on Mobile */
+  .mobile-mode-toggle-btn {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    min-width: 34px;
+    height: 32px;
+    border-radius: 7px;
+    transition: all 0.2s ease;
+  }
+
+  /* When On (Editing mode active) -> glowing active teal state with pen */
+  .mobile-mode-toggle-btn.mobile-mode-edit {
+    background: #1c83aa !important;
+    color: #ffffff !important;
+    border-color: #156b8c !important;
+    box-shadow: 0 2px 8px rgba(28, 131, 170, 0.35);
+  }
+
+  /* When Off (Preview mode active) -> neutral outlined state */
+  .mobile-mode-toggle-btn.mobile-mode-preview {
+    background: #ffffff !important;
+    color: #5a7d8c !important;
+    border-color: #d8eef5 !important;
+  }
+
+  .admin-ribbon-commandbar {
+    padding: 6px 12px;
+    gap: 4px;
+  }
+
+  /* When on preview mode in mobile, hide formatting commandbar to give full screen to preview */
+  .admin-ribbon-container:has(.mobile-mode-toggle-btn.mobile-mode-preview)
+    .admin-ribbon-commandbar {
+    display: none !important;
+  }
+
+  .ribbon-group {
+    padding: 1px 3px;
+    gap: 3px;
+  }
+
+  /* Admin Articles Table on Mobile: keep only Article Name, Date, Action */
+  .admin-col-hide-mobile {
+    display: none !important;
+  }
+
+  .admin-table th,
+  .admin-table td {
+    padding: 10px 8px;
+    font-size: 13px;
+  }
+
+  /* In mobile: Hide desktop title container (which had URL underneath) and show clickable title link */
+  .admin-article-title-desktop {
+    display: none !important;
+  }
+
+  .admin-article-title-mobile {
+    display: block !important;
+  }
+
+  /* In mobile: Hide separate 'مشاهده' button because the article name itself is directly clickable */
+  .admin-view-btn-desktop {
+    display: none !important;
+  }
+
+  /* In mobile: Hide desktop boxed action buttons */
+  .admin-action-btn-desktop {
+    display: none !important;
+  }
+
+  /* In mobile: Show borderless pencil & trash icons without box, outline, or subtitle */
+  .admin-actions-mobile {
+    display: inline-flex !important;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .admin-mobile-icon-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: all 0.18s ease;
+  }
+
+  .admin-mobile-edit-btn {
+    color: #1c83aa;
+  }
+
+  .admin-mobile-edit-btn:hover {
+    background: #e3f9ff;
+    color: #156b8c;
+    transform: scale(1.1);
+  }
+
+  .admin-mobile-delete-btn {
+    color: #e11d48;
+  }
+
+  .admin-mobile-delete-btn:hover {
+    background: #fff1f2;
+    color: #be123c;
+    transform: scale(1.1);
+  }
+
+  /* In mobile: Update subtitle to shortened text without clinic name */
+  .admin-article-list-subtitle-desktop {
+    display: none !important;
+  }
+
+  .admin-article-list-subtitle-mobile {
+    display: block !important;
+  }
+
+  /* In mobile: Make 'افزودن مقاله جدید' button more compact */
+  .admin-create-article-btn {
+    padding: 8px 14px !important;
+    font-size: 13px !important;
+    border-radius: 9px !important;
+  }
+
+  /* In mobile: Hide 'ادمین فعال' badge at top header */
+  .admin-nav-badge {
+    display: none !important;
+  }
+
+  /* In mobile: Make 'مشاهده سایت' link smaller */
+  .admin-nav-site-link {
+    font-size: 11.5px !important;
+  }
+
+  /* In mobile: Compact navbar layout */
+  .admin-navbar {
+    padding: 10px 14px !important;
+  }
+
+  .admin-nav-brand h2 {
+    font-size: 14.5px !important;
+  }
+
+  .admin-nav-actions {
+    gap: 10px !important;
+  }
 }

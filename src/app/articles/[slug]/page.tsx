@@ -150,15 +150,151 @@ function parseBold(text: string): React.ReactNode[] {
   return parts;
 }
 
+// List item detection helpers
+function isOrderedLine(line: string): boolean {
+  const trimmed = line.trim();
+  // Standard: 1. or ۱. or 1- or ۱- or 1) or ۱)
+  // Bolded: **1.** or **۱.** or **1. or **۱. or **1-** or **1)
+  return /^(?:\*\*\s*)?[0-9۰-۹]+(?:[\.\-\)]|\.(?=\s))(?:(?:\s*\*\*)|(?:\*\*\s*))?\s*/.test(trimmed);
+}
+
+function isBulletLine(line: string): boolean {
+  const trimmed = line.trim();
+  return /^(?:\*\*\s*)?[\-\*•](?:(?:\s*\*\*)|(?:\*\*\s*))?\s*/.test(trimmed);
+}
+
+function cleanOrderedItemContent(line: string): string {
+  const trimmed = line.trim();
+
+  // Pattern A: **۱.** text or **1.** text (number alone is wrapped in **)
+  if (/^\*\*\s*[0-9۰-۹]+[\.\-\)]\s*\*\*\s*/.test(trimmed)) {
+    return trimmed.replace(/^\*\*\s*[0-9۰-۹]+[\.\-\)]\s*\*\*\s*/, '');
+  }
+
+  // Pattern B: **۱. title** text or **1. title:** text (bold starts before number)
+  if (/^\*\*\s*[0-9۰-۹]+[\.\-\)]\s*/.test(trimmed)) {
+    const afterMarker = trimmed.replace(/^\*\*\s*[0-9۰-۹]+[\.\-\)]\s*/, '');
+    if (afterMarker.includes('**')) {
+      return '**' + afterMarker;
+    }
+    return afterMarker;
+  }
+
+  // Pattern C: Standard 1. or ۱. or 1- or ۱- or 1) or ۱)
+  return trimmed.replace(/^[0-9۰-۹]+[\.\-\)]\s*/, '');
+}
+
+function cleanBulletItemContent(line: string): string {
+  const trimmed = line.trim();
+
+  // Pattern A: **-** text or **•** text
+  if (/^\*\*\s*[\-\*•]\s*\*\*\s*/.test(trimmed)) {
+    return trimmed.replace(/^\*\*\s*[\-\*•]\s*\*\*\s*/, '');
+  }
+
+  // Pattern B: **- title** text
+  if (/^\*\*\s*[\-\*•]\s*/.test(trimmed)) {
+    const after = trimmed.replace(/^\*\*\s*[\-\*•]\s*/, '');
+    if (after.includes('**')) {
+      return '**' + after;
+    }
+    return after;
+  }
+
+  // Pattern C: Standard - or * or •
+  return trimmed.replace(/^[\-\*•]\s*/, '');
+}
+
+// Helper to split raw markdown text into semantic blocks (headings, tables, callouts, lists, paragraphs)
+function splitMarkdownBlocks(text: string): string[] {
+  if (!text) return [];
+
+  const rawLines = text.split('\n');
+  const blocks: string[] = [];
+  let currentLines: string[] = [];
+  let currentType: 'text' | 'bullet' | 'ordered' | 'table' | null = null;
+
+  const flush = () => {
+    if (currentLines.length > 0) {
+      blocks.push(currentLines.join('\n').trim());
+      currentLines = [];
+    }
+    currentType = null;
+  };
+
+  for (let i = 0; i < rawLines.length; i++) {
+    const line = rawLines[i];
+    const trimmed = line.trim();
+
+    // Empty line flushes current block
+    if (!trimmed) {
+      flush();
+      continue;
+    }
+
+    // Table line
+    if (trimmed.includes('|')) {
+      if (currentType !== 'table') {
+        flush();
+        currentType = 'table';
+      }
+      currentLines.push(trimmed);
+      continue;
+    } else if (currentType === 'table') {
+      flush();
+    }
+
+    // Headings: ### or ####
+    if (/^#{1,6}\s+/.test(trimmed)) {
+      flush();
+      blocks.push(trimmed);
+      continue;
+    }
+
+    // Callout quote: > ...
+    if (/^>\s*/.test(trimmed)) {
+      flush();
+      blocks.push(trimmed);
+      continue;
+    }
+
+    // Bullet list item
+    if (isBulletLine(trimmed)) {
+      if (currentType !== 'bullet') {
+        flush();
+        currentType = 'bullet';
+      }
+      currentLines.push(trimmed);
+      continue;
+    }
+
+    // Ordered list item
+    if (isOrderedLine(trimmed)) {
+      if (currentType !== 'ordered') {
+        flush();
+        currentType = 'ordered';
+      }
+      currentLines.push(trimmed);
+      continue;
+    }
+
+    // Regular text line
+    if (currentType !== 'text') {
+      flush();
+      currentType = 'text';
+    }
+    currentLines.push(trimmed);
+  }
+
+  flush();
+  return blocks.filter(Boolean);
+}
+
 // Structured block parser for section body: handles paragraphs, lists (ordered/unordered), and headings
 function renderFormattedBody(text: string) {
   if (!text) return null;
 
-  // Split by double line breaks into distinct block elements
-  const rawBlocks = text
-    .split(/\n\s*\n/)
-    .map(b => b.trim())
-    .filter(Boolean);
+  const rawBlocks = splitMarkdownBlocks(text);
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', textAlign: 'justify' }}>
@@ -167,6 +303,36 @@ function renderFormattedBody(text: string) {
           .split('\n')
           .map(l => l.trim())
           .filter(Boolean);
+
+        // Check if block is an H4 heading (#### Heading)
+        if (block.startsWith('####')) {
+          const headingText = block.replace(/^####\s*/, '');
+          return (
+            <h4
+              key={`h4-${blockIdx}`}
+              style={{
+                fontSize: '15.5px',
+                fontWeight: 700,
+                color: 'var(--color-primary-dark)',
+                margin: '6px 0 2px 0',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+              }}
+            >
+              <span
+                style={{
+                  display: 'inline-block',
+                  width: '6px',
+                  height: '6px',
+                  borderRadius: '50%',
+                  backgroundColor: 'var(--color-primary)',
+                }}
+              />
+              <span>{renderInlineFormatting(headingText)}</span>
+            </h4>
+          );
+        }
 
         // Check if block is a sub-heading (### Heading)
         if (block.startsWith('###')) {
@@ -193,8 +359,34 @@ function renderFormattedBody(text: string) {
                   backgroundColor: 'var(--color-primary)',
                 }}
               />
-              <span>{headingText}</span>
+              <span>{renderInlineFormatting(headingText)}</span>
             </h3>
+          );
+        }
+
+        // Callout quote (> **نکته:** ...)
+        if (block.startsWith('>')) {
+          const calloutText = block.replace(/^>\s*/, '');
+          return (
+            <div
+              key={`callout-${blockIdx}`}
+              style={{
+                backgroundColor: '#f6fbfd',
+                borderRight: '4px solid var(--color-primary, #1c83aa)',
+                borderTop: '1px solid #e1eff5',
+                borderBottom: '1px solid #e1eff5',
+                borderLeft: '1px solid #e1eff5',
+                padding: '14px 18px',
+                borderRadius: '12px',
+                margin: '12px 0',
+                fontSize: '14px',
+                lineHeight: 1.85,
+                color: 'var(--color-text-body, #2d4f5c)',
+                boxShadow: '0 2px 8px rgba(28, 131, 170, 0.04)',
+              }}
+            >
+              {renderInlineFormatting(calloutText)}
+            </div>
           );
         }
 
@@ -306,9 +498,9 @@ function renderFormattedBody(text: string) {
           );
         }
 
-        // Check if all lines are numbered list items (e.g. "۱. ...", "1. ...")
-        const isOrderedList = lines.every(line => /^[0-9۰-۹]+[\.\-]\s+/.test(line));
-        if (isOrderedList && lines.length > 0) {
+        // Ordered List
+        const isOrderedList = lines.length > 0 && lines.every(line => isOrderedLine(line));
+        if (isOrderedList) {
           return (
             <ol
               key={`ol-${blockIdx}`}
@@ -318,11 +510,11 @@ function renderFormattedBody(text: string) {
                 display: 'flex',
                 flexDirection: 'column',
                 gap: '10px',
-                listStyleType: 'decimal',
+                listStyleType: 'persian',
               }}
             >
               {lines.map((line, lineIdx) => {
-                const itemContent = line.replace(/^[0-9۰-۹]+[\.\-]\s+/, '');
+                const itemContent = cleanOrderedItemContent(line);
                 return (
                   <li
                     key={`oli-${lineIdx}`}
@@ -336,9 +528,9 @@ function renderFormattedBody(text: string) {
           );
         }
 
-        // Check if all lines are bullet list items (e.g. "- ...", "* ...")
-        const isBulletList = lines.every(line => /^[\-\*•]\s+/.test(line));
-        if (isBulletList && lines.length > 0) {
+        // Bullet List
+        const isBulletList = lines.length > 0 && lines.every(line => isBulletLine(line));
+        if (isBulletList) {
           return (
             <ul
               key={`ul-${blockIdx}`}
@@ -352,7 +544,7 @@ function renderFormattedBody(text: string) {
               }}
             >
               {lines.map((line, lineIdx) => {
-                const itemContent = line.replace(/^[\-\*•]\s+/, '');
+                const itemContent = cleanBulletItemContent(line);
                 return (
                   <li
                     key={`uli-${lineIdx}`}
@@ -366,55 +558,86 @@ function renderFormattedBody(text: string) {
           );
         }
 
-        // Mixed block: has lines starting with bullet/number or plain paragraph
-        if (lines.length > 1 && lines.some(l => /^([0-9۰-۹]+[\.\-]|[\-\*•])\s+/.test(l))) {
+        // Fallback for mixed block: group consecutive items cleanly without sub-numbers or indentation shifts
+        const hasListItems = lines.some(l => isOrderedLine(l) || isBulletLine(l));
+        if (hasListItems) {
+          type RunType = 'ordered' | 'bullet' | 'text';
+          const runs: { type: RunType; items: string[] }[] = [];
+          for (const line of lines) {
+            const lineType: RunType = isOrderedLine(line)
+              ? 'ordered'
+              : isBulletLine(line)
+                ? 'bullet'
+                : 'text';
+            if (runs.length === 0 || runs[runs.length - 1].type !== lineType) {
+              runs.push({ type: lineType, items: [line] });
+            } else {
+              runs[runs.length - 1].items.push(line);
+            }
+          }
+
           return (
             <div
               key={`mixed-${blockIdx}`}
               style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}
             >
-              {lines.map((line, lineIdx) => {
-                if (/^[0-9۰-۹]+[\.\-]\s+/.test(line)) {
+              {runs.map((run, rIdx) => {
+                if (run.type === 'ordered') {
                   return (
-                    <div
-                      key={`mline-${lineIdx}`}
+                    <ol
+                      key={`m-ol-${rIdx}`}
                       style={{
-                        paddingRight: '12px',
+                        margin: '2px 0',
+                        paddingRight: '24px',
                         display: 'flex',
-                        gap: '8px',
-                        alignItems: 'baseline',
+                        flexDirection: 'column',
+                        gap: '10px',
+                        listStyleType: 'persian',
                       }}
                     >
-                      <span style={{ color: 'var(--color-primary)', fontWeight: 700 }}>
-                        {line.match(/^[0-9۰-۹]+[\.\-]/)?.[0]}
-                      </span>
-                      <span style={{ lineHeight: 1.9 }}>
-                        {renderInlineFormatting(line.replace(/^[0-9۰-۹]+[\.\-]\s+/, ''))}
-                      </span>
-                    </div>
+                      {run.items.map((line, lIdx) => (
+                        <li
+                          key={`m-oli-${lIdx}`}
+                          style={{ lineHeight: 1.9, color: 'var(--color-text-body)' }}
+                        >
+                          {renderInlineFormatting(cleanOrderedItemContent(line))}
+                        </li>
+                      ))}
+                    </ol>
                   );
                 }
-                if (/^[\-\*•]\s+/.test(line)) {
+                if (run.type === 'bullet') {
                   return (
-                    <div
-                      key={`mline-${lineIdx}`}
+                    <ul
+                      key={`m-ul-${rIdx}`}
                       style={{
-                        paddingRight: '12px',
+                        margin: '2px 0',
+                        paddingRight: '22px',
                         display: 'flex',
+                        flexDirection: 'column',
                         gap: '8px',
-                        alignItems: 'baseline',
+                        listStyleType: 'disc',
                       }}
                     >
-                      <span style={{ color: 'var(--color-primary)', fontSize: '14px' }}>•</span>
-                      <span style={{ lineHeight: 1.9 }}>
-                        {renderInlineFormatting(line.replace(/^[\-\*•]\s+/, ''))}
-                      </span>
-                    </div>
+                      {run.items.map((line, lIdx) => (
+                        <li
+                          key={`m-uli-${lIdx}`}
+                          style={{ lineHeight: 1.9, color: 'var(--color-text-body)' }}
+                        >
+                          {renderInlineFormatting(cleanBulletItemContent(line))}
+                        </li>
+                      ))}
+                    </ul>
                   );
                 }
                 return (
-                  <div key={`mline-${lineIdx}`} style={{ margin: 0, lineHeight: 2.1 }}>
-                    {renderInlineFormatting(line)}
+                  <div
+                    key={`m-txt-${rIdx}`}
+                    style={{ margin: 0, lineHeight: 2.1, color: 'var(--color-text-body)' }}
+                  >
+                    {run.items.map((l, lIdx) => (
+                      <div key={`m-txline-${lIdx}`}>{renderInlineFormatting(l)}</div>
+                    ))}
                   </div>
                 );
               })}
@@ -423,6 +646,25 @@ function renderFormattedBody(text: string) {
         }
 
         // Regular paragraph block
+        if (lines.length > 1) {
+          return (
+            <div
+              key={`p-${blockIdx}`}
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '4px',
+                margin: 0,
+                lineHeight: 2.1,
+              }}
+            >
+              {lines.map((l, lIdx) => (
+                <div key={`pl-${lIdx}`}>{renderInlineFormatting(l)}</div>
+              ))}
+            </div>
+          );
+        }
+
         return (
           <div key={`p-${blockIdx}`} style={{ margin: 0, lineHeight: 2.1 }}>
             {renderInlineFormatting(block)}

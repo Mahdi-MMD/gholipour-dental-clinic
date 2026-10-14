@@ -8,7 +8,7 @@ import BookingDrawer from '@/components/BookingDrawer';
 import FloatingBubble from '@/components/FloatingBubble';
 import ScrollIndicator from '@/components/ScrollIndicator';
 import MeridiqSlider from '@/components/gallery/MeridiqSlider';
-import StagesCard from '@/components/gallery/StagesCard';
+import StagesCard, { openStagesFancybox } from '@/components/gallery/StagesCard';
 import {
   GALLERY_ITEMS,
   GALLERY_CATEGORIES,
@@ -252,19 +252,33 @@ export default function GalleryClient() {
                     <StagesCard item={item} />
                   )}
 
-                  {/* Card Footer matching reference screenshot - tapping opens modal */}
+                  {/* Card Footer matching reference screenshot - tapping opens modal or stages */}
                   <div
                     className="gallery-card-footer"
-                    onClick={() => setActiveModalItem(item)}
+                    onClick={() => {
+                      if (galleryMode === 'stages') {
+                        openStagesFancybox(item);
+                      } else {
+                        setActiveModalItem(item);
+                      }
+                    }}
                     role="button"
                     tabIndex={0}
                     onKeyDown={e => {
                       if (e.key === 'Enter' || e.key === ' ') {
                         e.preventDefault();
-                        setActiveModalItem(item);
+                        if (galleryMode === 'stages') {
+                          openStagesFancybox(item);
+                        } else {
+                          setActiveModalItem(item);
+                        }
                       }
                     }}
-                    aria-label={`مشاهده جزئیات ${item.title}`}
+                    aria-label={
+                      galleryMode === 'stages'
+                        ? `مشاهده مراحل درمان ${item.title}`
+                        : `مشاهده جزئیات ${item.title}`
+                    }
                   >
                     <div className="gallery-card-text">
                       <h3 className="gallery-card-title" title={item.title}>
@@ -288,10 +302,22 @@ export default function GalleryClient() {
                       className="gallery-card-cta-btn"
                       onClick={e => {
                         e.stopPropagation();
-                        setActiveModalItem(item);
+                        if (galleryMode === 'stages') {
+                          openStagesFancybox(item);
+                        } else {
+                          setActiveModalItem(item);
+                        }
                       }}
-                      aria-label={`مشاهده جزئیات ${item.title}`}
-                      title="مشاهده جزئیات و بزرگ‌نمایی"
+                      aria-label={
+                        galleryMode === 'stages'
+                          ? `مشاهده مراحل درمان ${item.title}`
+                          : `مشاهده جزئیات ${item.title}`
+                      }
+                      title={
+                        galleryMode === 'stages'
+                          ? 'مشاهده مراحل درمان'
+                          : 'مشاهده جزئیات و بزرگ‌نمایی'
+                      }
                     >
                       <i className="fa-solid fa-angle-left" />
                     </button>
@@ -359,11 +385,15 @@ export default function GalleryClient() {
             </button>
 
             <div className="gallery-modal-slider-box">
-              <MeridiqSlider
-                beforeImg={activeModalItem.beforeImg}
-                afterImg={activeModalItem.afterImg}
-                title={activeModalItem.title}
-              />
+              {galleryMode === 'stages' ? (
+                <StagesCard item={activeModalItem} />
+              ) : (
+                <MeridiqSlider
+                  beforeImg={activeModalItem.beforeImg}
+                  afterImg={activeModalItem.afterImg}
+                  title={activeModalItem.title}
+                />
+              )}
             </div>
 
             <div className="gallery-modal-body">

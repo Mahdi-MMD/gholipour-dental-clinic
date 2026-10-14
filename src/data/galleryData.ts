@@ -26,6 +26,8 @@ export interface GalleryItem {
   duration?: string;
   doctor?: string;
   sessions?: string;
+  // Type: before-after or work flow / stages
+  type?: 'before-after' | 'stages';
   // Steps/Stages sequence for the "مراحل" view with Fancybox
   stages?: TreatmentStage[];
 }
@@ -112,7 +114,7 @@ export const GALLERY_ITEMS: GalleryItem[] = [
     category: 'general',
     categoryLabel: 'ترمیم',
     subCategoryLabel: 'نانوکامپوزیت',
-    tags: ['ترمیم', 'پوسیدگی', 'کامپوزیت'],
+    tags: ['ترمیم', 'پوسیدگی', 'پرکردن'],
     beforeImg: 'https://sarvdental.clinic/wp-content/uploads/2025/08/sarvdental33.jpg',
     afterImg: 'https://sarvdental.clinic/wp-content/uploads/2025/08/sarvdental34.jpg',
     description:
@@ -130,7 +132,7 @@ export const GALLERY_ITEMS: GalleryItem[] = [
     category: 'composite',
     categoryLabel: 'لمینت و کامپوزیت',
     subCategoryLabel: 'بستن فاصله',
-    tags: ['لمینت و کامپوزیت', 'کامپوزیت', 'ترمیم'],
+    tags: ['لمینت و کامپوزیت', 'کامپوزیت', 'ونیر'],
     beforeImg: 'https://sarvdental.clinic/wp-content/uploads/2025/08/sarvdental31.jpg',
     afterImg: 'https://sarvdental.clinic/wp-content/uploads/2025/08/sarvdental32.jpg',
     description:

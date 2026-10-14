@@ -1020,3 +1020,391 @@
     white-space: nowrap !important;
   }
 }
+
+/* ==========================================================================
+   Admin Portal Dashboard / Hub Styles
+   ========================================================================== */
+
+.admin-portal-hero {
+  text-align: center;
+  margin-bottom: 40px;
+  padding: 12px 16px;
+}
+
+.admin-portal-badge {
+  display: inline-block;
+  background: #e3f9ff;
+  color: #1c83aa;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 6px 16px;
+  border-radius: 9999px;
+  border: 1px solid #c4eaf7;
+  margin-bottom: 12px;
+}
+
+.admin-portal-title {
+  font-size: 26px;
+  font-weight: 800;
+  color: #1c434f;
+  margin: 0 0 10px 0;
+}
+
+.admin-portal-subtitle {
+  font-size: 15px;
+  color: #5a7d8c;
+  max-width: 580px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.admin-portal-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.admin-portal-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  border: 1.5px solid #d8eef5;
+  border-radius: 20px;
+  padding: 32px 26px 26px;
+  text-align: right;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 20px rgba(28, 67, 79, 0.04);
+  font-family: inherit;
+  color: inherit;
+}
+
+.admin-portal-card.interactive {
+  cursor: pointer;
+}
+
+.admin-portal-card.interactive:hover {
+  transform: translateY(-4px);
+  border-color: #1c83aa;
+  box-shadow: 0 12px 32px rgba(28, 131, 170, 0.12);
+}
+
+.admin-portal-card.disabled {
+  opacity: 0.85;
+  background: #fbfdfe;
+  cursor: default;
+}
+
+.admin-portal-card.disabled:hover {
+  border-color: #d8eef5;
+  box-shadow: 0 4px 20px rgba(28, 67, 79, 0.04);
+}
+
+.admin-portal-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.admin-portal-card-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+}
+
+.admin-portal-card.interactive:hover .admin-portal-card-icon {
+  transform: scale(1.06);
+}
+
+.admin-portal-tag {
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  white-space: nowrap;
+}
+
+.admin-portal-tag-active {
+  background: #e6f9f0;
+  color: #0f8a5f;
+  border: 1px solid #c2f0d9;
+}
+
+.admin-portal-tag-soon {
+  background: #fff8eb;
+  color: #b45309;
+  border: 1px solid #fde68a;
+}
+
+.admin-portal-card-title {
+  font-size: 19px;
+  font-weight: 800;
+  color: #1c434f;
+  margin: 0 0 10px 0;
+}
+
+.admin-portal-card-desc {
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: #5a7d8c;
+  margin: 0 0 24px 0;
+  flex-grow: 1;
+}
+
+.admin-portal-card-footer {
+  margin-top: auto;
+  padding-top: 18px;
+  border-top: 1px dashed #e2f1f5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.admin-portal-card-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #1c83aa;
+  transition: gap 0.2s ease;
+}
+
+.admin-portal-card.interactive:hover .admin-portal-card-btn {
+  color: #156b8c;
+  gap: 12px;
+}
+
+.admin-portal-card-btn.muted {
+  color: #94a9b3;
+}
+
+@media (max-width: 960px) {
+  .admin-portal-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .admin-portal-card {
+    padding: 24px 20px 20px;
+  }
+
+  .admin-portal-title {
+    font-size: 22px;
+  }
+}
+
+/* ==========================================================================
+   Gallery Admin & Preview Styles
+   ========================================================================== */
+
+.admin-gallery-type-pill-group {
+  display: flex;
+  background: #f0f7fa;
+  padding: 4px;
+  border-radius: 14px;
+  border: 1.5px solid #cce5ee;
+  gap: 4px;
+  margin-bottom: 24px;
+  max-width: 480px;
+}
+
+.admin-gallery-type-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: none;
+  background: transparent;
+  color: #5a7d8c;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.admin-gallery-type-btn.active {
+  background: #1c83aa;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(28, 131, 170, 0.25);
+}
+
+.admin-gallery-type-btn:hover:not(.active) {
+  background: #e2f1f5;
+  color: #1c434f;
+}
+
+/* Stage Blocks / Flow Steps */
+.admin-stage-item-card {
+  background: #ffffff;
+  border: 1.5px solid #d4ebf2;
+  border-radius: 14px;
+  padding: 18px 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 10px rgba(28, 67, 79, 0.03);
+  transition: border-color 0.2s ease;
+}
+
+.admin-stage-item-card:hover {
+  border-color: #1c83aa;
+}
+
+.admin-stage-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #e2eff4;
+}
+
+.admin-stage-reorder-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.admin-stage-icon-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid #d8eef5;
+  background: #ffffff;
+  color: #5a7d8c;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.admin-stage-icon-btn:hover:not(:disabled) {
+  background: #e3f9ff;
+  border-color: #1c83aa;
+  color: #1c83aa;
+}
+
+.admin-stage-icon-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.admin-stage-icon-btn.delete:hover:not(:disabled) {
+  background: #fff1f2;
+  border-color: #fecdd3;
+  color: #e11d48;
+}
+
+/* Live Preview Simulated Canvas */
+.admin-gallery-preview-wrapper {
+  background: #ffffff;
+  border-radius: 20px;
+  border: 1.5px solid #d8eef5;
+  padding: 24px;
+  box-shadow: 0 8px 30px rgba(28, 67, 79, 0.06);
+}
+
+.admin-gallery-preview-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 16px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid #eef5f8;
+}
+
+.admin-gallery-preview-canvas {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  align-items: center;
+}
+
+.admin-gallery-card-preview-target {
+  max-width: 480px;
+  width: 100%;
+}
+
+.admin-gallery-meta-preview-box {
+  width: 100%;
+  max-width: 720px;
+  background: #fbfdfe;
+  border: 1px solid #d8eef5;
+  border-radius: 16px;
+  padding: 20px;
+}
+
+/* Image Placeholder / Upload Dropzone */
+.admin-image-placeholder-box {
+  border: 2px dashed #b6dbe6;
+  border-radius: 14px;
+  background: #f8fdff;
+  padding: 20px 16px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 140px;
+}
+
+.admin-image-placeholder-box:hover {
+  border-color: #1c83aa;
+  background: #f0faff;
+}
+
+.admin-image-preview-container {
+  position: relative;
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1.5px solid #d4ebf2;
+  background: #f4f8fa;
+}
+
+.admin-image-preview-overlay {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  display: flex;
+  gap: 6px;
+  z-index: 5;
+}
+
+.admin-image-overlay-btn {
+  background: rgba(28, 67, 79, 0.85);
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 5px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  backdrop-filter: blur(4px);
+  transition: all 0.15s ease;
+  font-family: inherit;
+}
+
+.admin-image-overlay-btn:hover {
+  background: #1c83aa;
+}
+
+.admin-image-overlay-btn.delete:hover {
+  background: #e11d48;
+}

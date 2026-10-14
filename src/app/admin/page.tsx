@@ -1005,27 +1005,18 @@ export default function AdminPage() {
         <header className="admin-navbar">
           <div className="admin-nav-brand">
             <h2 style={{ fontSize: '18px', fontWeight: 800 }}>
-              پنل مدیریت کلینیک دندانپزشکی قلی‌پور
+              <span className="admin-nav-title-desktop">پنل مدیریت کلینیک دندانپزشکی قلی‌پور</span>
+              <span className="admin-nav-title-mobile" style={{ display: 'none' }}>
+                پنل مدیریت کلینیک
+              </span>
             </h2>
             <span className="admin-nav-badge">ادمین فعال</span>
           </div>
           <div className="admin-nav-actions">
             <a href="/" target="_blank" rel="noopener noreferrer" className="admin-nav-site-link">
-              مشاهده سایت ↗
+              مشاهده سایت
             </a>
-            <button
-              type="button"
-              onClick={handleLogout}
-              style={{
-                padding: '6px 14px',
-                border: '1px solid #d8eef5',
-                background: '#fff',
-                borderRadius: '8px',
-                cursor: 'pointer',
-                fontSize: '13px',
-                color: '#5a7d8c',
-              }}
-            >
+            <button type="button" onClick={handleLogout} className="admin-logout-btn">
               خروج
             </button>
           </div>

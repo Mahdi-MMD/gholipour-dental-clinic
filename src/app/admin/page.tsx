@@ -1093,7 +1093,7 @@ export default function AdminPage() {
               <input
                 type="text"
                 className="admin-input"
-                placeholder="جست و جو در مقالات..."
+                placeholder="جستجو در مقالات..."
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
                 style={{ maxWidth: '400px' }}
@@ -1743,8 +1743,9 @@ export default function AdminPage() {
                           </div>
                         </div>
 
-                        {/* Title and Anchor ID: Stacked into separate rows in split mode to prevent narrow squeezed inputs */}
+                        {/* Title and Anchor ID: Stacked into separate rows in split mode or mobile to prevent narrow squeezed inputs */}
                         <div
+                          className="admin-section-meta-row"
                           style={{
                             display: editorViewMode === 'split' ? 'flex' : 'grid',
                             flexDirection: editorViewMode === 'split' ? 'column' : undefined,
@@ -1769,7 +1770,17 @@ export default function AdminPage() {
                             />
                           </div>
                           <div className="admin-input-group" style={{ marginBottom: 0 }}>
-                            <label>شناسه لنگر (Anchor ID برای فهرست)</label>
+                            <label>
+                              <span className="admin-anchor-label-desktop">
+                                شناسه لنگر (Anchor ID برای فهرست)
+                              </span>
+                              <span
+                                className="admin-anchor-label-mobile"
+                                style={{ display: 'none' }}
+                              >
+                                شناسه فهرست
+                              </span>
+                            </label>
                             <input
                               type="text"
                               className="admin-input"

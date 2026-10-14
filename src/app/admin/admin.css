@@ -952,4 +952,21 @@
   .admin-nav-actions {
     gap: 10px !important;
   }
+
+  /* In mobile: Move section title and anchor ID onto separate lines (stacked) */
+  .admin-section-meta-row {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+
+  /* In mobile: Replace 'شناسه لنگر (Anchor ID برای فهرست)' with 'شناسه فهرست' */
+  .admin-anchor-label-desktop {
+    display: none !important;
+  }
+
+  .admin-anchor-label-mobile {
+    display: inline !important;
+    white-space: nowrap !important;
+  }
 }

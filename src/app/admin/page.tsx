@@ -11,6 +11,7 @@ import {
   GALLERY_CATEGORIES,
   DEFAULT_TREATMENT_STAGES,
   TreatmentStage,
+  isGalleryItemMatchingCategory,
 } from '@/data/galleryData';
 
 function PreviewLocateBtn({
@@ -74,6 +75,7 @@ export default function AdminPage() {
   const [gallerySearchQuery, setGallerySearchQuery] = useState('');
   const [galleryCategoryFilter, setGalleryCategoryFilter] = useState('all');
   const [galleryTypeFilter, setGalleryTypeFilter] = useState<'all' | 'before-after' | 'stages'>('all');
+  const [galleryDateSortOrder, setGalleryDateSortOrder] = useState<'asc' | 'desc' | null>(null);
   const [selectedGalleryItem, setSelectedGalleryItem] = useState<GalleryItem | null>(null);
   const [isNewGalleryItem, setIsNewGalleryItem] = useState(false);
   const [galleryViewMode, setGalleryViewMode] = useState<'edit' | 'preview'>('edit');
@@ -90,6 +92,24 @@ export default function AdminPage() {
   const editorRefs = useRef<Record<number, RichTextEditorRef | null>>({});
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Global Save Success Toast Popup State
+  const [showSaveToast, setShowSaveToast] = useState(false);
+  const toastTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const triggerSaveToast = () => {
+    if (toastTimeoutRef.current) clearTimeout(toastTimeoutRef.current);
+    setShowSaveToast(true);
+    toastTimeoutRef.current = setTimeout(() => {
+      setShowSaveToast(false);
+    }, 3500);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (toastTimeoutRef.current) clearTimeout(toastTimeoutRef.current);
+    };
+  }, []);
 
   // Check login status on mount
   useEffect(() => {
@@ -339,9 +359,10 @@ export default function AdminPage() {
       });
       const data = await res.json();
       if (data.success) {
-        setSaveMessage('✅ تغییرات با موفقیت در کد و دیتای سایت ذخیره شد!');
+        setSaveMessage('با موفقیت ذخیره شد!');
         setSelectedArticle(data.article);
         setIsNewArticle(false);
+        triggerSaveToast();
         await loadArticles();
       } else {
         setSaveMessage('❌ خطا: ' + data.message);
@@ -570,11 +591,33 @@ export default function AdminPage() {
       const year = parseInt(normalizeDigits(parts[2]), 10) || 1400;
       return year * 10000 + month * 100 + day;
     }
+
+    // Support YYYY/MM/DD or YYYY-MM-DD
+    const slashParts = dateStr.trim().split(/[/\\-]/);
+    if (slashParts.length === 3) {
+      const p0 = parseInt(normalizeDigits(slashParts[0]), 10) || 0;
+      const p1 = parseInt(normalizeDigits(slashParts[1]), 10) || 1;
+      const p2 = parseInt(normalizeDigits(slashParts[2]), 10) || 1;
+      if (p0 > 1000) {
+        // year/month/day
+        return p0 * 10000 + p1 * 100 + p2;
+      }
+      // day/month/year
+      return p2 * 10000 + p1 * 100 + p0;
+    }
+
     return 0;
   };
 
   const handleToggleDateSort = () => {
     setDateSortOrder(prev => {
+      if (prev === 'desc') return 'asc';
+      return 'desc';
+    });
+  };
+
+  const handleToggleGalleryDateSort = () => {
+    setGalleryDateSortOrder(prev => {
       if (prev === 'desc') return 'asc';
       return 'desc';
     });
@@ -598,34 +641,36 @@ export default function AdminPage() {
       return dateB - dateA;
     });
 
-  // Filter gallery items
-  const filteredGalleryItems = galleryItems.filter(item => {
-    const isStages =
-      item.type === 'stages' || (item.stages && item.stages.length > 0 && !item.beforeImg);
-    const itemType = isStages ? 'stages' : 'before-after';
+  // Filter and sort gallery items
+  const filteredGalleryItems = galleryItems
+    .filter(item => {
+      const isStages =
+        item.type === 'stages' || (item.stages && item.stages.length > 0 && !item.beforeImg);
+      const itemType = isStages ? 'stages' : 'before-after';
 
-    if (galleryTypeFilter !== 'all' && itemType !== galleryTypeFilter) {
-      return false;
-    }
+      if (galleryTypeFilter !== 'all' && itemType !== galleryTypeFilter) {
+        return false;
+      }
 
-    const matchesSearch =
-      (item.title || '').toLowerCase().includes(gallerySearchQuery.toLowerCase()) ||
-      (item.categoryLabel || '').toLowerCase().includes(gallerySearchQuery.toLowerCase()) ||
-      (item.subCategoryLabel || '').toLowerCase().includes(gallerySearchQuery.toLowerCase()) ||
-      (item.tags || []).some(t => t.toLowerCase().includes(gallerySearchQuery.toLowerCase()));
+      const matchesSearch =
+        (item.title || '').toLowerCase().includes(gallerySearchQuery.toLowerCase()) ||
+        (item.categoryLabel || '').toLowerCase().includes(gallerySearchQuery.toLowerCase()) ||
+        (item.subCategoryLabel || '').toLowerCase().includes(gallerySearchQuery.toLowerCase()) ||
+        (item.tags || []).some(t => t.toLowerCase().includes(gallerySearchQuery.toLowerCase()));
 
-    if (!matchesSearch) return false;
-    if (galleryCategoryFilter === 'all') return true;
-
-    const catObj = GALLERY_CATEGORIES.find(c => c.id === galleryCategoryFilter);
-    if (!catObj || !catObj.match) return true;
-    return catObj.match.some(
-      m =>
-        item.categoryLabel.includes(m) ||
-        item.subCategoryLabel.includes(m) ||
-        item.tags.some(t => t.includes(m))
-    );
-  });
+      if (!matchesSearch) return false;
+      if (galleryCategoryFilter === 'all') return true;
+      return isGalleryItemMatchingCategory(item, galleryCategoryFilter);
+    })
+    .sort((a, b) => {
+      if (!galleryDateSortOrder) return 0;
+      const dateA = parsePersianDate(a.date);
+      const dateB = parsePersianDate(b.date);
+      if (galleryDateSortOrder === 'asc') {
+        return dateA - dateB;
+      }
+      return dateB - dateA;
+    });
 
   // Toggle item type directly from list
   const handleToggleGalleryItemType = async (item: GalleryItem) => {
@@ -701,10 +746,12 @@ export default function AdminPage() {
   };
 
   const handleCreateNewGalleryItem = () => {
+    const newItemType: 'before-after' | 'stages' =
+      galleryTypeFilter === 'stages' ? 'stages' : 'before-after';
     const newItem: GalleryItem = {
       id: `gallery-${Date.now()}`,
       title: 'نمونه کار جدید',
-      type: 'before-after',
+      type: newItemType,
       category: 'composite',
       categoryLabel: 'لمینت و کامپوزیت',
       subCategoryLabel: 'طراحی لبخند',
@@ -715,16 +762,17 @@ export default function AdminPage() {
       duration: '۱ الی ۲ جلسه',
       doctor: 'کلینیک دندانپزشکی قلی‌پور',
       sessions: '۱ جلسه',
+      date: new Date().toLocaleDateString('fa-IR-u-nu-latn'),
       stages: [
         {
           stepNumber: 1,
-          title: 'مرحله ۱: نمای اولیه قبل درمان',
+          title: 'عکس یک',
           image: '',
           description: '',
         },
         {
           stepNumber: 2,
-          title: 'مرحله ۲: پایان درمان و نتیجه نهایی',
+          title: 'عکس دو',
           image: '',
           description: '',
         },
@@ -751,9 +799,10 @@ export default function AdminPage() {
       });
       const data = await res.json();
       if (data.success) {
-        setGallerySaveMessage('✅ نمونه کار با موفقیت در سایت ذخیره شد!');
+        setGallerySaveMessage('با موفقیت ذخیره شد!');
         setSelectedGalleryItem(data.item);
         setIsNewGalleryItem(false);
+        triggerSaveToast();
         await loadGalleryItems();
       } else {
         setGallerySaveMessage('❌ خطا: ' + data.message);
@@ -850,12 +899,14 @@ export default function AdminPage() {
   const handleAddStage = () => {
     if (!selectedGalleryItem) return;
     const stages = [...(selectedGalleryItem.stages || [])];
+    const persianWords = ['یک', 'دو', 'سه', 'چهار', 'پنج', 'شش', 'هفت', 'هشت', 'نه', 'ده'];
     const nextStep = stages.length + 1;
+    const word = persianWords[nextStep - 1] || toPersianDigits(nextStep);
     const newStage: TreatmentStage = {
       stepNumber: nextStep,
-      title: `مرحله ${nextStep}: عنوان مرحله`,
+      title: `عکس ${word}`,
       image: '',
-      description: 'توضیحات روند درمان در این مرحله...',
+      description: '',
     };
     stages.push(newStage);
     setSelectedGalleryItem({ ...selectedGalleryItem, stages });
@@ -927,6 +978,23 @@ export default function AdminPage() {
   // Admin Dashboard
   return (
     <div className="admin-wrapper">
+      {/* Global Save Success Toast Popup */}
+      {showSaveToast && (
+        <div className="admin-save-toast-popup" role="alert" aria-live="assertive">
+          <span className="admin-save-toast-emoji">✅</span>
+          <span className="admin-save-toast-text desktop">با موفقیت ذخیره شد!</span>
+          <span className="admin-save-toast-text mobile">ذخیره شد!</span>
+          <button
+            type="button"
+            className="admin-save-toast-close"
+            onClick={() => setShowSaveToast(false)}
+            aria-label="بستن پیام"
+          >
+            ✕
+          </button>
+        </div>
+      )}
+
       {/* Top Navbar / Office Ribbon Toolbar */}
       {activeTab === 'edit-article' && selectedArticle ? (
         <header className="admin-ribbon-container">
@@ -2859,15 +2927,50 @@ export default function AdminPage() {
 
             {/* Gallery Items Table */}
             <div className="admin-table-container">
-              <table className="admin-table">
+              <table className="admin-table admin-gallery-table">
                 <thead>
                   <tr>
-                    <th style={{ width: '70px' }}>تصویر</th>
-                    <th>عنوان نمونه‌کار</th>
-                    <th>نوع نمایش (تغییر سریع)</th>
-                    <th>دسته‌بندی</th>
-                    <th>مدت و جلسات</th>
-                    <th style={{ textAlign: 'center', width: '140px' }}>عملیات</th>
+                    <th className="admin-gallery-col-img">تصویر</th>
+                    <th className="admin-gallery-col-title">عنوان نمونه‌کار</th>
+                    <th className="admin-gallery-col-cat">دسته‌بندی</th>
+                    <th className="admin-gallery-col-date">
+                      <button
+                        type="button"
+                        onClick={handleToggleGalleryDateSort}
+                        className="admin-table-sort-btn"
+                        style={{ margin: '0 auto', display: 'flex' }}
+                        title={
+                          galleryDateSortOrder === 'desc'
+                            ? 'مرتب‌سازی تاریخ: جدیدترین به قدیمی‌ترین (کلیک برای صعودی)'
+                            : galleryDateSortOrder === 'asc'
+                              ? 'مرتب‌سازی تاریخ: قدیمی‌ترین به جدیدترین (کلیک برای نزولی)'
+                              : 'مرتب‌سازی بر اساس تاریخ (کلیک کنید)'
+                        }
+                      >
+                        <span>تاریخ</span>
+                        <span className="admin-sort-arrows" aria-hidden="true">
+                          <svg
+                            className={`admin-sort-arrow-up ${galleryDateSortOrder === 'asc' ? 'active' : ''}`}
+                            width="9"
+                            height="9"
+                            viewBox="0 0 24 24"
+                            fill="currentColor"
+                          >
+                            <path d="M12 4l-8 8h16z" />
+                          </svg>
+                          <svg
+                            className={`admin-sort-arrow-down ${galleryDateSortOrder === 'desc' ? 'active' : ''}`}
+                            width="9"
+                            height="9"
+                            viewBox="0 0 24 24"
+                            fill="currentColor"
+                          >
+                            <path d="M12 20l8-8H4z" />
+                          </svg>
+                        </span>
+                      </button>
+                    </th>
+                    <th className="admin-gallery-col-actions">عملیات</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -2879,16 +2982,17 @@ export default function AdminPage() {
 
                     return (
                       <tr key={item.id}>
-                        <td>
+                        <td className="admin-gallery-col-img">
                           <div
                             style={{
-                              width: '52px',
+                              width: '54px',
                               height: '42px',
                               borderRadius: '8px',
                               overflow: 'hidden',
                               position: 'relative',
                               border: '1px solid #d8eef5',
                               background: '#e3f9ff',
+                              margin: '0 auto',
                             }}
                           >
                             <img
@@ -2898,145 +3002,72 @@ export default function AdminPage() {
                             />
                           </div>
                         </td>
-                        <td>
-                          <strong style={{ fontSize: '14px', color: '#1c434f', display: 'block' }}>
+                        <td className="admin-gallery-col-title">
+                          <strong style={{ fontSize: '14px', color: '#1c434f', display: 'block', marginBottom: '3px' }}>
                             {item.title}
                           </strong>
                           <span style={{ fontSize: '12px', color: '#8faab6' }}>
                             شناسه: {item.id}
                           </span>
                         </td>
-                        <td>
-                          <button
-                            type="button"
-                            onClick={() => handleToggleGalleryItemType(item)}
-                            title="کلیک برای تغییر نوع نمایش میان قبل/بعد و مراحل کار"
-                            style={{
-                              border: 'none',
-                              background: 'transparent',
-                              padding: 0,
-                              cursor: 'pointer',
-                              fontFamily: 'inherit',
-                            }}
-                          >
-                            <span
-                              style={{
-                                fontSize: '11.5px',
-                                fontWeight: 700,
-                                padding: '4px 10px',
-                                borderRadius: '9999px',
-                                background: isStages ? '#e0e7ff' : '#e3f9ff',
-                                color: isStages ? '#4338ca' : '#1c83aa',
-                                display: 'inline-flex',
-                                alignItems: 'center',
-                                gap: '4px',
-                                border: isStages ? '1px solid #c7d2fe' : '1px solid #bae6fd',
-                                transition: 'all 0.15s ease',
-                              }}
+                        <td className="admin-gallery-col-cat">
+                          <span className="admin-badge" style={{ fontSize: '12px' }}>
+                            {item.categoryLabel}
+                          </span>
+                          {item.subCategoryLabel && (
+                            <span style={{ fontSize: '11.5px', color: '#5a7d8c', display: 'block', marginTop: '3px' }}>
+                              {item.subCategoryLabel}
+                            </span>
+                          )}
+                        </td>
+                        <td className="admin-gallery-col-date" style={{ color: '#5a7d8c', whiteSpace: 'nowrap', fontSize: '13px' }}>
+                          {item.date ? toPersianDigits(item.date) : '—'}
+                        </td>
+                        <td className="admin-gallery-col-actions">
+                          <div className="admin-table-actions">
+                            <button
+                              type="button"
+                              className="admin-action-btn admin-action-btn-edit"
+                              onClick={() => handleEditGalleryItem(item)}
+                              title="ویرایش نمونه کار"
                             >
-                              <span>{isStages ? 'مراحل کار' : 'قبل و بعد'}</span>
                               <svg
-                                width="12"
-                                height="12"
+                                width="14"
+                                height="14"
                                 viewBox="0 0 24 24"
                                 fill="none"
                                 stroke="currentColor"
                                 strokeWidth="2.2"
                                 strokeLinecap="round"
                                 strokeLinejoin="round"
+                                aria-hidden="true"
                               >
-                                <polyline points="6 9 12 15 18 9" />
+                                <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z" />
                               </svg>
-                            </span>
-                          </button>
-                        </td>
-                        <td>
-                          <span style={{ fontSize: '13px' }}>{item.categoryLabel}</span>
-                          {item.subCategoryLabel && (
-                            <span style={{ fontSize: '11.5px', color: '#5a7d8c', display: 'block' }}>
-                              {item.subCategoryLabel}
-                            </span>
-                          )}
-                        </td>
-                        <td>
-                          <span style={{ fontSize: '12.5px', color: '#5a7d8c' }}>
-                            {item.duration || item.sessions || '—'}
-                          </span>
-                        </td>
-                        <td style={{ textAlign: 'center' }}>
-                          <div style={{ display: 'flex', gap: '6px', justifyContent: 'center', alignItems: 'center' }}>
-                            {/* Desktop action buttons */}
-                            <button
-                              type="button"
-                              className="toolbar-btn admin-action-btn-desktop"
-                              onClick={() => handleEditGalleryItem(item)}
-                              style={{ color: '#1c83aa', borderColor: '#1c83aa' }}
-                              title="ویرایش نمونه کار"
-                            >
-                              ✏️ ویرایش
+                              <span>ویرایش</span>
                             </button>
                             <button
                               type="button"
-                              className="toolbar-btn admin-action-btn-desktop"
+                              className="admin-action-btn admin-action-btn-delete"
                               onClick={() => handleDeleteGalleryItem(item.id, item.title)}
-                              style={{
-                                color: '#e11d48',
-                                borderColor: '#fecdd3',
-                                background: '#fff1f2',
-                              }}
                               title="حذف نمونه کار"
                             >
-                              🗑️
+                              <svg
+                                width="14"
+                                height="14"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2.2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                aria-hidden="true"
+                              >
+                                <polyline points="3 6 5 6 21 6" />
+                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                              </svg>
+                              <span>حذف</span>
                             </button>
-
-                            {/* Mobile action buttons with clean icons */}
-                            <div className="admin-actions-mobile">
-                              <button
-                                type="button"
-                                className="admin-mobile-icon-btn admin-mobile-edit-btn"
-                                onClick={() => handleEditGalleryItem(item)}
-                                title="ویرایش نمونه کار"
-                                aria-label="ویرایش نمونه کار"
-                              >
-                                <svg
-                                  width="18"
-                                  height="18"
-                                  viewBox="0 0 24 24"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  strokeWidth="2.2"
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  aria-hidden="true"
-                                >
-                                  <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z" />
-                                </svg>
-                              </button>
-                              <button
-                                type="button"
-                                className="admin-mobile-icon-btn admin-mobile-delete-btn"
-                                onClick={() => handleDeleteGalleryItem(item.id, item.title)}
-                                title="حذف نمونه کار"
-                                aria-label="حذف نمونه کار"
-                              >
-                                <svg
-                                  width="18"
-                                  height="18"
-                                  viewBox="0 0 24 24"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  strokeWidth="2.2"
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  aria-hidden="true"
-                                >
-                                  <polyline points="3 6 5 6 21 6" />
-                                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-                                  <line x1="10" y1="11" x2="10" y2="17" />
-                                  <line x1="14" y1="11" x2="14" y2="17" />
-                                </svg>
-                              </button>
-                            </div>
                           </div>
                         </td>
                       </tr>
@@ -3044,7 +3075,7 @@ export default function AdminPage() {
                   })}
                   {filteredGalleryItems.length === 0 && (
                     <tr>
-                      <td colSpan={6} style={{ textAlign: 'center', padding: '36px', color: '#8faab6' }}>
+                      <td colSpan={5} style={{ textAlign: 'center', padding: '36px', color: '#8faab6' }}>
                         نمونه‌کاری مطابق با جستجوی شما یافت نشد.
                       </td>
                     </tr>
@@ -3071,67 +3102,72 @@ export default function AdminPage() {
                   نوع نمونه‌کار، تصاویر بهینه‌شده و مشخصات درمان را تنظیم کنید.
                 </p>
 
-                {/* TYPE SELECTOR: Before/After vs. Work Flow (Stages) */}
-                <div className="admin-input-group">
-                  <label style={{ fontWeight: 700 }}>نوع فرمت گالری</label>
-                  <div className="admin-gallery-type-pill-group">
-                    <button
-                      type="button"
-                      className={`admin-gallery-type-btn ${
-                        selectedGalleryItem.type !== 'stages' ? 'active' : ''
-                      }`}
-                      onClick={() =>
-                        setSelectedGalleryItem({ ...selectedGalleryItem, type: 'before-after' })
-                      }
-                    >
-                      <svg
-                        width="16"
-                        height="16"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2.2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
+                {/* TYPE SELECTOR: Before/After vs. Work Flow (Stages) - Only when creating a new item */}
+                {isNewGalleryItem && (
+                  <div className="admin-input-group">
+                    <label style={{ fontWeight: 700 }}>نوع فرمت گالری</label>
+                    <div className="admin-gallery-type-pill-group">
+                      <button
+                        type="button"
+                        className={`admin-gallery-type-btn ${
+                          selectedGalleryItem.type !== 'stages' ? 'active' : ''
+                        }`}
+                        onClick={() =>
+                          setSelectedGalleryItem({ ...selectedGalleryItem, type: 'before-after' })
+                        }
                       >
-                        <rect x="3" y="3" width="18" height="18" rx="2" />
-                        <line x1="12" y1="3" x2="12" y2="21" />
-                      </svg>
-                      <span>مقایسه قبل و بعد (۲ تصویر)</span>
-                    </button>
+                        <svg
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2.2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <rect x="3" y="3" width="18" height="18" rx="2" />
+                          <line x1="12" y1="3" x2="12" y2="21" />
+                        </svg>
+                        <span>مقایسه قبل و بعد (۲ تصویر)</span>
+                      </button>
 
-                    <button
-                      type="button"
-                      className={`admin-gallery-type-btn ${
-                        selectedGalleryItem.type === 'stages' ? 'active' : ''
-                      }`}
-                      onClick={() => {
-                        const stages =
-                          selectedGalleryItem.stages && selectedGalleryItem.stages.length >= 2
-                            ? selectedGalleryItem.stages
-                            : JSON.parse(JSON.stringify(DEFAULT_TREATMENT_STAGES));
-                        setSelectedGalleryItem({ ...selectedGalleryItem, type: 'stages', stages });
-                      }}
-                    >
-                      <svg
-                        width="16"
-                        height="16"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2.2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
+                      <button
+                        type="button"
+                        className={`admin-gallery-type-btn ${
+                          selectedGalleryItem.type === 'stages' ? 'active' : ''
+                        }`}
+                        onClick={() => {
+                          const stages =
+                            selectedGalleryItem.stages && selectedGalleryItem.stages.length >= 2
+                              ? selectedGalleryItem.stages
+                              : [
+                                  { stepNumber: 1, title: 'عکس یک', image: selectedGalleryItem.beforeImg || '', description: '' },
+                                  { stepNumber: 2, title: 'عکس دو', image: selectedGalleryItem.afterImg || '', description: '' },
+                                ];
+                          setSelectedGalleryItem({ ...selectedGalleryItem, type: 'stages', stages });
+                        }}
                       >
-                        <rect x="3" y="3" width="7" height="7" />
-                        <rect x="14" y="3" width="7" height="7" />
-                        <rect x="14" y="14" width="7" height="7" />
-                        <rect x="3" y="14" width="7" height="7" />
-                      </svg>
-                      <span>مراحل کار و جریان درمان (چندمرحله‌ای)</span>
-                    </button>
+                        <svg
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2.2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <rect x="3" y="3" width="7" height="7" />
+                          <rect x="14" y="3" width="7" height="7" />
+                          <rect x="14" y="14" width="7" height="7" />
+                          <rect x="3" y="14" width="7" height="7" />
+                        </svg>
+                        <span>مراحل کار و جریان درمان (چندمرحله‌ای)</span>
+                      </button>
+                    </div>
                   </div>
-                </div>
+                )}
 
                 {/* DYNAMIC SECTION 1: Before & After View */}
                 {selectedGalleryItem.type !== 'stages' && (
@@ -3151,7 +3187,7 @@ export default function AdminPage() {
                     <div>
                       <div className="admin-field-header">
                         <label style={{ fontSize: '13.5px', fontWeight: 700, color: '#1c434f' }}>
-                          تصویر قبل از درمان (Before)
+                          عکس قبل (تصویر قبل از درمان)
                         </label>
                       </div>
 
@@ -3159,7 +3195,7 @@ export default function AdminPage() {
                         <div className="admin-image-preview-container" style={{ height: '200px' }}>
                           <img
                             src={selectedGalleryItem.beforeImg}
-                            alt="قبل از درمان"
+                            alt="عکس قبل"
                             style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                           />
                           <div className="admin-image-preview-overlay">
@@ -3211,8 +3247,8 @@ export default function AdminPage() {
                               <polyline points="21 15 16 10 5 21" />
                             </svg>
                           </div>
-                          <span style={{ fontSize: '13.5px', fontWeight: 700, color: '#1c434f' }}>
-                            {isUploadingGalleryImg === 'before' ? 'در حال آپلود و بهینه‌سازی...' : 'بارگذاری تصویر قبل از درمان'}
+                          <span style={{ fontSize: '14px', fontWeight: 800, color: '#1c434f' }}>
+                            {isUploadingGalleryImg === 'before' ? 'در حال آپلود و بهینه‌سازی...' : 'عکس قبل'}
                           </span>
                           <span style={{ fontSize: '12px', color: '#8faab6' }}>
                             کلیک کنید تا تصویر انتخاب و خودکار به WebP تبدیل شود
@@ -3231,7 +3267,7 @@ export default function AdminPage() {
                     <div>
                       <div className="admin-field-header">
                         <label style={{ fontSize: '13.5px', fontWeight: 700, color: '#1c434f' }}>
-                          تصویر بعد از درمان (After)
+                          عکس بعد (تصویر بعد از درمان)
                         </label>
                       </div>
 
@@ -3239,7 +3275,7 @@ export default function AdminPage() {
                         <div className="admin-image-preview-container" style={{ height: '200px' }}>
                           <img
                             src={selectedGalleryItem.afterImg}
-                            alt="بعد از درمان"
+                            alt="عکس بعد"
                             style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                           />
                           <div className="admin-image-preview-overlay">
@@ -3291,8 +3327,8 @@ export default function AdminPage() {
                               <polyline points="21 15 16 10 5 21" />
                             </svg>
                           </div>
-                          <span style={{ fontSize: '13.5px', fontWeight: 700, color: '#1c434f' }}>
-                            {isUploadingGalleryImg === 'after' ? 'در حال آپلود و بهینه‌سازی...' : 'بارگذاری تصویر بعد از درمان'}
+                          <span style={{ fontSize: '14px', fontWeight: 800, color: '#1c434f' }}>
+                            {isUploadingGalleryImg === 'after' ? 'در حال آپلود و بهینه‌سازی...' : 'عکس بعد'}
                           </span>
                           <span style={{ fontSize: '12px', color: '#8faab6' }}>
                             کلیک کنید تا تصویر انتخاب و خودکار به WebP تبدیل شود
@@ -3448,12 +3484,12 @@ export default function AdminPage() {
                         >
                           <div>
                             <label style={{ fontSize: '12px', fontWeight: 600, display: 'block', marginBottom: '6px' }}>
-                              عنوان مرحله
+                              عنوان تصویر / مرحله
                             </label>
                             <input
                               type="text"
                               className="admin-input"
-                              placeholder={`مرحله ${sIdx + 1}: تراش و پاکسازی...`}
+                              placeholder={`عکس ${['یک', 'دو', 'سه', 'چهار', 'پنج', 'شش', 'هفت', 'هشت', 'نه', 'ده'][sIdx] || sIdx + 1}: تراش و پاکسازی...`}
                               value={stage.title}
                               onChange={e => handleUpdateStage(sIdx, 'title', e.target.value)}
                             />
@@ -3472,7 +3508,7 @@ export default function AdminPage() {
 
                           <div>
                             <label style={{ fontSize: '12px', fontWeight: 600, display: 'block', marginBottom: '6px' }}>
-                              تصویر این مرحله
+                              بارگذاری تصویر ({`عکس ${['یک', 'دو', 'سه', 'چهار', 'پنج', 'شش', 'هفت', 'هشت', 'نه', 'ده'][sIdx] || sIdx + 1}`})
                             </label>
 
                             {stage.image ? (
@@ -3531,8 +3567,13 @@ export default function AdminPage() {
                                     <polyline points="21 15 16 10 5 21" />
                                   </svg>
                                 </div>
-                                <span style={{ fontSize: '12.5px', fontWeight: 700, color: '#1c434f' }}>
-                                  {isUploadingGalleryImg === `stage-${sIdx}` ? 'در حال آپلود...' : `بارگذاری تصویر مرحله ${sIdx + 1}`}
+                                <span style={{ fontSize: '13px', fontWeight: 700, color: '#1c434f' }}>
+                                  {isUploadingGalleryImg === `stage-${sIdx}`
+                                    ? 'در حال آپلود...'
+                                    : `عکس ${['یک', 'دو', 'سه', 'چهار', 'پنج', 'شش', 'هفت', 'هشت', 'نه', 'ده'][sIdx] || sIdx + 1}`}
+                                </span>
+                                <span style={{ fontSize: '11px', color: '#64748b' }}>
+                                  کلیک جهت بارگذاری تصویر
                                 </span>
                                 <input
                                   type="file"
@@ -3619,6 +3660,19 @@ export default function AdminPage() {
                       placeholder="کلینیک دندانپزشکی قلی‌پور"
                       onChange={e =>
                         setSelectedGalleryItem({ ...selectedGalleryItem, doctor: e.target.value })
+                      }
+                    />
+                  </div>
+
+                  <div className="admin-input-group">
+                    <label>تاریخ ثبت نمونه‌کار</label>
+                    <input
+                      type="text"
+                      className="admin-input"
+                      value={selectedGalleryItem.date || ''}
+                      placeholder="مثال: ۱۴۰۳/۰۸/۱۵"
+                      onChange={e =>
+                        setSelectedGalleryItem({ ...selectedGalleryItem, date: e.target.value })
                       }
                     />
                   </div>

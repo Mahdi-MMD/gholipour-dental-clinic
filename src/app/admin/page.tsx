@@ -57,7 +57,9 @@ export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [password, setPassword] = useState('');
   const [loginError, setLoginError] = useState('');
-  const [activeTab, setActiveTab] = useState<'portal' | 'articles' | 'edit-article' | 'gallery' | 'edit-gallery'>('portal');
+  const [activeTab, setActiveTab] = useState<
+    'portal' | 'articles' | 'edit-article' | 'gallery' | 'edit-gallery'
+  >('portal');
 
   const [articles, setArticles] = useState<ArticleItem[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -74,7 +76,9 @@ export default function AdminPage() {
   const [galleryItems, setGalleryItems] = useState<GalleryItem[]>([]);
   const [gallerySearchQuery, setGallerySearchQuery] = useState('');
   const [galleryCategoryFilter, setGalleryCategoryFilter] = useState('all');
-  const [galleryTypeFilter, setGalleryTypeFilter] = useState<'all' | 'before-after' | 'stages'>('all');
+  const [galleryTypeFilter, setGalleryTypeFilter] = useState<'all' | 'before-after' | 'stages'>(
+    'all'
+  );
   const [galleryDateSortOrder, setGalleryDateSortOrder] = useState<'asc' | 'desc' | null>(null);
   const [selectedGalleryItem, setSelectedGalleryItem] = useState<GalleryItem | null>(null);
   const [isNewGalleryItem, setIsNewGalleryItem] = useState(false);
@@ -1527,7 +1531,10 @@ export default function AdminPage() {
       >
         {/* Navigation Tabs (Shown in list mode when inside articles) */}
         {activeTab === 'articles' && (
-          <div className="admin-tabs" style={{ alignItems: 'center', justifyContent: 'space-between' }}>
+          <div
+            className="admin-tabs"
+            style={{ alignItems: 'center', justifyContent: 'space-between' }}
+          >
             <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
               <button
                 type="button"
@@ -1558,10 +1565,7 @@ export default function AdminPage() {
                 </svg>
                 <span>بازگشت به پیشخوان اصلی</span>
               </button>
-              <button
-                className="admin-tab-btn active"
-                onClick={() => setActiveTab('articles')}
-              >
+              <button className="admin-tab-btn active" onClick={() => setActiveTab('articles')}>
                 📚 مدیریت مقالات ({articles.length})
               </button>
             </div>
@@ -1570,7 +1574,10 @@ export default function AdminPage() {
 
         {/* Navigation Tabs (Shown in list mode when inside gallery) */}
         {activeTab === 'gallery' && (
-          <div className="admin-tabs" style={{ alignItems: 'center', justifyContent: 'space-between' }}>
+          <div
+            className="admin-tabs"
+            style={{ alignItems: 'center', justifyContent: 'space-between' }}
+          >
             <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
               <button
                 type="button"
@@ -1601,16 +1608,12 @@ export default function AdminPage() {
                 </svg>
                 <span>بازگشت به پیشخوان اصلی</span>
               </button>
-              <button
-                className="admin-tab-btn active"
-                onClick={() => setActiveTab('gallery')}
-              >
+              <button className="admin-tab-btn active" onClick={() => setActiveTab('gallery')}>
                 🖼️ مدیریت گالری و نمونه‌کارها ({galleryItems.length})
               </button>
             </div>
           </div>
         )}
-
 
         {/* SECTION HUB: 3 Options Dashboard */}
         {activeTab === 'portal' && (
@@ -1663,7 +1666,8 @@ export default function AdminPage() {
 
                 <h3 className="admin-portal-card-title">مدیریت مقالات</h3>
                 <p className="admin-portal-card-desc">
-                  مشاهده، ویرایش زنده با پیش‌نمایش گرافیکی، ایجاد مقالات علمی جدید و کنترل سئو و مراجع علمی وب‌سایت کلینیک.
+                  مشاهده، ویرایش زنده با پیش‌نمایش گرافیکی، ایجاد مقالات علمی جدید و کنترل سئو و
+                  مراجع علمی وب‌سایت کلینیک.
                 </p>
 
                 <div className="admin-portal-card-footer">
@@ -1727,7 +1731,8 @@ export default function AdminPage() {
 
                 <h3 className="admin-portal-card-title">مدیریت گالری تصاویر</h3>
                 <p className="admin-portal-card-desc">
-                  افزودن و ویرایش تصاویر نمونه‌کارها، مقایسه‌های قبل و بعد از درمان (Before/After)، مراحل کار و جریان درمان با بهینه‌سازی خودکار تصاویر.
+                  افزودن و ویرایش تصاویر نمونه‌کارها، مقایسه‌های قبل و بعد از درمان (Before/After)،
+                  مراحل کار و جریان درمان با بهینه‌سازی خودکار تصاویر.
                 </p>
 
                 <div className="admin-portal-card-footer">
@@ -1782,7 +1787,8 @@ export default function AdminPage() {
 
                 <h3 className="admin-portal-card-title">مدیریت نوبت‌دهی و رزروها</h3>
                 <p className="admin-portal-card-desc">
-                  بررسی درخواست‌های نوبت‌دهی آنلاین بیماران، تعیین وضعیت رزروها، هماهنگی مشاوره‌ها و ارتباط مستقیم با مراجعه‌کنندگان.
+                  بررسی درخواست‌های نوبت‌دهی آنلاین بیماران، تعیین وضعیت رزروها، هماهنگی مشاوره‌ها و
+                  ارتباط مستقیم با مراجعه‌کنندگان.
                 </p>
 
                 <div className="admin-portal-card-footer">
@@ -3003,7 +3009,14 @@ export default function AdminPage() {
                           </div>
                         </td>
                         <td className="admin-gallery-col-title">
-                          <strong style={{ fontSize: '14px', color: '#1c434f', display: 'block', marginBottom: '3px' }}>
+                          <strong
+                            style={{
+                              fontSize: '14px',
+                              color: '#1c434f',
+                              display: 'block',
+                              marginBottom: '3px',
+                            }}
+                          >
                             {item.title}
                           </strong>
                           <span style={{ fontSize: '12px', color: '#8faab6' }}>
@@ -3015,12 +3028,22 @@ export default function AdminPage() {
                             {item.categoryLabel}
                           </span>
                           {item.subCategoryLabel && (
-                            <span style={{ fontSize: '11.5px', color: '#5a7d8c', display: 'block', marginTop: '3px' }}>
+                            <span
+                              style={{
+                                fontSize: '11.5px',
+                                color: '#5a7d8c',
+                                display: 'block',
+                                marginTop: '3px',
+                              }}
+                            >
                               {item.subCategoryLabel}
                             </span>
                           )}
                         </td>
-                        <td className="admin-gallery-col-date" style={{ color: '#5a7d8c', whiteSpace: 'nowrap', fontSize: '13px' }}>
+                        <td
+                          className="admin-gallery-col-date"
+                          style={{ color: '#5a7d8c', whiteSpace: 'nowrap', fontSize: '13px' }}
+                        >
                           {item.date ? toPersianDigits(item.date) : '—'}
                         </td>
                         <td className="admin-gallery-col-actions">
@@ -3075,7 +3098,10 @@ export default function AdminPage() {
                   })}
                   {filteredGalleryItems.length === 0 && (
                     <tr>
-                      <td colSpan={5} style={{ textAlign: 'center', padding: '36px', color: '#8faab6' }}>
+                      <td
+                        colSpan={5}
+                        style={{ textAlign: 'center', padding: '36px', color: '#8faab6' }}
+                      >
                         نمونه‌کاری مطابق با جستجوی شما یافت نشد.
                       </td>
                     </tr>
@@ -3142,10 +3168,24 @@ export default function AdminPage() {
                             selectedGalleryItem.stages && selectedGalleryItem.stages.length >= 2
                               ? selectedGalleryItem.stages
                               : [
-                                  { stepNumber: 1, title: 'عکس یک', image: selectedGalleryItem.beforeImg || '', description: '' },
-                                  { stepNumber: 2, title: 'عکس دو', image: selectedGalleryItem.afterImg || '', description: '' },
+                                  {
+                                    stepNumber: 1,
+                                    title: 'عکس یک',
+                                    image: selectedGalleryItem.beforeImg || '',
+                                    description: '',
+                                  },
+                                  {
+                                    stepNumber: 2,
+                                    title: 'عکس دو',
+                                    image: selectedGalleryItem.afterImg || '',
+                                    description: '',
+                                  },
                                 ];
-                          setSelectedGalleryItem({ ...selectedGalleryItem, type: 'stages', stages });
+                          setSelectedGalleryItem({
+                            ...selectedGalleryItem,
+                            type: 'stages',
+                            stages,
+                          });
                         }}
                       >
                         <svg
@@ -3211,7 +3251,9 @@ export default function AdminPage() {
                             <button
                               type="button"
                               className="admin-image-overlay-btn delete"
-                              onClick={() => setSelectedGalleryItem({ ...selectedGalleryItem, beforeImg: '' })}
+                              onClick={() =>
+                                setSelectedGalleryItem({ ...selectedGalleryItem, beforeImg: '' })
+                              }
                               title="حذف تصویر"
                             >
                               حذف
@@ -3248,7 +3290,9 @@ export default function AdminPage() {
                             </svg>
                           </div>
                           <span style={{ fontSize: '14px', fontWeight: 800, color: '#1c434f' }}>
-                            {isUploadingGalleryImg === 'before' ? 'در حال آپلود و بهینه‌سازی...' : 'عکس قبل'}
+                            {isUploadingGalleryImg === 'before'
+                              ? 'در حال آپلود و بهینه‌سازی...'
+                              : 'عکس قبل'}
                           </span>
                           <span style={{ fontSize: '12px', color: '#8faab6' }}>
                             کلیک کنید تا تصویر انتخاب و خودکار به WebP تبدیل شود
@@ -3291,7 +3335,9 @@ export default function AdminPage() {
                             <button
                               type="button"
                               className="admin-image-overlay-btn delete"
-                              onClick={() => setSelectedGalleryItem({ ...selectedGalleryItem, afterImg: '' })}
+                              onClick={() =>
+                                setSelectedGalleryItem({ ...selectedGalleryItem, afterImg: '' })
+                              }
                               title="حذف تصویر"
                             >
                               حذف
@@ -3328,7 +3374,9 @@ export default function AdminPage() {
                             </svg>
                           </div>
                           <span style={{ fontSize: '14px', fontWeight: 800, color: '#1c434f' }}>
-                            {isUploadingGalleryImg === 'after' ? 'در حال آپلود و بهینه‌سازی...' : 'عکس بعد'}
+                            {isUploadingGalleryImg === 'after'
+                              ? 'در حال آپلود و بهینه‌سازی...'
+                              : 'عکس بعد'}
                           </span>
                           <span style={{ fontSize: '12px', color: '#8faab6' }}>
                             کلیک کنید تا تصویر انتخاب و خودکار به WebP تبدیل شود
@@ -3357,11 +3405,19 @@ export default function AdminPage() {
                       }}
                     >
                       <div>
-                        <label style={{ fontSize: '15px', fontWeight: 800, color: '#1c434f', display: 'block' }}>
+                        <label
+                          style={{
+                            fontSize: '15px',
+                            fontWeight: 800,
+                            color: '#1c434f',
+                            display: 'block',
+                          }}
+                        >
                           مراحل انجام کار / جریان درمان (Work Flow)
                         </label>
                         <p style={{ fontSize: '12.5px', color: '#5a7d8c', margin: '2px 0 0 0' }}>
-                          به صورت پیش‌فرض ۲ بخش تصویر قرار دارد. با دکمه «+ افزودن مرحله جدید» می‌توانید تصاویر و مراحل بیشتری اضافه کنید.
+                          به صورت پیش‌فرض ۲ بخش تصویر قرار دارد. با دکمه «+ افزودن مرحله جدید»
+                          می‌توانید تصاویر و مراحل بیشتری اضافه کنید.
                         </p>
                       </div>
 
@@ -3483,7 +3539,14 @@ export default function AdminPage() {
                           }}
                         >
                           <div>
-                            <label style={{ fontSize: '12px', fontWeight: 600, display: 'block', marginBottom: '6px' }}>
+                            <label
+                              style={{
+                                fontSize: '12px',
+                                fontWeight: 600,
+                                display: 'block',
+                                marginBottom: '6px',
+                              }}
+                            >
                               عنوان تصویر / مرحله
                             </label>
                             <input
@@ -3494,7 +3557,14 @@ export default function AdminPage() {
                               onChange={e => handleUpdateStage(sIdx, 'title', e.target.value)}
                             />
 
-                            <label style={{ fontSize: '12px', fontWeight: 600, display: 'block', marginBottom: '6px' }}>
+                            <label
+                              style={{
+                                fontSize: '12px',
+                                fontWeight: 600,
+                                display: 'block',
+                                marginBottom: '6px',
+                              }}
+                            >
                               توضیحات بالینی و تکنیک درمان
                             </label>
                             <textarea
@@ -3507,12 +3577,24 @@ export default function AdminPage() {
                           </div>
 
                           <div>
-                            <label style={{ fontSize: '12px', fontWeight: 600, display: 'block', marginBottom: '6px' }}>
-                              بارگذاری تصویر ({`عکس ${['یک', 'دو', 'سه', 'چهار', 'پنج', 'شش', 'هفت', 'هشت', 'نه', 'ده'][sIdx] || sIdx + 1}`})
+                            <label
+                              style={{
+                                fontSize: '12px',
+                                fontWeight: 600,
+                                display: 'block',
+                                marginBottom: '6px',
+                              }}
+                            >
+                              بارگذاری تصویر (
+                              {`عکس ${['یک', 'دو', 'سه', 'چهار', 'پنج', 'شش', 'هفت', 'هشت', 'نه', 'ده'][sIdx] || sIdx + 1}`}
+                              )
                             </label>
 
                             {stage.image ? (
-                              <div className="admin-image-preview-container" style={{ height: '150px' }}>
+                              <div
+                                className="admin-image-preview-container"
+                                style={{ height: '150px' }}
+                              >
                                 <img
                                   src={stage.image}
                                   alt={stage.title}
@@ -3539,7 +3621,10 @@ export default function AdminPage() {
                                 </div>
                               </div>
                             ) : (
-                              <label className="admin-image-placeholder-box" style={{ height: '150px' }}>
+                              <label
+                                className="admin-image-placeholder-box"
+                                style={{ height: '150px' }}
+                              >
                                 <div
                                   style={{
                                     width: '36px',
@@ -3567,7 +3652,9 @@ export default function AdminPage() {
                                     <polyline points="21 15 16 10 5 21" />
                                   </svg>
                                 </div>
-                                <span style={{ fontSize: '13px', fontWeight: 700, color: '#1c434f' }}>
+                                <span
+                                  style={{ fontSize: '13px', fontWeight: 700, color: '#1c434f' }}
+                                >
                                   {isUploadingGalleryImg === `stage-${sIdx}`
                                     ? 'در حال آپلود...'
                                     : `عکس ${['یک', 'دو', 'سه', 'چهار', 'پنج', 'شش', 'هفت', 'هشت', 'نه', 'ده'][sIdx] || sIdx + 1}`}
@@ -3730,7 +3817,10 @@ export default function AdminPage() {
                     value={selectedGalleryItem.description || ''}
                     placeholder="توضیحات فرآیند درمان، علل مراجعه، اقدامات و نتیجه نهایی..."
                     onChange={e =>
-                      setSelectedGalleryItem({ ...selectedGalleryItem, description: e.target.value })
+                      setSelectedGalleryItem({
+                        ...selectedGalleryItem,
+                        description: e.target.value,
+                      })
                     }
                   />
                 </div>

@@ -3,10 +3,7 @@ const path = require('path');
 const sharp = require('sharp');
 
 const targetDir = path.join(process.cwd(), 'public', 'assets');
-const codeDirs = [
-  path.join(process.cwd(), 'src'),
-  path.join(process.cwd(), '.agents'),
-];
+const codeDirs = [path.join(process.cwd(), 'src'), path.join(process.cwd(), '.agents')];
 
 const VALID_IMAGE_EXTS = ['.jpg', '.jpeg', '.png'];
 const CODE_EXTS = ['.ts', '.tsx', '.js', '.jsx', '.css', '.md'];
@@ -28,7 +25,7 @@ function getAllFiles(dir, extensions) {
 }
 
 function updateCodeReferences(oldName, newName) {
-  const codeFiles = codeDirs.flatMap((d) => getAllFiles(d, CODE_EXTS));
+  const codeFiles = codeDirs.flatMap(d => getAllFiles(d, CODE_EXTS));
   let updatedCount = 0;
   for (const file of codeFiles) {
     let content = fs.readFileSync(file, 'utf8');
@@ -52,9 +49,7 @@ async function convertFile(filePath) {
 
   try {
     const origStat = fs.statSync(filePath);
-    await sharp(filePath)
-      .webp({ quality: 82, effort: 6 })
-      .toFile(outPath);
+    await sharp(filePath).webp({ quality: 82, effort: 6 }).toFile(outPath);
 
     const newStat = fs.statSync(outPath);
     const saved = Math.round((1 - newStat.size / origStat.size) * 100);

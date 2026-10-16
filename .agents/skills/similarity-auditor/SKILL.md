@@ -6,6 +6,7 @@ description: Audits both (1) fidelity against a reference website/example across
 # Similarity & Prompt Accuracy Auditor
 
 This skill governs the systematic dual audit of:
+
 1. **Reference / Example Similarity**: Comparing the development output against a target reference website.
    - **Dynamic Reference Detection**: If a specific reference website, link, or example is specified in the user's prompt or task instructions, compare against that exact reference.
    - **Default Reference**: If no reference is provided or mentioned, default to `https://qafdentalclinic.com/`.
@@ -46,6 +47,7 @@ When an audit is conducted, the auditor outputs:
 
 ```markdown
 ### 🔍 Audit Report (Prompt Compliance & Reference Similarity)
+
 - **Active Reference Used**: [Provided reference URL or https://qafdentalclinic.com/ (Default)]
 - **Prompt Instruction Compliance**: XX%
 - **Reference Example Similarity**: XX%
@@ -54,13 +56,16 @@ When an audit is conducted, the auditor outputs:
   - Functional Mechanics Match: XX%
 
 ### 📋 1. Prompt Compliance Checklist
-| # | Prompt Requirement | Status | Verification Notes |
-|---|---|---|---|
+
+| #   | Prompt Requirement | Status | Verification Notes |
+| --- | ------------------ | ------ | ------------------ |
 
 ### ⚠️ 2. Reference Discrepancy Breakdown
+
 | Component | Reference Behavior | Local Output | Required Correction |
-|---|---|---|---|
+| --------- | ------------------ | ------------ | ------------------- |
 
 ### 🛠️ Correction Injection Instructions
+
 [Detailed instructions, Tailwind classes, or React/HTML code modifications needed for the builder agent to apply]
 ```

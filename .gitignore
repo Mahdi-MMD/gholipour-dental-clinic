@@ -36,4 +36,6 @@ next-env.d.ts
 .chrome-admin-test/
 .chrome-debug/
 admin-verification-screenshots/
+.agents/teamwork/
+
 

@@ -334,6 +334,119 @@
   font-weight: 600;
 }
 
+/* Gallery Table Column Proportions & Spacing */
+.admin-gallery-table {
+  width: 100%;
+  table-layout: fixed;
+}
+
+.admin-gallery-col-img {
+  width: 80px;
+  text-align: center !important;
+}
+
+.admin-gallery-col-title {
+  width: 34%;
+  text-align: right;
+  padding-left: 16px;
+}
+
+.admin-gallery-col-cat {
+  width: 23%;
+  text-align: center !important;
+}
+
+.admin-gallery-col-date {
+  width: 17%;
+  text-align: center !important;
+}
+
+.admin-gallery-col-actions {
+  width: 20%;
+  text-align: center !important;
+}
+
+/* Harmonic Table Action Buttons */
+.admin-table-actions {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.admin-action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 34px;
+  padding: 0 12px;
+  border-radius: 7px;
+  font-size: 12.5px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+  line-height: 1;
+  box-sizing: border-box;
+  transition: all 0.18s ease;
+  user-select: none;
+}
+
+.admin-action-btn svg {
+  display: block;
+  flex-shrink: 0;
+}
+
+.admin-action-btn-edit {
+  background: #ffffff;
+  border: 1.5px solid #b6dbe6;
+  color: #1c83aa;
+}
+
+.admin-action-btn-edit:hover {
+  background: #e3f9ff;
+  border-color: #1c83aa;
+  color: #156b8c;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(28, 131, 170, 0.15);
+}
+
+.admin-action-btn-delete {
+  background: #fff1f2;
+  border: 1.5px solid #fecdd3;
+  color: #e11d48;
+}
+
+.admin-action-btn-delete:hover {
+  background: #ffe4e6;
+  border-color: #e11d48;
+  color: #be123c;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(225, 29, 72, 0.15);
+}
+
+@media (max-width: 768px) {
+  .admin-gallery-table {
+    table-layout: auto;
+  }
+  .admin-gallery-col-cat {
+    display: none;
+  }
+  .admin-gallery-col-title {
+    width: auto;
+  }
+  .admin-action-btn {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+  }
+  .admin-action-btn span {
+    display: none;
+  }
+}
+
 /* Rich Editor UI */
 .rich-editor-container {
   border: 1.5px solid #b6dbe6;
@@ -368,6 +481,11 @@
 }
 
 .toolbar-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  white-space: nowrap;
   padding: 6px 10px;
   background: #ffffff;
   border: 1.5px solid #b6dbe6;
@@ -378,6 +496,7 @@
   cursor: pointer;
   transition: all 0.2s;
   font-family: inherit;
+  line-height: 1;
 }
 
 .toolbar-btn:hover {
@@ -1407,4 +1526,99 @@
 
 .admin-image-overlay-btn.delete:hover {
   background: #e11d48;
+}
+
+/* Save Success Toast Popup */
+.admin-save-toast-popup {
+  position: fixed;
+  top: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 999999;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: #ffffff;
+  color: #065f46;
+  border: 1.5px solid #10b981;
+  border-radius: 9999px;
+  padding: 10px 20px;
+  box-shadow:
+    0 10px 25px -5px rgba(16, 185, 129, 0.25),
+    0 8px 16px -6px rgba(0, 0, 0, 0.1);
+  font-family: inherit;
+  font-size: 14.5px;
+  font-weight: 700;
+  animation: adminToastSlideDown 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  pointer-events: auto;
+  direction: rtl;
+}
+
+@keyframes adminToastSlideDown {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -20px) scale(0.96);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(1);
+  }
+}
+
+.admin-save-toast-emoji {
+  font-size: 18px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.admin-save-toast-text.desktop {
+  display: inline;
+}
+
+.admin-save-toast-text.mobile {
+  display: none;
+}
+
+.admin-save-toast-close {
+  background: none;
+  border: none;
+  color: #059669;
+  cursor: pointer;
+  padding: 2px 4px;
+  margin-right: 4px;
+  border-radius: 50%;
+  font-size: 12px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.7;
+  transition:
+    opacity 0.15s ease,
+    background 0.15s ease;
+}
+
+.admin-save-toast-close:hover {
+  opacity: 1;
+  background: rgba(16, 185, 129, 0.12);
+}
+
+@media (max-width: 640px) {
+  .admin-save-toast-popup {
+    top: 16px;
+    padding: 8px 16px;
+    font-size: 13.5px;
+    gap: 8px;
+    box-shadow: 0 8px 20px rgba(16, 185, 129, 0.2);
+  }
+
+  .admin-save-toast-text.desktop {
+    display: none;
+  }
+
+  .admin-save-toast-text.mobile {
+    display: inline;
+  }
 }

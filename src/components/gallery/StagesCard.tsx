@@ -45,7 +45,8 @@ export function openStagesFancybox(item: GalleryItem) {
 
 export default function StagesCard({ item }: StagesCardProps) {
   const stages = item.stages && item.stages.length > 0 ? item.stages : DEFAULT_TREATMENT_STAGES;
-  const coverImage = stages[0]?.image || item.afterImg || item.beforeImg;
+  const coverImage =
+    stages[0]?.image || item.afterImg || item.beforeImg || '/assets/gallery/stage-1.webp';
   const stageCount = stages.length;
 
   return (

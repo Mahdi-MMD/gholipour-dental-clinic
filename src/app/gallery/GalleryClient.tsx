@@ -14,6 +14,7 @@ import {
   GALLERY_CATEGORIES,
   GalleryItem,
   GALLERY_TITLE_MAX_CHARS,
+  isGalleryItemMatchingCategory,
 } from '@/data/galleryData';
 import '@/app/gallery.css';
 
@@ -64,21 +65,20 @@ export default function GalleryClient() {
     setIsBookingOpen(false);
   };
 
-  // Filter items according to category
+  // Filter items according to mode and category
   const filteredItems = useMemo(() => {
-    const activeCatObj = GALLERY_CATEGORIES.find(c => c.id === selectedCategory);
-
     return GALLERY_ITEMS.filter(item => {
+      // 1. Separate by mode: item type must match current galleryMode
+      const itemType =
+        item.type ||
+        (item.stages && item.stages.length > 0 && !item.beforeImg ? 'stages' : 'before-after');
+      if (itemType !== galleryMode) return false;
+
+      // 2. Filter by category
       if (selectedCategory === 'all') return true;
-      if (!activeCatObj?.match) return true;
-      return activeCatObj.match.some(
-        m =>
-          item.categoryLabel.includes(m) ||
-          item.subCategoryLabel.includes(m) ||
-          item.tags.some(t => t.includes(m))
-      );
+      return isGalleryItemMatchingCategory(item, selectedCategory);
     });
-  }, [selectedCategory]);
+  }, [galleryMode, selectedCategory]);
 
   const displayedList = filteredItems.slice(0, visibleCount);
   const hasMore = visibleCount < filteredItems.length;
@@ -244,8 +244,8 @@ export default function GalleryClient() {
                   {/* Mode 1: Before & After Split Screen Slider | Mode 2: Treatment Stages with Fancybox */}
                   {galleryMode === 'before-after' ? (
                     <MeridiqSlider
-                      beforeImg={item.beforeImg}
-                      afterImg={item.afterImg}
+                      beforeImg={item.beforeImg || ''}
+                      afterImg={item.afterImg || ''}
                       title={item.title}
                     />
                   ) : (
@@ -389,8 +389,8 @@ export default function GalleryClient() {
                 <StagesCard item={activeModalItem} />
               ) : (
                 <MeridiqSlider
-                  beforeImg={activeModalItem.beforeImg}
-                  afterImg={activeModalItem.afterImg}
+                  beforeImg={activeModalItem.beforeImg || ''}
+                  afterImg={activeModalItem.afterImg || ''}
                   title={activeModalItem.title}
                 />
               )}

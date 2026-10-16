@@ -27,8 +27,8 @@ jobs:
       - name: Prettier Format Check
         run: npm run format:check
 
-      - name: Next.js Lint
-        run: npm run lint
+      - name: TypeScript Type Check
+        run: npx tsc --noEmit
 
       - name: Next.js Production Build
         run: npm run build

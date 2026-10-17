@@ -3,7 +3,7 @@ import './globals.css';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://gholipourdental.com'),
-  title: 'کلینیک دندانپزشکی قلی‌پور',
+  title: 'کلینیک دندانپزشکی قلی‌پور | زیباکنار، گیلان',
   description:
     'کلینیک دندانپزشکی قلی‌پور، ارائه دهنده خدمات تخصصی ایمپلنت دیجیتال، عصب‌کشی بدون درد، روکش و ترمیم دندان در محیطی مدرن و آرامش‌بخش.',
   keywords: [

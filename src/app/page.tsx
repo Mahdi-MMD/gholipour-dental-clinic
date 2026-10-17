@@ -4,7 +4,7 @@ import HomeClientView from './HomeClientView';
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://gholipourdental.com';
 
 export const metadata: Metadata = {
-  title: 'کلینیک دندانپزشکی قلی‌پور',
+  title: 'کلینیک دندانپزشکی قلی‌پور | زیباکنار، گیلان',
   description:
     'کلینیک دندانپزشکی قلی‌پور ارائه دهنده خدمات تخصصی ایمپلنت دیجیتال، عصب‌کشی بدون درد، روکش زیرکونیا و اصلاح طرح لبخند در محیطی مدرن در استان گیلان (زیباکنار).',
   keywords: [

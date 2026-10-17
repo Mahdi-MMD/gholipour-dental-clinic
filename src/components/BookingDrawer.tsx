@@ -3,6 +3,12 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import PersianDatePicker from '@/components/PersianDatePicker';
+import {
+  validate_persian_name,
+  normalize_and_validate_iran_phone,
+  toAsciiDigits,
+  ALREADY_RESERVED_MESSAGE,
+} from '@/lib/reservationValidators';
 
 interface BookingDrawerProps {
   isOpen: boolean;
@@ -21,6 +27,8 @@ export default function BookingDrawer({ isOpen, onClose, initialService }: Booki
   const [visitedBefore, setVisitedBefore] = useState<VisitedStatus>(null);
   const [proposedDate, setProposedDate] = useState('');
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
 
   // Update service when initialService prop changes or drawer opens
   useEffect(() => {
@@ -29,6 +37,8 @@ export default function BookingDrawer({ isOpen, onClose, initialService }: Booki
       setVisitedBefore(null);
       setProposedDate('');
       setIsCalendarOpen(false);
+      setIsSubmitting(false);
+      setSubmitError('');
       setErrors({});
       setTouched({});
     }
@@ -94,40 +104,43 @@ export default function BookingDrawer({ isOpen, onClose, initialService }: Booki
 
   // Handle phone change: allow Persian and English digits, normalize and display in Persian
   const handlePhoneChange = (val: string) => {
-    const englishDigits = toEnglishDigits(val).replace(/\D/g, '').slice(0, 11);
-    const persianDisplay = toPersianDigits(englishDigits);
+    // Keep raw typing clean, allowing Persian or ASCII digits
+    const asciiDigits = toAsciiDigits(val).replace(/\D/g, '').slice(0, 11);
+    const persianDisplay = toPersianDigits(asciiDigits);
     setPhone(persianDisplay);
 
     if (touched.phone) {
-      validatePhone(englishDigits);
+      validatePhone(asciiDigits);
     }
   };
 
-  const validatePhone = (digits: string): string | undefined => {
-    if (!digits) {
-      return 'لطفاً شماره تماس همراه را وارد نمایید.';
+  const validatePhone = (inputPhone: string): string | undefined => {
+    const res = normalize_and_validate_iran_phone(inputPhone);
+    if (!res.isValid) {
+      return res.error;
     }
-    if (!digits.startsWith('09')) {
-      return 'شماره همراه باید با ۰۹ شروع شود.';
+
+    // Client-side 24-hour frequency check via localStorage
+    if (typeof window !== 'undefined') {
+      try {
+        const stored = localStorage.getItem(`last_res_${res.normalizedPhone}`);
+        if (stored) {
+          const timestamp = parseInt(stored, 10);
+          if (!isNaN(timestamp) && Date.now() - timestamp < 24 * 60 * 60 * 1000) {
+            return ALREADY_RESERVED_MESSAGE;
+          }
+        }
+      } catch {
+        // localStorage access might be restricted in private mode
+      }
     }
-    if (digits.length !== 11) {
-      return 'شماره همراه باید ۱۱ رقم باشد (مثال: ۰۹۱۲۳۴۵۶۷۸۹).';
-    }
+
     return undefined;
   };
 
   const validateName = (val: string): string | undefined => {
-    const trimmed = val.trim();
-    if (!trimmed) {
-      return 'لطفاً نام و نام خانوادگی را وارد نمایید.';
-    }
-    if (!isPersianText(trimmed)) {
-      return 'نام و نام خانوادگی باید با حروف فارسی نوشته شود.';
-    }
-    if (trimmed.length < 3) {
-      return 'نام و نام خانوادگی کوتاه است.';
-    }
-    return undefined;
+    const res = validate_persian_name(val);
+    return res.isValid ? undefined : res.error;
   };
 
   const validateService = (val: string): string | undefined => {
@@ -189,7 +202,7 @@ export default function BookingDrawer({ isOpen, onClose, initialService }: Booki
     };
   }, [isOpen, onClose]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     setTouched({
@@ -220,21 +233,62 @@ export default function BookingDrawer({ isOpen, onClose, initialService }: Booki
       return;
     }
 
-    setSubmitted(true);
-    setTimeout(() => {
-      onClose();
-      setTimeout(() => {
-        setSubmitted(false);
-        setName('');
-        setPhone('');
-        setService('');
-        setVisitedBefore(null);
-        setProposedDate('');
-        setIsCalendarOpen(false);
-        setErrors({});
-        setTouched({});
-      }, 400);
-    }, 3000);
+    setIsSubmitting(true);
+    setSubmitError('');
+
+    try {
+      const response = await fetch('/api/reservations', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: name.trim(),
+          phone: phone.trim(),
+          service: service.trim(),
+          visitedBefore,
+          proposedDate: proposedDate.trim(),
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        // Record timestamp in localStorage for 24-hour rate limiting
+        try {
+          const phoneRes = normalize_and_validate_iran_phone(phone);
+          if (phoneRes.isValid) {
+            localStorage.setItem(`last_res_${phoneRes.normalizedPhone}`, Date.now().toString());
+          }
+          localStorage.setItem('last_successful_reservation', Date.now().toString());
+        } catch {
+          // ignore localStorage storage errors
+        }
+
+        setSubmitted(true);
+        setTimeout(() => {
+          onClose();
+          setTimeout(() => {
+            setSubmitted(false);
+            setName('');
+            setPhone('');
+            setService('');
+            setVisitedBefore(null);
+            setProposedDate('');
+            setIsCalendarOpen(false);
+            setErrors({});
+            setTouched({});
+            setIsSubmitting(false);
+          }, 400);
+        }, 3000);
+      } else {
+        setSubmitError(data.message || 'خطا در برقراری ارتباط با سرور. لطفاً دوباره تلاش فرمایید.');
+        setIsSubmitting(false);
+      }
+    } catch {
+      setSubmitError('خطا در ارسال درخواست. لطفاً اتصال اینترنت خود را بررسی کنید.');
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -466,8 +520,54 @@ export default function BookingDrawer({ isOpen, onClose, initialService }: Booki
                   </div>
                 )}
 
-                <button type="submit" className="btn-primary btn-block">
-                  <span>ثبت درخواست نوبت</span>
+                {submitError && (
+                  <div
+                    style={{
+                      background: '#fff1f2',
+                      border: '1px solid #fecdd3',
+                      color: '#e11d48',
+                      padding: '10px 14px',
+                      borderRadius: '10px',
+                      fontSize: '13px',
+                      marginBottom: '16px',
+                      lineHeight: '1.6',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                    }}
+                  >
+                    <i className="fa-solid fa-triangle-exclamation"></i>
+                    <span>{submitError}</span>
+                  </div>
+                )}
+
+                <button
+                  type="submit"
+                  className="btn-primary btn-block"
+                  disabled={isSubmitting}
+                  style={isSubmitting ? { opacity: 0.75, cursor: 'not-allowed' } : undefined}
+                >
+                  {isSubmitting ? (
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
+                      <svg
+                        style={{
+                          animation: 'spin 1s linear infinite',
+                          width: '16px',
+                          height: '16px',
+                        }}
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2.5"
+                      >
+                        <circle cx="12" cy="12" r="10" strokeOpacity="0.25" />
+                        <path d="M12 2a10 10 0 0 1 10 10" />
+                      </svg>
+                      <span>در حال ثبت اطلاعات...</span>
+                    </span>
+                  ) : (
+                    <span>ثبت درخواست نوبت</span>
+                  )}
                 </button>
               </form>
             </>

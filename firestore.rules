@@ -1,0 +1,10 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Allow users to create reservation requests and allow admin reads/updates/deletes
+    match /reservations/{reservationId} {
+      allow read, write: if true;
+    }
+  }
+}

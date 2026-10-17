@@ -5,6 +5,7 @@ import './admin.css';
 import RichTextEditor, { RichTextEditorRef } from './RichTextEditor';
 import ArticlePreview from './ArticlePreview';
 import GalleryPreview from './GalleryPreview';
+import ReservationsManager from './ReservationsManager';
 import { ArticleItem, ArticleSection, ArticleFAQ, ArticleCitation } from '@/data/articlesData';
 import {
   GalleryItem,
@@ -13,6 +14,7 @@ import {
   TreatmentStage,
   isGalleryItemMatchingCategory,
 } from '@/data/galleryData';
+import { ReservationItem } from '@/types/reservation';
 
 function PreviewLocateBtn({
   targetId,
@@ -58,10 +60,11 @@ export default function AdminPage() {
   const [password, setPassword] = useState('');
   const [loginError, setLoginError] = useState('');
   const [activeTab, setActiveTab] = useState<
-    'portal' | 'articles' | 'edit-article' | 'gallery' | 'edit-gallery'
+    'portal' | 'articles' | 'edit-article' | 'gallery' | 'edit-gallery' | 'reservations'
   >('portal');
 
   const [articles, setArticles] = useState<ArticleItem[]>([]);
+  const [reservations, setReservations] = useState<ReservationItem[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedArticle, setSelectedArticle] = useState<ArticleItem | null>(null);
   const [isNewArticle, setIsNewArticle] = useState<boolean>(false);
@@ -124,6 +127,7 @@ export default function AdminPage() {
           setIsAuthenticated(true);
           loadArticles();
           loadGalleryItems();
+          loadReservations();
         }
       })
       .catch(() => {});
@@ -143,6 +147,7 @@ export default function AdminPage() {
         setIsAuthenticated(true);
         loadArticles();
         loadGalleryItems();
+        loadReservations();
       } else {
         setLoginError(data.message || 'رمز عبور نامعتبر است');
       }
@@ -177,6 +182,18 @@ export default function AdminPage() {
       }
     } catch (err) {
       console.error('Failed to load gallery items:', err);
+    }
+  };
+
+  const loadReservations = async () => {
+    try {
+      const res = await fetch('/api/admin/reservations');
+      const data = await res.json();
+      if (data.success && Array.isArray(data.reservations)) {
+        setReservations(data.reservations);
+      }
+    } catch (err) {
+      console.error('Failed to load reservations:', err);
     }
   };
 
@@ -1615,6 +1632,49 @@ export default function AdminPage() {
           </div>
         )}
 
+        {/* Navigation Tabs (Shown in reservations mode) */}
+        {activeTab === 'reservations' && (
+          <div
+            className="admin-tabs"
+            style={{ alignItems: 'center', justifyContent: 'space-between' }}
+          >
+            <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+              <button
+                type="button"
+                className="admin-tab-btn"
+                onClick={() => setActiveTab('portal')}
+                title="بازگشت به منوی اصلی بخش‌های مدیریت"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  background: '#ffffff',
+                  border: '1.5px solid #d8eef5',
+                  color: '#1c434f',
+                  padding: '8px 16px',
+                }}
+              >
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M19 12H5M12 19l-7-7 7-7" />
+                </svg>
+                <span>بازگشت به پیشخوان اصلی</span>
+              </button>
+              <button className="admin-tab-btn active" onClick={() => setActiveTab('reservations')}>
+                📋 مدیریت نوبت‌دهی و رزروها ({reservations.length})
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* SECTION HUB: 3 Options Dashboard */}
         {activeTab === 'portal' && (
           <div className="admin-portal-container">
@@ -1758,8 +1818,19 @@ export default function AdminPage() {
                 </div>
               </div>
 
-              {/* Option 3: User Reservations (Coming Soon) */}
-              <div className="admin-portal-card disabled" aria-disabled="true">
+              {/* Option 3: User Reservations (Active) */}
+              <div
+                className="admin-portal-card interactive"
+                onClick={() => setActiveTab('reservations')}
+                role="button"
+                tabIndex={0}
+                onKeyDown={e => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    setActiveTab('reservations');
+                  }
+                }}
+              >
                 <div className="admin-portal-card-header">
                   <div
                     className="admin-portal-card-icon"
@@ -1782,7 +1853,7 @@ export default function AdminPage() {
                       <path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01M16 18h.01" />
                     </svg>
                   </div>
-                  <span className="admin-portal-tag admin-portal-tag-soon">به‌زودی</span>
+                  <span className="admin-portal-tag admin-portal-tag-active">فعال</span>
                 </div>
 
                 <h3 className="admin-portal-card-title">مدیریت نوبت‌دهی و رزروها</h3>
@@ -1792,9 +1863,29 @@ export default function AdminPage() {
                 </p>
 
                 <div className="admin-portal-card-footer">
-                  <span style={{ fontSize: '13px', color: '#8faab6' }}>در مرحله آماده‌سازی</span>
-                  <span className="admin-portal-card-btn muted">
-                    <span>به‌زودی</span>
+                  <span style={{ fontSize: '13px', color: '#5a7d8c', fontWeight: 600 }}>
+                    {toPersianDigits(reservations.length)} درخواست ثبت‌شده
+                    {reservations.filter(r => !r.isConfirmed).length > 0 && (
+                      <span style={{ color: '#d97706', marginRight: '6px' }}>
+                        ({toPersianDigits(reservations.filter(r => !r.isConfirmed).length)} جدید)
+                      </span>
+                    )}
+                  </span>
+                  <span className="admin-portal-card-btn">
+                    <span>ورود به بخش</span>
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <line x1="19" y1="12" x2="5" y2="12" />
+                      <polyline points="12 19 5 12 12 5" />
+                    </svg>
                   </span>
                 </div>
               </div>
@@ -3847,6 +3938,16 @@ export default function AdminPage() {
               </div>
             )}
           </div>
+        )}
+
+        {/* TAB 3: Reservations Manager */}
+        {activeTab === 'reservations' && (
+          <ReservationsManager
+            reservations={reservations}
+            setReservations={setReservations}
+            onRefresh={loadReservations}
+            onTriggerToast={triggerSaveToast}
+          />
         )}
       </main>
     </div>

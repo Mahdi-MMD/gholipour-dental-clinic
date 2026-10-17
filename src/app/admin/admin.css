@@ -1622,3 +1622,921 @@
     display: inline;
   }
 }
+
+/* ==========================================================================
+   Admin Reservations Section Styles
+   ========================================================================== */
+
+.admin-reservations-wrapper {
+  padding: 24px;
+}
+
+.admin-reservations-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.admin-reservations-title {
+  font-size: 19px;
+  font-weight: 800;
+  color: #1c434f;
+  margin: 0 0 6px 0;
+}
+
+.admin-reservations-subtitle {
+  font-size: 13.5px;
+  color: #5a7d8c;
+  margin: 0;
+}
+
+.admin-reservations-refresh-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: #ffffff;
+  border: 1.5px solid #b6dbe6;
+  border-radius: 10px;
+  color: #1c83aa;
+  font-size: 13.5px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.admin-reservations-refresh-btn:hover:not(:disabled) {
+  background: #e3f9ff;
+  border-color: #1c83aa;
+  transform: translateY(-1px);
+}
+
+.admin-reservations-refresh-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.admin-spin {
+  animation: adminSpin 1s linear infinite;
+}
+
+@keyframes adminSpin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Stats Cards */
+.admin-reservations-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.admin-res-stat-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 20px;
+  background: #ffffff;
+  border: 1.5px solid #e2f0f5;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.admin-res-stat-card:hover {
+  border-color: #b6dbe6;
+  background: #fdfefe;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(28, 67, 79, 0.05);
+}
+
+.admin-res-stat-card.active {
+  border-color: #1c83aa;
+  background: #f0f9ff;
+  box-shadow: 0 4px 14px rgba(28, 131, 170, 0.12);
+}
+
+.admin-res-stat-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.admin-res-stat-icon.all {
+  background: #e3f9ff;
+  color: #1c83aa;
+}
+
+.admin-res-stat-icon.pending {
+  background: #fef3c7;
+  color: #d97706;
+}
+
+.admin-res-stat-icon.confirmed {
+  background: #ecfdf5;
+  color: #10b981;
+}
+
+.admin-res-stat-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-res-stat-label {
+  font-size: 12.5px;
+  color: #5a7d8c;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.admin-res-stat-value {
+  font-size: 20px;
+  font-weight: 800;
+  color: #1c434f;
+}
+
+/* Controls */
+.admin-reservations-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.admin-reservations-search-wrap {
+  position: relative;
+  flex: 1;
+  min-width: 280px;
+  max-width: 520px;
+}
+
+.admin-reservations-search-icon {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #8faab6;
+  pointer-events: none;
+}
+
+.admin-reservations-search-input {
+  padding-right: 42px !important;
+  padding-left: 36px !important;
+  height: 44px;
+}
+
+.admin-search-clear-btn {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: #8faab6;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.admin-search-clear-btn:hover {
+  color: #1c434f;
+}
+
+.admin-reservations-filters {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.admin-reservations-pills {
+  display: flex;
+  background: #f0f4f7;
+  padding: 4px;
+  border-radius: 12px;
+  gap: 4px;
+}
+
+.admin-res-pill {
+  border: none;
+  background: transparent;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #5a7d8c;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s ease;
+}
+
+.admin-res-pill:hover {
+  color: #1c434f;
+}
+
+.admin-res-pill.active {
+  background: #ffffff;
+  color: #1c83aa;
+  font-weight: 700;
+  box-shadow: 0 2px 6px rgba(28, 67, 79, 0.08);
+}
+
+.admin-res-sort-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: #ffffff;
+  border: 1.5px solid #d8eef5;
+  border-radius: 10px;
+  color: #5a7d8c;
+  font-size: 12.5px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.admin-res-sort-btn:hover {
+  border-color: #1c83aa;
+  color: #1c83aa;
+}
+
+/* Table */
+.admin-reservations-table-container {
+  overflow-x: auto;
+  border-radius: 14px;
+  border: 1px solid #d8eef5;
+  background: #ffffff;
+}
+
+.admin-reservations-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+}
+
+.admin-reservations-table th {
+  background: #f8fdff;
+  color: #1c434f;
+  font-weight: 700;
+  padding: 14px 16px;
+  border-bottom: 2px solid #d8eef5;
+  white-space: nowrap;
+}
+
+.admin-reservations-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid #edf5f8;
+  vertical-align: middle;
+}
+
+/* Row Highlight when Confirmed / Reviewed */
+.admin-res-row {
+  transition: background-color 0.2s ease;
+}
+
+.admin-res-row:hover {
+  background-color: #fafdff;
+}
+
+.admin-res-row.is-confirmed-row {
+  background-color: #eef9fd;
+}
+
+.admin-res-row.is-confirmed-row:hover {
+  background-color: #e2f4fb;
+}
+
+.admin-res-row.is-confirmed-row td:first-child {
+  border-right: 3.5px solid #1c83aa;
+}
+
+/* Checkbox */
+.admin-res-checkbox-wrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  user-select: none;
+}
+
+.admin-res-checkbox-input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+}
+
+.admin-res-custom-checkbox {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  border: 2px solid #b6dbe6;
+  background: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  transition: all 0.18s ease;
+}
+
+.admin-res-checkbox-wrap:hover .admin-res-custom-checkbox {
+  border-color: #1c83aa;
+}
+
+.admin-res-custom-checkbox.checked {
+  background: #1c83aa;
+  border-color: #1c83aa;
+  box-shadow: 0 2px 6px rgba(28, 131, 170, 0.25);
+}
+
+/* Patient Name Cell */
+.admin-res-patient-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.patient-name-text {
+  font-weight: 700;
+  color: #1c434f;
+}
+
+.patient-tag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 6px;
+}
+
+.patient-tag.previous-patient {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+
+.patient-tag.new-patient {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+/* Phone Cell */
+.admin-res-phone-cell {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  direction: ltr;
+}
+
+.admin-res-phone-link {
+  color: #1c83aa;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 13.5px;
+  font-family: inherit;
+}
+
+.admin-res-phone-link:hover {
+  text-decoration: underline;
+}
+
+.admin-res-phone-copy-btn {
+  background: transparent;
+  border: none;
+  color: #8faab6;
+  cursor: pointer;
+  padding: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: all 0.15s ease;
+}
+
+.admin-res-phone-copy-btn:hover {
+  color: #1c83aa;
+  background: #e3f9ff;
+}
+
+.admin-badge-service {
+  background: #e3f9ff;
+  color: #1c83aa;
+  border: 1px solid #c4eaf7;
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* Status Badges */
+.admin-res-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 11px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.admin-res-status-badge.confirmed {
+  background: #ecfdf5;
+  color: #059669;
+  border: 1px solid #a7f3d0;
+}
+
+.admin-res-status-badge.pending {
+  background: #fffbeb;
+  color: #d97706;
+  border: 1px solid #fde68a;
+}
+
+/* Actions in Table */
+.admin-action-btn-view {
+  background: #ffffff;
+  border: 1.5px solid #b6dbe6;
+  color: #1c83aa;
+}
+
+.admin-action-btn-view:hover {
+  background: #e3f9ff;
+  border-color: #1c83aa;
+  color: #156b8c;
+  transform: translateY(-1px);
+}
+
+.admin-action-btn-newtab {
+  background: #ffffff;
+  border: 1.5px solid #d8eef5;
+  color: #5a7d8c;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 9px;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.admin-action-btn-newtab:hover {
+  background: #e3f9ff;
+  border-color: #1c83aa;
+  color: #1c83aa;
+  transform: translateY(-1px);
+}
+
+.admin-reservations-empty {
+  padding: 60px 24px;
+  text-align: center;
+  color: #8faab6;
+}
+
+.admin-reservations-empty svg {
+  margin-bottom: 14px;
+  color: #b6dbe6;
+}
+
+.admin-reservations-empty h4 {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1c434f;
+  margin: 0 0 6px 0;
+}
+
+.admin-reservations-empty p {
+  font-size: 13.5px;
+  color: #5a7d8c;
+  margin: 0;
+}
+
+/* ==========================================================================
+   Full View Modal (Pop in Middle, Blurry Background, 'X' at Top-Left)
+   ========================================================================== */
+
+.admin-res-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(28, 67, 79, 0.45);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: adminFadeIn 0.22s ease-out;
+}
+
+.admin-res-modal-card {
+  position: relative;
+  max-width: 620px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: #ffffff;
+  border-radius: 22px;
+  box-shadow: 0 25px 60px rgba(28, 67, 79, 0.22);
+  border: 1.5px solid #d8eef5;
+  padding: 32px 30px;
+  animation: adminScaleIn 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes adminFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes adminScaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Close 'X' Button at Top-Left Corner */
+.admin-res-modal-close-btn {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #f0f4f7;
+  border: 1.5px solid #d8eef5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #5a7d8c;
+  transition: all 0.2s ease;
+  z-index: 10;
+}
+
+.admin-res-modal-close-btn:hover {
+  background: #ffe4e6;
+  border-color: #fecdd3;
+  color: #e11d48;
+  transform: rotate(90deg);
+}
+
+.admin-res-modal-header {
+  margin-bottom: 24px;
+  padding-bottom: 18px;
+  border-bottom: 1.5px solid #eef5f8;
+}
+
+.admin-res-modal-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #1c83aa;
+  background: #e3f9ff;
+  padding: 3px 10px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.admin-res-modal-id {
+  color: #5a7d8c;
+  font-weight: 500;
+  font-size: 11.5px;
+}
+
+.admin-res-modal-title {
+  font-size: 22px;
+  font-weight: 800;
+  color: #1c434f;
+  margin: 0 0 12px 0;
+}
+
+.admin-res-modal-badges {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* Modal Details Grid */
+.admin-res-modal-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  margin-bottom: 26px;
+}
+
+.admin-res-modal-item {
+  background: #f8fdff;
+  border: 1px solid #d8eef5;
+  border-radius: 12px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.admin-res-modal-item.full-width {
+  grid-column: 1 / -1;
+}
+
+.admin-res-item-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #5a7d8c;
+}
+
+.admin-res-item-value {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: #1c434f;
+}
+
+.admin-res-item-value.highlight-value {
+  color: #1c83aa;
+}
+
+.admin-res-phone-action-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 2px;
+}
+
+.admin-res-item-value.phone-val {
+  font-size: 15px;
+  direction: ltr;
+}
+
+.admin-res-call-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  background: #1c83aa;
+  color: #ffffff;
+  border-radius: 6px;
+  font-size: 11.5px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background 0.15s ease;
+}
+
+.admin-res-call-btn:hover {
+  background: #156b8c;
+}
+
+.admin-res-copy-pill {
+  padding: 4px 10px;
+  background: #ffffff;
+  border: 1px solid #b6dbe6;
+  border-radius: 6px;
+  font-size: 11.5px;
+  color: #1c83aa;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.admin-res-copy-pill:hover {
+  background: #e3f9ff;
+}
+
+.admin-res-notes-text {
+  font-size: 13.5px;
+  color: #1c434f;
+  background: #ffffff;
+  border: 1px dashed #b6dbe6;
+  padding: 10px 14px;
+  border-radius: 8px;
+  margin: 4px 0 0 0;
+  line-height: 1.6;
+}
+
+/* Modal Actions */
+.admin-res-modal-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding-top: 18px;
+  border-top: 1.5px solid #eef5f8;
+}
+
+.admin-res-toggle-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-size: 13.5px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: #1c83aa;
+  color: #ffffff;
+  transition: all 0.2s ease;
+}
+
+.admin-res-toggle-action-btn:hover {
+  background: #156b8c;
+  transform: translateY(-1px);
+}
+
+.admin-res-toggle-action-btn.is-confirmed {
+  background: #f0fdf4;
+  border: 1.5px solid #86efac;
+  color: #166534;
+}
+
+.admin-res-toggle-action-btn.is-confirmed:hover {
+  background: #dcfce7;
+}
+
+.admin-res-newtab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 16px;
+  background: #ffffff;
+  border: 1.5px solid #d8eef5;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #1c434f;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s ease;
+}
+
+.admin-res-newtab-btn:hover {
+  border-color: #1c83aa;
+  color: #1c83aa;
+  background: #f8fdff;
+}
+
+.admin-res-delete-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 16px;
+  background: #fff1f2;
+  border: 1.5px solid #fecdd3;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #e11d48;
+  cursor: pointer;
+  font-family: inherit;
+  margin-right: auto;
+  transition: all 0.2s ease;
+}
+
+.admin-res-delete-btn:hover {
+  background: #ffe4e6;
+  border-color: #e11d48;
+}
+
+/* Delete Confirmation Modal */
+.admin-res-delete-modal-card {
+  position: relative;
+  max-width: 440px;
+  width: 100%;
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 25px 60px rgba(28, 67, 79, 0.25);
+  border: 1.5px solid #fecdd3;
+  padding: 28px 24px;
+  text-align: center;
+  animation: adminScaleIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.admin-res-delete-icon-wrap {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #fff1f2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+}
+
+.admin-res-delete-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: #1c434f;
+  margin: 0 0 8px 0;
+}
+
+.admin-res-delete-desc {
+  font-size: 13.5px;
+  color: #5a7d8c;
+  line-height: 1.6;
+  margin: 0 0 20px 0;
+}
+
+.admin-res-delete-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.admin-res-delete-confirm-btn {
+  flex: 1;
+  padding: 10px 18px;
+  background: #e11d48;
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.admin-res-delete-confirm-btn:hover:not(:disabled) {
+  background: #be123c;
+}
+
+.admin-res-delete-confirm-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.admin-res-delete-cancel-btn {
+  flex: 1;
+  padding: 10px 18px;
+  background: #f0f4f7;
+  border: 1px solid #d8eef5;
+  color: #5a7d8c;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.admin-res-delete-cancel-btn:hover:not(:disabled) {
+  background: #e2e8f0;
+  color: #1c434f;
+}
+
+@media (max-width: 768px) {
+  .admin-reservations-wrapper {
+    padding: 16px;
+  }
+
+  .admin-res-modal-card {
+    padding: 24px 18px;
+  }
+
+  .admin-res-modal-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-res-modal-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .admin-res-delete-btn {
+    margin-right: 0;
+  }
+}

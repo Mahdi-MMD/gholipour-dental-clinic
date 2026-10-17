@@ -47,42 +47,45 @@ async function writeLocalReservations(items: ReservationItem[]): Promise<void> {
 export async function getAllReservations(): Promise<ReservationItem[]> {
   try {
     const db = getDb();
-    const colRef = collection(db, 'reservations');
-    const q = query(colRef, orderBy('createdAt', 'desc'));
-    const snapshot = await getDocs(q);
+    if (db) {
+      const colRef = collection(db, 'reservations');
+      const q = query(colRef, orderBy('createdAt', 'desc'));
+      const snapshot = await getDocs(q);
 
-    // If getDocs executed without throwing, Firestore is the authoritative source
-    const firestoreItems: ReservationItem[] = snapshot.docs.map((docSnap, index) => {
-      const data = docSnap.data();
-      return {
-        id: docSnap.id,
-        listNumber: index + 1,
-        patientName: data.patientName || '',
-        phone: data.phone || '',
-        service: data.service || '',
-        visitedBefore: data.visitedBefore || null,
-        proposedDate: data.proposedDate || '',
-        createdAt: data.createdAt || new Date().toISOString(),
-        formattedDate:
-          data.formattedDate || formatToPersianDateTime(new Date(data.createdAt || Date.now())),
-        isConfirmed: Boolean(data.isConfirmed),
-        confirmedAt: data.confirmedAt || null,
-        notes: data.notes || '',
-      };
-    });
+      // If getDocs executed without throwing, Firestore is the authoritative source
+      const firestoreItems: ReservationItem[] = snapshot.docs.map((docSnap, index) => {
+        const data = docSnap.data();
+        return {
+          id: docSnap.id,
+          listNumber: index + 1,
+          patientName: data.patientName || '',
+          phone: data.phone || '',
+          service: data.service || '',
+          visitedBefore: data.visitedBefore || null,
+          proposedDate: data.proposedDate || '',
+          createdAt: data.createdAt || new Date().toISOString(),
+          formattedDate:
+            data.formattedDate || formatToPersianDateTime(new Date(data.createdAt || Date.now())),
+          isConfirmed: Boolean(data.isConfirmed),
+          confirmedAt: data.confirmedAt || null,
+          notes: data.notes || '',
+        };
+      });
 
-    // Keep local cache in sync (even if empty, so deleted items do not resurrect)
-    await writeLocalReservations(firestoreItems);
-    return firestoreItems;
+      // Keep local cache in sync (even if empty, so deleted items do not resurrect)
+      await writeLocalReservations(firestoreItems);
+      return firestoreItems;
+    }
   } catch (err) {
     console.warn('Firestore fetch failed, falling back to local storage:', err);
-    // Fallback to local storage only if Firestore is unreachable
-    const localItems = await readLocalReservations();
-    return localItems.map((item, idx) => ({
-      ...item,
-      listNumber: idx + 1,
-    }));
   }
+
+  // Fallback to local storage only if Firestore is unreachable or not configured
+  const localItems = await readLocalReservations();
+  return localItems.map((item, idx) => ({
+    ...item,
+    listNumber: idx + 1,
+  }));
 }
 
 // Check if a normalized phone number has an active reservation within the last 24 hours
@@ -119,24 +122,26 @@ export async function getReservationById(id: string): Promise<ReservationItem | 
   // 1. Try Firestore
   try {
     const db = getDb();
-    const docRef = doc(db, 'reservations', id);
-    const snap = await getDoc(docRef);
-    if (snap.exists()) {
-      const data = snap.data();
-      return {
-        id: snap.id,
-        patientName: data.patientName || '',
-        phone: data.phone || '',
-        service: data.service || '',
-        visitedBefore: data.visitedBefore || null,
-        proposedDate: data.proposedDate || '',
-        createdAt: data.createdAt || new Date().toISOString(),
-        formattedDate:
-          data.formattedDate || formatToPersianDateTime(new Date(data.createdAt || Date.now())),
-        isConfirmed: Boolean(data.isConfirmed),
-        confirmedAt: data.confirmedAt || null,
-        notes: data.notes || '',
-      };
+    if (db) {
+      const docRef = doc(db, 'reservations', id);
+      const snap = await getDoc(docRef);
+      if (snap.exists()) {
+        const data = snap.data();
+        return {
+          id: snap.id,
+          patientName: data.patientName || '',
+          phone: data.phone || '',
+          service: data.service || '',
+          visitedBefore: data.visitedBefore || null,
+          proposedDate: data.proposedDate || '',
+          createdAt: data.createdAt || new Date().toISOString(),
+          formattedDate:
+            data.formattedDate || formatToPersianDateTime(new Date(data.createdAt || Date.now())),
+          isConfirmed: Boolean(data.isConfirmed),
+          confirmedAt: data.confirmedAt || null,
+          notes: data.notes || '',
+        };
+      }
     }
   } catch (err) {
     console.warn(`Firestore getDoc for ${id} failed:`, err);
@@ -179,9 +184,11 @@ export async function addReservation(item: {
   // Attempt to write to Cloud Firestore
   try {
     const db = getDb();
-    const colRef = collection(db, 'reservations');
-    const docRef = await addDoc(colRef, newReservationData);
-    createdId = docRef.id;
+    if (db) {
+      const colRef = collection(db, 'reservations');
+      const docRef = await addDoc(colRef, newReservationData);
+      createdId = docRef.id;
+    }
   } catch (err) {
     console.warn('Firestore save failed, saving to local store:', err);
   }
@@ -211,29 +218,31 @@ export async function updateReservationStatus(
   // Try updating Firestore
   try {
     const db = getDb();
-    const docRef = doc(db, 'reservations', id);
-    await updateDoc(docRef, {
-      isConfirmed,
-      confirmedAt,
-    });
+    if (db) {
+      const docRef = doc(db, 'reservations', id);
+      await updateDoc(docRef, {
+        isConfirmed,
+        confirmedAt,
+      });
 
-    const snap = await getDoc(docRef);
-    if (snap.exists()) {
-      const data = snap.data();
-      updatedDoc = {
-        id: snap.id,
-        patientName: data.patientName || '',
-        phone: data.phone || '',
-        service: data.service || '',
-        visitedBefore: data.visitedBefore || null,
-        proposedDate: data.proposedDate || '',
-        createdAt: data.createdAt || new Date().toISOString(),
-        formattedDate:
-          data.formattedDate || formatToPersianDateTime(new Date(data.createdAt || Date.now())),
-        isConfirmed: Boolean(data.isConfirmed),
-        confirmedAt: data.confirmedAt || null,
-        notes: data.notes || '',
-      };
+      const snap = await getDoc(docRef);
+      if (snap.exists()) {
+        const data = snap.data();
+        updatedDoc = {
+          id: snap.id,
+          patientName: data.patientName || '',
+          phone: data.phone || '',
+          service: data.service || '',
+          visitedBefore: data.visitedBefore || null,
+          proposedDate: data.proposedDate || '',
+          createdAt: data.createdAt || new Date().toISOString(),
+          formattedDate:
+            data.formattedDate || formatToPersianDateTime(new Date(data.createdAt || Date.now())),
+          isConfirmed: Boolean(data.isConfirmed),
+          confirmedAt: data.confirmedAt || null,
+          notes: data.notes || '',
+        };
+      }
     }
   } catch (err) {
     console.warn(`Firestore update for ${id} failed:`, err);
@@ -263,11 +272,13 @@ export async function deleteReservation(id: string): Promise<boolean> {
   // Try Firestore
   try {
     const db = getDb();
-    const docRef = doc(db, 'reservations', id);
-    const snap = await getDoc(docRef);
-    if (snap.exists()) {
-      itemExisted = true;
-      await deleteDoc(docRef);
+    if (db) {
+      const docRef = doc(db, 'reservations', id);
+      const snap = await getDoc(docRef);
+      if (snap.exists()) {
+        itemExisted = true;
+        await deleteDoc(docRef);
+      }
     }
   } catch (err) {
     console.warn(`Firestore delete for ${id} failed:`, err);

@@ -5,9 +5,18 @@ import {
   updateReservationStatus,
   deleteReservation,
 } from '@/lib/reservationsStore';
+import { verifyAdminSession } from '@/lib/adminAuth';
 
 export async function GET(request: Request) {
   try {
+    const session = verifyAdminSession(request);
+    if (!session.authorized) {
+      return NextResponse.json(
+        { success: false, message: session.reason || 'دسترسی غیرمجاز.' },
+        { status: 401 }
+      );
+    }
+
     const url = new URL(request.url);
     const id = url.searchParams.get('id');
 
@@ -35,6 +44,14 @@ export async function GET(request: Request) {
 
 export async function PATCH(request: Request) {
   try {
+    const session = verifyAdminSession(request);
+    if (!session.authorized) {
+      return NextResponse.json(
+        { success: false, message: session.reason || 'دسترسی غیرمجاز.' },
+        { status: 401 }
+      );
+    }
+
     const body = await request.json();
     const { id, isConfirmed } = body;
 
@@ -65,6 +82,14 @@ export async function PATCH(request: Request) {
 
 export async function DELETE(request: Request) {
   try {
+    const session = verifyAdminSession(request);
+    if (!session.authorized) {
+      return NextResponse.json(
+        { success: false, message: session.reason || 'دسترسی غیرمجاز.' },
+        { status: 401 }
+      );
+    }
+
     const url = new URL(request.url);
     let id = url.searchParams.get('id');
 
@@ -98,3 +123,4 @@ export async function DELETE(request: Request) {
     return NextResponse.json({ success: false, message: 'خطا در حذف نوبت' }, { status: 500 });
   }
 }
+

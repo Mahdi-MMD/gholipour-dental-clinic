@@ -5,16 +5,15 @@
   "scripts": {
     "optimize-images": "node scripts/optimize-images.js",
     "prebuild": "node scripts/optimize-images.js",
-    "dev": "node scripts/optimize-images.js && next dev",
-    "dev:poll": "node scripts/optimize-images.js && next dev",
+    "dev": "next dev -p 3000 -H 0.0.0.0",
+    "dev:poll": "next dev -p 3000 -H 0.0.0.0",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p 3000 -H 0.0.0.0",
     "lint": "next lint",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "clean": "node -e \"require('fs').rmSync('.next', { recursive: true, force: true })\"",
-    "dev:clean": "npm run clean && npm run dev",
-    "prepare": "husky"
+    "dev:clean": "npm run clean && npm run dev"
   },
   "dependencies": {
     "@fancyapps/ui": "^6.1.15",
@@ -30,6 +29,8 @@
     "@types/node": "^22.0.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
+    "eslint": "^8.57.0",
+    "eslint-config-next": "15.2.0",
     "husky": "^9.1.7",
     "lint-staged": "^17.6.0",
     "prettier": "^3.9.10",

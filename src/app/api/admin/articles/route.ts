@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import fs from 'fs/promises';
 import path from 'path';
 import { ARTICLES_DATA, ArticleItem } from '@/data/articlesData';
+import { verifyAdminSession } from '@/lib/adminAuth';
 
 const ARTICLES_FILE_PATH = path.join(process.cwd(), 'src', 'data', 'articlesData.ts');
 
@@ -15,6 +16,14 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
+    const session = verifyAdminSession(request);
+    if (!session.authorized) {
+      return NextResponse.json(
+        { success: false, message: session.reason || 'دسترسی غیرمجاز.' },
+        { status: 401 }
+      );
+    }
+
     const body = await request.json();
     const article: ArticleItem = body.article || body;
     const isNew: boolean = Boolean(body.isNew);
@@ -110,6 +119,14 @@ export async function POST(request: Request) {
 
 export async function DELETE(request: Request) {
   try {
+    const session = verifyAdminSession(request);
+    if (!session.authorized) {
+      return NextResponse.json(
+        { success: false, message: session.reason || 'دسترسی غیرمجاز.' },
+        { status: 401 }
+      );
+    }
+
     const { id } = await request.json();
     if (!id) {
       return NextResponse.json(

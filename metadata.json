@@ -1,0 +1,6 @@
+{
+  "name": "کلینیک دندانپزشکی قلیپور",
+  "description": "سایت رسمی درمانگاه و کلینیک دندانپزشکی قلیپور زیباکنار - نوبت دهی آنلاین، مقالات و گالری نمونه کارها",
+  "permissions": [],
+  "capabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

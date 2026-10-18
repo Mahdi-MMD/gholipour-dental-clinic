@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import fs from 'fs/promises';
 import path from 'path';
 import { GALLERY_ITEMS, GalleryItem } from '@/data/galleryData';
+import { verifyAdminSession } from '@/lib/adminAuth';
 
 const GALLERY_FILE_PATH = path.join(process.cwd(), 'src', 'data', 'galleryData.ts');
 
@@ -15,6 +16,14 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
+    const session = verifyAdminSession(request);
+    if (!session.authorized) {
+      return NextResponse.json(
+        { success: false, message: session.reason || 'دسترسی غیرمجاز.' },
+        { status: 401 }
+      );
+    }
+
     const body = await request.json();
     const item: GalleryItem = body.item || body;
     const isNew: boolean = Boolean(body.isNew);
@@ -104,6 +113,14 @@ export async function POST(request: Request) {
 
 export async function DELETE(request: Request) {
   try {
+    const session = verifyAdminSession(request);
+    if (!session.authorized) {
+      return NextResponse.json(
+        { success: false, message: session.reason || 'دسترسی غیرمجاز.' },
+        { status: 401 }
+      );
+    }
+
     const { id } = await request.json();
     if (!id) {
       return NextResponse.json(

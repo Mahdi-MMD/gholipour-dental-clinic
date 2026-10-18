@@ -60,7 +60,7 @@ export default function ServiceDetailClientView({
             <nav className="service-breadcrumbs" aria-label="موقعیت در سایت">
               <Link href="/">صفحه اصلی</Link>
               <span className="separator">/</span>
-              <a href="/#services">خدمات تخصصی</a>
+              <Link href="/#services">خدمات تخصصی</Link>
               <span className="separator">/</span>
               <span className="current">{service.title}</span>
             </nav>

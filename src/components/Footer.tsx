@@ -51,7 +51,7 @@ export default function Footer({ onOpenBooking }: FooterProps) {
                   <Link href="/gallery">نمونه کارها</Link>
                 </li>
                 <li>
-                  <a href="/#articles">مقالات</a>
+                  <Link href="/#articles">مقالات</Link>
                 </li>
                 <li>
                   <a
@@ -66,7 +66,7 @@ export default function Footer({ onOpenBooking }: FooterProps) {
                   </a>
                 </li>
                 <li>
-                  <a href="/#faq">سوالات متداول</a>
+                  <Link href="/#faq">سوالات متداول</Link>
                 </li>
                 <li>
                   <Link href="/about">درباره ما</Link>
@@ -79,16 +79,16 @@ export default function Footer({ onOpenBooking }: FooterProps) {
               <h4 className="footer-card-title">لینک های مفید</h4>
               <ul className="footer-links">
                 <li>
-                  <a href="/#services">ایمپلنت تخصصی</a>
+                  <Link href="/#services">ایمپلنت تخصصی</Link>
                 </li>
                 <li>
-                  <a href="/#services">ترمیم دندان</a>
+                  <Link href="/#services">ترمیم دندان</Link>
                 </li>
                 <li>
-                  <a href="/#services">روکش دندان</a>
+                  <Link href="/#services">روکش دندان</Link>
                 </li>
                 <li>
-                  <a href="/#services">درمان ریشه دندان</a>
+                  <Link href="/#services">درمان ریشه دندان</Link>
                 </li>
               </ul>
             </div>

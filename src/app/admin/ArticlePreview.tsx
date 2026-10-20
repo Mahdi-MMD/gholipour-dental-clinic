@@ -221,7 +221,11 @@ function splitMarkdownBlocks(text: string): string[] {
 function renderFormattedBody(text: string) {
   if (!text) return null;
 
-  const rawBlocks = splitMarkdownBlocks(text);
+  // Safeguard: Strip any raw [doctorComment: ...] tags so they never leak into paragraph text
+  const sanitizedText = text.replace(/\[doctorComment:[\s\S]*?\]/g, '').trim();
+  if (!sanitizedText) return null;
+
+  const rawBlocks = splitMarkdownBlocks(sanitizedText);
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', textAlign: 'justify' }}>

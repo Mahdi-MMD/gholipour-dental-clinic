@@ -14,7 +14,7 @@ interface RequestPayload {
 }
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY || '';
-const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-flash-latest';
+const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
 
 // Initialize MiniSearch indexing once at module level
 const searchableDocs: SearchableArticleDoc[] = ARTICLES_DATA.map(art => ({
@@ -296,10 +296,12 @@ Execution Guidelines:
     };
 
     // Candidate models cascade:
-    // 1. Primary: gemini-3.5-flash (full capability)
-    // 2. Secondary: gemini-3.5-flash-lite (fast lightweight)
-    // 3. Fallback: gemini-3.1-flash-lite (peak hour stability)
-    const candidateModels = ['gemini-3.5-flash', 'gemini-3.5-flash-lite', 'gemini-3.1-flash-lite'];
+    // 1. Primary: GEMINI_MODEL or gemini-2.5-flash
+    // 2. Secondary: gemini-2.0-flash
+    // 3. Fallback: gemini-1.5-flash
+    const candidateModels = Array.from(
+      new Set([GEMINI_MODEL, 'gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash'].filter(Boolean))
+    );
 
     let candidateText = '';
     let lastErrorDetails = '';

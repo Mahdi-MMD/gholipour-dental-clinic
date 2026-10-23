@@ -1,6 +1,8 @@
 'use client';
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import Image from 'next/image';
+import { LockKeyhole } from 'lucide-react';
 import './admin.css';
 import RichTextEditor, { RichTextEditorRef } from './RichTextEditor';
 import ArticlePreview from './ArticlePreview';
@@ -959,12 +961,19 @@ export default function AdminPage() {
   if (!isAuthenticated) {
     return (
       <div className="admin-wrapper admin-login-container">
+        <div className="admin-bg-layer" aria-hidden="true" />
         <div className="admin-login-card">
-          <div style={{ fontSize: '38px', marginBottom: '12px' }}>🔒</div>
+          <div className="admin-login-lock-container">
+            <LockKeyhole className="admin-login-lock-icon" size={38} strokeWidth={2.2} />
+          </div>
           <h1 className="admin-login-title">ورود به پنل مدیریت کلینیک</h1>
           <p className="admin-login-subtitle">
-            برای ویرایش مستقیم متون، جداول، مقالات و مشاهده پیش‌نمایش گرافیکی، رمز عبور را وارد
-            کنید.
+            <span className="admin-login-subtitle-desktop">
+              برای مدیریت و ویرایش مقالات، گالری، نوبتها و پیش نمایش گرافیکی، لطفا رمز عبور را وارد کنید
+            </span>
+            <span className="admin-login-subtitle-mobile">
+              برای مدیریت و ویرایش مقالات، گالری و نوبتها، لطفا رمز عبور را وارد کنید.
+            </span>
           </p>
 
           <form onSubmit={handleLogin}>
@@ -997,8 +1006,11 @@ export default function AdminPage() {
   }
 
   // Admin Dashboard
+  const isSectionLanding = ['portal', 'articles', 'gallery', 'reservations'].includes(activeTab);
+
   return (
-    <div className="admin-wrapper">
+    <div className={`admin-wrapper ${!isSectionLanding ? 'admin-wrapper-plain' : ''}`}>
+      {isSectionLanding && <div className="admin-bg-layer" aria-hidden="true" />}
       {/* Global Save Success Toast Popup */}
       {showSaveToast && (
         <div className="admin-save-toast-popup" role="alert" aria-live="assertive">
@@ -1523,13 +1535,29 @@ export default function AdminPage() {
       ) : (
         <header className="admin-navbar">
           <div className="admin-nav-brand">
-            <h2 style={{ fontSize: '18px', fontWeight: 800 }}>
-              <span className="admin-nav-title-desktop">پنل مدیریت کلینیک دندانپزشکی قلی‌پور</span>
+            <a
+              href="/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="admin-nav-logo-link"
+              title="مشاهده سایت کلینیک دندانپزشکی قلی‌پور"
+            >
+              <Image
+                src="/assets/logo.webp"
+                alt="کلینیک دندانپزشکی قلی‌پور"
+                className="logo-img"
+                width={130}
+                height={42}
+                priority
+              />
+            </a>
+            <div className="admin-brand-divider" />
+            <h2 style={{ fontSize: '16.5px', fontWeight: 800, margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span className="admin-nav-title-desktop" style={{ color: '#016f92' }}>پنل مدیریت کلینیک</span>
               <span className="admin-nav-title-mobile" style={{ display: 'none' }}>
-                پنل مدیریت کلینیک
+                پنل مدیریت
               </span>
             </h2>
-            <span className="admin-nav-badge">ادمین فعال</span>
           </div>
           <div className="admin-nav-actions">
             <a href="/" target="_blank" rel="noopener noreferrer" className="admin-nav-site-link">
@@ -1679,7 +1707,6 @@ export default function AdminPage() {
         {activeTab === 'portal' && (
           <div className="admin-portal-container">
             <div className="admin-portal-hero">
-              <span className="admin-portal-badge">پنل کنترل جامع کلینیک</span>
               <h2 className="admin-portal-title">بخش مدیریت کلینیک دندانپزشکی</h2>
               <p className="admin-portal-subtitle">
                 لطفاً یکی از بخش‌های زیر را جهت مدیریت محتوا، رسانه‌ها و خدمات انتخاب کنید.
@@ -1701,30 +1728,25 @@ export default function AdminPage() {
                 }}
               >
                 <div className="admin-portal-card-header">
-                  <div
-                    className="admin-portal-card-icon"
-                    style={{ background: '#e3f9ff', color: '#1c83aa' }}
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#1c83aa"
+                    strokeWidth="2.2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    aria-hidden="true"
                   >
-                    <svg
-                      width="28"
-                      height="28"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
-                      <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
-                      <line x1="9" y1="7" x2="15" y2="7" />
-                      <line x1="9" y1="11" x2="15" y2="11" />
-                    </svg>
-                  </div>
-                  <span className="admin-portal-tag admin-portal-tag-active">فعال</span>
+                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+                    <line x1="9" y1="7" x2="15" y2="7" />
+                    <line x1="9" y1="11" x2="15" y2="11" />
+                  </svg>
+                  <h3 className="admin-portal-card-title">مدیریت مقالات</h3>
                 </div>
 
-                <h3 className="admin-portal-card-title">مدیریت مقالات</h3>
                 <p className="admin-portal-card-desc">
                   مشاهده، ویرایش زنده با پیش‌نمایش گرافیکی، ایجاد مقالات علمی جدید و کنترل سئو و
                   مراجع علمی وب‌سایت کلینیک.
@@ -1767,29 +1789,24 @@ export default function AdminPage() {
                 }}
               >
                 <div className="admin-portal-card-header">
-                  <div
-                    className="admin-portal-card-icon"
-                    style={{ background: '#fef3c7', color: '#d97706' }}
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#1c83aa"
+                    strokeWidth="2.2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    aria-hidden="true"
                   >
-                    <svg
-                      width="28"
-                      height="28"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-                      <circle cx="8.5" cy="8.5" r="1.5" />
-                      <polyline points="21 15 16 10 5 21" />
-                    </svg>
-                  </div>
-                  <span className="admin-portal-tag admin-portal-tag-active">فعال</span>
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                    <circle cx="8.5" cy="8.5" r="1.5" />
+                    <polyline points="21 15 16 10 5 21" />
+                  </svg>
+                  <h3 className="admin-portal-card-title">مدیریت گالری تصاویر</h3>
                 </div>
 
-                <h3 className="admin-portal-card-title">مدیریت گالری تصاویر</h3>
                 <p className="admin-portal-card-desc">
                   افزودن و ویرایش تصاویر نمونه‌کارها، مقایسه‌های قبل و بعد از درمان (Before/After)،
                   مراحل کار و جریان درمان با بهینه‌سازی خودکار تصاویر.
@@ -1832,31 +1849,26 @@ export default function AdminPage() {
                 }}
               >
                 <div className="admin-portal-card-header">
-                  <div
-                    className="admin-portal-card-icon"
-                    style={{ background: '#e0e7ff', color: '#4f46e5' }}
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#1c83aa"
+                    strokeWidth="2.2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    aria-hidden="true"
                   >
-                    <svg
-                      width="28"
-                      height="28"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-                      <line x1="16" y1="2" x2="16" y2="6" />
-                      <line x1="8" y1="2" x2="8" y2="6" />
-                      <line x1="3" y1="10" x2="21" y2="10" />
-                      <path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01M16 18h.01" />
-                    </svg>
-                  </div>
-                  <span className="admin-portal-tag admin-portal-tag-active">فعال</span>
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                    <line x1="16" y1="2" x2="16" y2="6" />
+                    <line x1="8" y1="2" x2="8" y2="6" />
+                    <line x1="3" y1="10" x2="21" y2="10" />
+                    <path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01M16 18h.01" />
+                  </svg>
+                  <h3 className="admin-portal-card-title">مدیریت نوبت‌دهی و رزروها</h3>
                 </div>
 
-                <h3 className="admin-portal-card-title">مدیریت نوبت‌دهی و رزروها</h3>
                 <p className="admin-portal-card-desc">
                   بررسی درخواست‌های نوبت‌دهی آنلاین بیماران، تعیین وضعیت رزروها، هماهنگی مشاوره‌ها و
                   ارتباط مستقیم با مراجعه‌کنندگان.
